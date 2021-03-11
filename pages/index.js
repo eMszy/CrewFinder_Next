@@ -19,6 +19,9 @@ const Home = () => {
 			</Head>
 
 			<div className={classes.LoginMain}>
+				<div>
+					<h1>Hello</h1>
+				</div>
 				{/* <AuthForm /> */}
 				<div className={classes.LoginStaticContent}>
 					<div className={classes.LoginStaticContent__Main}>
