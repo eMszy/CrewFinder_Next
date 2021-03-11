@@ -1,0 +1,59 @@
+@mixin media-min-width($width) {
+	@media (min-width: $width) {
+		@content;
+	}
+}
+
+.FooterDiv {
+	text-align: left;
+	color: #909090;
+	background-color: #181818;
+
+	// &::before {
+	// 	content: "";
+	// 	border-style: solid;
+	// 	border-width: 0 0 50px 100vw;
+	// 	border-color: transparent transparent #181818 transparent;
+	// 	position: relative;
+	// 	z-index: 2;
+	// 	top: -67px;
+	// }
+
+	.FooterDiv__Nav {
+		width: 80vw;
+		margin: 0 auto;
+		padding-bottom: 2rem;
+	}
+	h3,
+	ul {
+		font-weight: 400;
+	}
+
+	h3 {
+		padding-bottom: 1rem;
+	}
+
+	li {
+		padding: 0.25rem 0;
+	}
+
+	a {
+		&:hover,
+		&:active,
+		&.active {
+			color: white;
+		}
+	}
+
+	.Copyright {
+		font-size: 0.7rem;
+		color: #ffffff40;
+		padding: 1rem 2rem;
+		text-align: center;
+		background: black;
+
+		@include media-min-width(400px) {
+			font-size: 0.8rem;
+		}
+	}
+}
