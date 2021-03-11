@@ -1,5 +1,4 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
-import Footer from "../components/Footer/footer";
 
 class MyDocument extends Document {
 	render() {
@@ -9,13 +8,8 @@ class MyDocument extends Document {
 					<link rel="shortcut icon" href="/icons/favicon.ico" />
 				</Head>
 				<body>
-					<main>
-						<Main />
-					</main>
+					<Main />
 					<NextScript />
-					<footer>
-						<Footer />
-					</footer>
 				</body>
 			</Html>
 		);

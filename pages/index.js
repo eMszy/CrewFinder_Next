@@ -15,7 +15,7 @@ const Home = () => {
 	return (
 		<>
 			<Head>
-				<title>Create Next App</title>
+				<title>CrewFinder</title>
 			</Head>
 
 			<div className={classes.LoginMain}>

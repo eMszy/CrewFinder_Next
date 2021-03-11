@@ -1,0 +1,47 @@
+@mixin media-min-width($width) {
+	@media (min-width: $width) {
+		@content;
+	}
+}
+
+.NaviItems {
+	position: relative;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0;
+	display: flex;
+	flex-flow: column;
+	justify-content: flex-end;
+	height: 100%;
+
+	li {
+		margin: 1rem 0;
+	}
+
+	a {
+		color: white;
+
+		&:hover,
+		&:active,
+		.active {
+			color: #afd7f8;
+		}
+	}
+
+	@include media-min-width(800px) {
+		flex-flow: row;
+		li {
+			margin: 1rem;
+		}
+		a {
+			font-weight: 400;
+		}
+	}
+
+	.active {
+		color: #afd7f8;
+		&:hover {
+			color: white;
+		}
+	}
+}
