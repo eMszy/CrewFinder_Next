@@ -1,6 +1,12 @@
+@mixin media-min-width($width) {
+	@media (min-width: $width) {
+		@content;
+	}
+}
+
 .Logo {
-	margin: 0.5rem;
-	// img {
-	// 	height: 100%;
-	// }
+	margin: 0.5rem 0;
+	@include media-min-width(1200px) {
+		margin: 0.5rem;
+	}
 }

@@ -1,0 +1,130 @@
+@mixin media-min-width($width) {
+	@media (min-width: $width) {
+		@content;
+	}
+}
+.LoginMain__Reglink {
+	width: 80vw;
+	background-color: transparent;
+	justify-self: center;
+
+	@include media-min-width(800px) {
+		width: 65vw;
+	}
+
+	@include media-min-width(1200px) {
+		width: auto;
+		margin: 0;
+		align-self: center;
+	}
+
+	.LoginMain__Reglink_Link {
+		a {
+			border: 2px solid white;
+			border-radius: 15px;
+			text-align: center;
+			padding: 1rem;
+			color: inherit;
+			width: auto;
+
+			&:hover {
+				background-color: white;
+				color: #525252;
+				outline: none;
+				border-color: #afd7f8;
+			}
+		}
+
+		Button {
+			height: 3rem;
+			min-width: 12rem;
+			margin-top: 1rem;
+		}
+	}
+}
+
+.LoginMain__LoginForm {
+	display: grid;
+	grid-template-columns: auto;
+	background-color: inherit;
+	margin: 0 auto 3rem;
+	border: 2px solid white;
+	border-radius: 15px;
+	padding: 1rem;
+	text-align: left;
+	width: 80vw;
+	row-gap: 1rem;
+
+	@include media-min-width(800px) {
+		grid-template-columns: 30% 70%;
+		width: 40rem;
+		margin: 0;
+		row-gap: 2rem;
+	}
+
+	// @include media-min-width(1200px) {
+	// 	max-width: 40rem;
+	// 	margin: 0;
+	// 	align-self: center;
+	// }
+
+	::-ms-input-placeholder,
+	:-ms-input-placeholder,
+	::placeholder {
+		color: red;
+		opacity: 1;
+	}
+
+	h2 {
+		text-align: center;
+		@include media-min-width(800px) {
+			grid-column: span 2;
+		}
+	}
+
+	a {
+		color: inherit;
+		&:hover,
+		&:active {
+			color: #afd7f8;
+		}
+	}
+
+	label {
+		text-align: center;
+	}
+
+	input {
+		min-width: 80%;
+	}
+
+	.LoginMain__LoginForm__SubmitBtn {
+		color: white;
+		background-color: rgba(255, 255, 255, 0.3);
+		border: 2px solid white;
+		border-radius: 15px;
+		height: 3rem;
+		font-size: 1.2rem;
+		background-color: transparent;
+		&:hover {
+			background-color: white;
+			border-color: #afd7f8;
+			color: #525252;
+		}
+
+		&:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
+
+		@include media-min-width(800px) {
+			grid-column: span 2;
+		}
+	}
+}
+
+.Error {
+	@include media-min-width(800px) {
+		grid-column: span 2;
+	}
+}

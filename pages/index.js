@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
+import AuthForm from "../components/Auth/Auth";
 
 // import AuthForm from "../../containers/Auth/Auth.js";
 
@@ -20,17 +21,13 @@ const Home = () => {
 
 			<div className={classes.LoginMain}>
 				<div className={classes.Login}>
-					<h1>Hello</h1>
-					<h1>Login</h1>
+					<AuthForm />
 				</div>
-
-				{/* <AuthForm /> */}
 				<div className={classes.LoginStaticContent}>
 					<div className={classes.LoginStaticContent__Main}>
 						<h2 className="center-title bottom-line">
 							Mire képes a Crew Finder!
 						</h2>
-
 						<div className={classes.LoginStaticContent__Main_Flex}>
 							<div className={classes.LoginStaticContent__Main_Pix}>
 								<Image
@@ -38,6 +35,7 @@ const Home = () => {
 									alt="icons01"
 									layout="fill"
 									objectFit={"contain"}
+									priority
 								/>
 							</div>
 							<div className={classes.LoginStaticContent__Main_Item}>
@@ -45,7 +43,6 @@ const Home = () => {
 								<p>Találd meg a helyed a stábban gyorsan és egyszerűen</p>
 							</div>
 						</div>
-
 						<div className={classes.LoginStaticContent__Main_Flex}>
 							<div className={classes.LoginStaticContent__Main_Pix}>
 								<Image
@@ -65,7 +62,6 @@ const Home = () => {
 								</div>
 							</div>
 						</div>
-
 						<div className={classes.LoginStaticContent__Main_Flex}>
 							<div className={classes.LoginStaticContent__Main_Pix}>
 								<Image
@@ -86,7 +82,6 @@ const Home = () => {
 								</div>
 							</div>
 						</div>
-
 						<div className={classes.LoginStaticContent__Main_Flex}>
 							<div className={classes.LoginStaticContent__Main_Pix}>
 								<Image
@@ -106,7 +101,6 @@ const Home = () => {
 								</div>
 							</div>
 						</div>
-
 						<div className={classes.LoginStaticContent__Main_Flex}>
 							<div className={classes.LoginStaticContent__Main_Pix}>
 								<Image

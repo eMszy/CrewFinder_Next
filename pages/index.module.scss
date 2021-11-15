@@ -10,12 +10,14 @@
 		flex-direction: column;
 		justify-content: space-evenly;
 		align-items: center;
-		// padding-top: 2rem;
 		color: white;
 		row-gap: 4rem;
+		margin-top: 2rem;
+		margin-bottom: 4rem;
 
-		height: 30rem;
-		margin: 2rem;
+		@include media-min-width(800px) {
+			margin-bottom: 8rem;
+		}
 
 		@include media-min-width(1200px) {
 			flex-direction: row;

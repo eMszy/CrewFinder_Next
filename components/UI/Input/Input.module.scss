@@ -1,0 +1,26 @@
+.Label {
+	align-self: center;
+}
+
+.InputElement {
+	color: white;
+	background-color: rgba(255, 255, 255, 0.3);
+	border: 2px solid white;
+	border-radius: 15px;
+	font: inherit;
+	padding: 6px 10px;
+	display: block;
+
+	&:focus,
+	&:hover {
+		outline: none;
+		border-color: #afd7f8;
+	}
+}
+.Invalid {
+	border-color: red;
+	background-color: #fda49a;
+	&:hover {
+		border-color: #fda49a;
+	}
+}

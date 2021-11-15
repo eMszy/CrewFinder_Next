@@ -1,11 +1,14 @@
+import AuthContextProvider from "../context/auth-context";
 import Layout from "../hoc/Layout/Layout";
 import "../styles/globals.scss";
 
 function MyApp({ Component, pageProps }) {
 	return (
-		<Layout>
-			<Component {...pageProps} />
-		</Layout>
+		<AuthContextProvider>
+			<Layout>
+				<Component {...pageProps} />
+			</Layout>
+		</AuthContextProvider>
 	);
 }
 
