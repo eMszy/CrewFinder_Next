@@ -1,14 +1,32 @@
+@mixin media-min-width($width) {
+	@media (min-width: $width) {
+		@content;
+	}
+}
+
 .content {
 	line-height: 2;
-	width: 80%;
+	width: 90%;
 	margin: 3rem auto;
-	padding: 3rem;
+	padding: 1.5rem;
 	color: black;
+	text-align: justify;
 	background-color: rgb(255, 255, 255, 0.7);
 	border-radius: 15px;
 
+	@include media-min-width(1200px) {
+		width: 80%;
+		padding: 3rem;
+	}
+
 	h1 {
 		padding-bottom: 2rem;
+		text-align: center;
+	}
+
+	h2 {
+		padding: 1rem 0;
+		text-align: center;
 	}
 
 	img {
@@ -23,21 +41,22 @@
 
 	.Content_Height {
 		min-height: 18rem;
-	}
+		display: flex;
+		flex-wrap: nowrap;
+		flex-direction: column;
+		align-items: center;
+		gap: 2rem;
 
-	.imgLeft {
-		float: left;
-	}
-
-	.imgRight {
-		float: right;
-	}
-
-	.alignright {
-		text-align: right;
-	}
-
-	.alignleft {
-		text-align: left;
+		@include media-min-width(1200px) {
+			flex-direction: row;
+			.Picture_Right {
+				order: 1;
+			}
+		}
+		.Image_Div {
+			display: flex;
+			justify-content: center;
+			width: 240px;
+		}
 	}
 }

@@ -19,9 +19,11 @@ const Home = () => {
 			</Head>
 
 			<div className={classes.LoginMain}>
-				<div>
+				<div className={classes.Login}>
 					<h1>Hello</h1>
+					<h1>Login</h1>
 				</div>
+
 				{/* <AuthForm /> */}
 				<div className={classes.LoginStaticContent}>
 					<div className={classes.LoginStaticContent__Main}>
@@ -30,8 +32,13 @@ const Home = () => {
 						</h2>
 
 						<div className={classes.LoginStaticContent__Main_Flex}>
-							<div className={classes.LoginStaticContent__Main_Item}>
-								<Image src={icons_01} alt="icons01" width={150} height={150} />
+							<div className={classes.LoginStaticContent__Main_Pix}>
+								<Image
+									src={icons_01}
+									alt="icons01"
+									layout="fill"
+									objectFit={"contain"}
+								/>
 							</div>
 							<div className={classes.LoginStaticContent__Main_Item}>
 								<h3>Találj munkát gyorsan és egyszerűen</h3>
@@ -40,8 +47,13 @@ const Home = () => {
 						</div>
 
 						<div className={classes.LoginStaticContent__Main_Flex}>
-							<div className={classes.LoginStaticContent__Main_Item}>
-								<img src={icons_02} alt="icons02" />
+							<div className={classes.LoginStaticContent__Main_Pix}>
+								<Image
+									src={icons_02}
+									alt="icons02"
+									layout="fill"
+									objectFit={"contain"}
+								/>
 							</div>
 							<div className={classes.LoginStaticContent__Main_Item}>
 								<div>
@@ -55,8 +67,13 @@ const Home = () => {
 						</div>
 
 						<div className={classes.LoginStaticContent__Main_Flex}>
-							<div className={classes.LoginStaticContent__Main_Item}>
-								<img src={icons_03} alt="icons03" />
+							<div className={classes.LoginStaticContent__Main_Pix}>
+								<Image
+									src={icons_03}
+									alt="icons03"
+									layout="fill"
+									objectFit={"contain"}
+								/>
 							</div>
 							<div className={classes.LoginStaticContent__Main_Item}>
 								<div>
@@ -71,8 +88,13 @@ const Home = () => {
 						</div>
 
 						<div className={classes.LoginStaticContent__Main_Flex}>
-							<div className={classes.LoginStaticContent__Main_Item}>
-								<img src={icons_04} alt="icons04" />
+							<div className={classes.LoginStaticContent__Main_Pix}>
+								<Image
+									src={icons_04}
+									alt="icons04"
+									layout="fill"
+									objectFit={"contain"}
+								/>
 							</div>
 							<div className={classes.LoginStaticContent__Main_Item}>
 								<div>
@@ -86,8 +108,13 @@ const Home = () => {
 						</div>
 
 						<div className={classes.LoginStaticContent__Main_Flex}>
-							<div className={classes.LoginStaticContent__Main_Item}>
-								<img src={icons_05} alt="icons05" />
+							<div className={classes.LoginStaticContent__Main_Pix}>
+								<Image
+									src={icons_05}
+									alt="icons05"
+									layout="fill"
+									objectFit={"contain"}
+								/>
 							</div>
 							<div className={classes.LoginStaticContent__Main_Item}>
 								<div>
