@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useContext } from "react";
 
 // import { AuthContext } from "../../../context/auth-context";
@@ -8,17 +9,22 @@ import classes from "./NavigationItem.module.scss";
 
 const NavigationItems = () => {
 	// const authContext = useContext(AuthContext);
+	const router = useRouter();
 
 	let navMenu = (
 		<ul className={classes.NaviItems}>
 			<li>
-				<Link href="/ismerteto" activeClassName={classes.active}>
-					Így működik a Crew Finder
+				<Link href="/ismerteto">
+					<a className={router.pathname === "/ismerteto" ? classes.Active : ""}>
+						Így működik a Crew Finder
+					</a>
 				</Link>
 			</li>
 			<li>
-				<Link href="/rolunk" activeClassName={classes.active}>
-					Rólunk
+				<Link href="/rolunk">
+					<a className={router.pathname === "/rolunk" ? classes.Active : ""}>
+						Rólunk
+					</a>
 				</Link>
 			</li>
 		</ul>

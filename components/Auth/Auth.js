@@ -75,10 +75,17 @@ const AuthForm = () => {
 		<div className={classes.LoginMain__Reglink}>
 			<div className={classes.LoginMain__Reglink_Icon}>
 				<Link href="/">
-					<Image src={crewfinderLogoWhite} alt="crewfinder-logo-white" />
+					<a>
+						<Image
+							src={crewfinderLogoWhite}
+							alt="Crew Finder"
+							width={170}
+							height={50}
+						/>
+					</a>
 				</Link>
 			</div>
-			<p>Szervezd egyszerűen a filmes stábot - TESZT VERZIÓ</p>
+			<p>Szervezd egyszerűen a filmes stábot</p>
 			<div className={classes.LoginMain__Reglink_Link}>
 				<Button
 					clicked={() => {
@@ -99,7 +106,11 @@ const AuthForm = () => {
 				className={classes.LoginMain__LoginForm}
 			>
 				<h2>{IsSignup ? "Regisztráció" : "Belépés"}</h2>
-				{authContext.err ? <ErrorHandel err={authContext.err} /> : null}
+				{authContext.err ? (
+					<div className={classes.LoginMain_Error}>
+						<ErrorHandel err={authContext.err} />
+					</div>
+				) : null}
 				{authContext.loading ? (
 					<Spinner />
 				) : (

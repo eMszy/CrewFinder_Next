@@ -10,12 +10,14 @@ const logo = () => {
 	return (
 		<div className={classes.Logo}>
 			<Link href="/">
-				<Image
-					src={crewfinderLogoWhite}
-					alt="Crew Finder"
-					width={110}
-					height={30}
-				/>
+				<a>
+					<Image
+						src={crewfinderLogoWhite}
+						alt="Crew Finder"
+						width={110}
+						height={30}
+					/>
+				</a>
 			</Link>
 		</div>
 	);

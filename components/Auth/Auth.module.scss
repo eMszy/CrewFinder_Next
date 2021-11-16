@@ -43,6 +43,13 @@
 	}
 }
 
+.LoginMain_Error {
+	text-align: center;
+	@include media-min-width(800px) {
+		grid-column: span 2;
+	}
+}
+
 .LoginMain__LoginForm {
 	display: grid;
 	grid-template-columns: auto;
@@ -61,12 +68,6 @@
 		margin: 0;
 		row-gap: 2rem;
 	}
-
-	// @include media-min-width(1200px) {
-	// 	max-width: 40rem;
-	// 	margin: 0;
-	// 	align-self: center;
-	// }
 
 	::-ms-input-placeholder,
 	:-ms-input-placeholder,
@@ -120,11 +121,5 @@
 		@include media-min-width(800px) {
 			grid-column: span 2;
 		}
-	}
-}
-
-.Error {
-	@include media-min-width(800px) {
-		grid-column: span 2;
 	}
 }
