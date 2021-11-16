@@ -44,6 +44,7 @@ const Rolunk = () => (
 							alt="Vilonya Norbert"
 							width={190}
 							height={190}
+							blurDataURL
 						/>
 					</div>
 				</div>
@@ -74,6 +75,7 @@ const Rolunk = () => (
 							alt="Boza András"
 							width={190}
 							height={190}
+							blurDataURL
 						/>
 					</div>
 				</div>

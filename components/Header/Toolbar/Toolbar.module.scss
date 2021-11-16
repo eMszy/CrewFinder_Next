@@ -13,10 +13,12 @@
 }
 
 .Toolbar {
+	align-items: center;
 	justify-content: space-between;
 	margin: auto;
 	height: 100%;
 	display: flex;
+	flex-direction: row-reverse;
 	z-index: 90;
 	nav {
 		height: 100%;

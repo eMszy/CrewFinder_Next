@@ -36,6 +36,7 @@ const Home = () => {
 									layout="fill"
 									objectFit={"contain"}
 									priority
+									blurDataURL
 								/>
 							</div>
 							<div className={classes.LoginStaticContent__Main_Item}>
@@ -50,6 +51,7 @@ const Home = () => {
 									alt="icons02"
 									layout="fill"
 									objectFit={"contain"}
+									blurDataURL
 								/>
 							</div>
 							<div className={classes.LoginStaticContent__Main_Item}>
@@ -69,6 +71,7 @@ const Home = () => {
 									alt="icons03"
 									layout="fill"
 									objectFit={"contain"}
+									blurDataURL
 								/>
 							</div>
 							<div className={classes.LoginStaticContent__Main_Item}>
@@ -89,6 +92,7 @@ const Home = () => {
 									alt="icons04"
 									layout="fill"
 									objectFit={"contain"}
+									blurDataURL
 								/>
 							</div>
 							<div className={classes.LoginStaticContent__Main_Item}>
@@ -108,6 +112,7 @@ const Home = () => {
 									alt="icons05"
 									layout="fill"
 									objectFit={"contain"}
+									blurDataURL
 								/>
 							</div>
 							<div className={classes.LoginStaticContent__Main_Item}>

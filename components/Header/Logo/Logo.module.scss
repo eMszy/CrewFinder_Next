@@ -6,6 +6,7 @@
 
 .Logo {
 	margin: 0.5rem 0;
+	// align-items: center;
 	@include media-min-width(1200px) {
 		margin: 0.5rem;
 	}

@@ -12,9 +12,9 @@
 		align-items: center;
 		color: white;
 		row-gap: 4rem;
-		margin-top: 2rem;
+		padding-top: 2rem;
 		margin-bottom: 4rem;
-		min-height: 27rem;
+		min-height: 40rem;
 
 		@include media-min-width(800px) {
 			margin-bottom: 8rem;

@@ -16,13 +16,14 @@ const Toolbar = (props) => {
 	return (
 		<div className={classes.Toolbar}>
 			<DrawerToggle clicked={props.drawerToggleClicked} />
+			<nav className={classes.DesktopOnly}>
+				<NavigationItems />
+			</nav>
 			{router.pathname !== "/" ? (
 				// || authContext.isAuth
 				<Logo className={classes.Logo} />
 			) : null}
-			<nav className={classes.DesktopOnly}>
-				<NavigationItems />
-			</nav>
+
 			{/* <FelhasznaloIcon /> */}
 		</div>
 	);
