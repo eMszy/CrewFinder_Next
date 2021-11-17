@@ -35,6 +35,7 @@ const AuthForm = () => {
 	const signupHandler = (event) => {
 		event.preventDefault();
 		authContext.reg(LoginRegForm);
+		authContext.login(LoginRegForm);
 		switchAuthModeHandler(LoginRegForm.email.value);
 	};
 

@@ -18,13 +18,15 @@
 		margin: 1rem 0;
 	}
 
-	a {
+	a,
+	p {
 		color: white;
 
 		&:hover,
 		&:active,
 		.active {
 			color: #afd7f8;
+			cursor: pointer;
 		}
 	}
 

@@ -2,13 +2,13 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useContext } from "react";
 
-// import { AuthContext } from "../../../context/auth-context";
+import { AuthContext } from "../../../context/auth-context";
 import Button from "../../UI/Button/Button";
 
 import classes from "./NavigationItem.module.scss";
 
 const NavigationItems = () => {
-	// const authContext = useContext(AuthContext);
+	const authContext = useContext(AuthContext);
 	const router = useRouter();
 
 	let navMenu = (
@@ -30,20 +30,22 @@ const NavigationItems = () => {
 		</ul>
 	);
 
-	// if (authContext.isAuth) {
-	// 	navMenu = (
-	// 		<ul className={classes.NaviItems}>
-	// 			<li>
-	// 				<Link href="/profil" activeClassName={classes.active}>
-	// 					Profil
-	// 				</Link>
-	// 			</li>
-	// 			<li>
-	// 				<Button clicked={authContext.logout}>Kijelentkezés</Button>
-	// 			</li>
-	// 		</ul>
-	// 	);
-	// }
+	if (authContext.isAuth) {
+		navMenu = (
+			<ul className={classes.NaviItems}>
+				<li>
+					<Link href="/profil" activeClassName={classes.active}>
+						Profil
+					</Link>
+				</li>
+				<li>
+					<p href="" onClick={authContext.logout}>
+						Kijelentkezés
+					</p>
+				</li>
+			</ul>
+		);
+	}
 
 	return navMenu;
 };
