@@ -1,19 +1,15 @@
 import Head from "next/head";
 // import Image from "next/image";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import Login from "../components/Login/Login";
 import { AuthContext } from "../context/auth-context";
+import { autoLogin } from "../shared/autoLogin";
 
-// import classes from "./index.module.scss";
+import classes from "./index.module.scss";
 
 const Home = () => {
 	const authContext = useContext(AuthContext);
-
-	useEffect(() => {
-		if (!authContext.isAuth) {
-			authContext.autoLogin();
-		}
-	}, []);
+	autoLogin();
 
 	let content = <Login />;
 
@@ -21,12 +17,6 @@ const Home = () => {
 		content = (
 			<div>
 				<h1>Be vagy jelentkezve!!</h1>
-				<br />
-				<br />
-				<br />
-				<br />
-				<br />
-				<br />
 			</div>
 		);
 	}

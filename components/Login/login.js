@@ -4,13 +4,13 @@ import AuthForm from "../Auth/Auth";
 
 import classes from "./login.module.scss";
 
-const Login = () => {
-	const icons_01 = "/icons/icons-01.png";
-	const icons_02 = "/icons/icons-02.png";
-	const icons_03 = "/icons/icons-03.png";
-	const icons_04 = "/icons/icons-04.png";
-	const icons_05 = "/icons/icons-05.png";
+const icons_01 = "/icons/icons-01.png";
+const icons_02 = "/icons/icons-02.png";
+const icons_03 = "/icons/icons-03.png";
+const icons_04 = "/icons/icons-04.png";
+const icons_05 = "/icons/icons-05.png";
 
+const Login = () => {
 	return (
 		<>
 			<div className={classes.LoginMain}>

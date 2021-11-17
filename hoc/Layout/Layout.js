@@ -25,10 +25,12 @@ const Layout = (props) => {
 					closed={sideDrawerClosedHandler}
 				/>
 			</header>
-			<main>{props.children}</main>
-			<footer className={classes.Footer}>
-				<Footer />
-			</footer>
+			<main className={classes.Main}>
+				{props.children}
+				<footer>
+					<Footer />
+				</footer>
+			</main>
 		</div>
 	);
 };

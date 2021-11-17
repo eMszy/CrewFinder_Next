@@ -20,7 +20,9 @@ const Toolbar = (props) => {
 				<NavigationItems />
 			</nav>
 			{router.pathname !== "/" || authContext.isAuth ? (
-				<Logo className={classes.Logo} />
+				<div className={classes.Logo}>
+					<Logo />
+				</div>
 			) : null}
 
 			{/* <FelhasznaloIcon /> */}

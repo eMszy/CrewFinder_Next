@@ -12,6 +12,7 @@ import ErrorHandel from "../../shared/errorHandel";
 import crewfinderLogoWhite from "../../public/icons/crewfinderLogoWhite.svg";
 import Spinner from "../../components/UI/Spinner/Spinner.js";
 import classes from "./Auth.module.scss";
+import { autoLogin } from "../../shared/autoLogin";
 
 const AuthForm = () => {
 	const authContext = useContext(AuthContext);
@@ -35,7 +36,7 @@ const AuthForm = () => {
 	const signupHandler = (event) => {
 		event.preventDefault();
 		authContext.reg(LoginRegForm);
-		authContext.login(LoginRegForm);
+		// authContext.login(LoginRegForm);
 		switchAuthModeHandler(LoginRegForm.email.value);
 	};
 
@@ -113,7 +114,9 @@ const AuthForm = () => {
 					</div>
 				) : null}
 				{authContext.loading ? (
-					<Spinner />
+					<div className={classes.Spinner}>
+						<Spinner />
+					</div>
 				) : (
 					<InputElement
 						Form={LoginRegForm}

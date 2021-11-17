@@ -39,9 +39,7 @@ const NavigationItems = () => {
 					</Link>
 				</li>
 				<li>
-					<p href="" onClick={authContext.logout}>
-						Kijelentkezés
-					</p>
+					<p onClick={authContext.logout}>Kijelentkezés</p>
 				</li>
 			</ul>
 		);
