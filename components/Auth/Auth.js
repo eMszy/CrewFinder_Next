@@ -2,16 +2,16 @@ import React, { useContext, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-import classes from "./Auth.module.scss";
-import crewfinderLogoWhite from "../../public/icons/crewfinderLogoWhite.svg";
-
-import Spinner from "../../components/UI/Spinner/Spinner.js";
+import { AuthContext } from "../../context/auth-context";
 import { inputChangedHandler, isAllInputVaild } from "../../shared/utility.js";
 import * as InputTemplates from "../../components/UI/Input/InputTemplates/InputTemplates.js";
-import Button from "../../components/UI/Button/Button";
-import { AuthContext } from "../../context/auth-context";
 import InputElement from "../../components/UI/Input/InputElement";
+import Button from "../../components/UI/Button/Button";
 import ErrorHandel from "../../shared/errorHandel";
+
+import crewfinderLogoWhite from "../../public/icons/crewfinderLogoWhite.svg";
+import Spinner from "../../components/UI/Spinner/Spinner.js";
+import classes from "./Auth.module.scss";
 
 const AuthForm = () => {
 	const authContext = useContext(AuthContext);

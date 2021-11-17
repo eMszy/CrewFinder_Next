@@ -3,8 +3,8 @@ import { FetchByIdGQL, updateByIdGQL } from "./GraphQLTemplates";
 export const PostData = async (graphqlQuery) => {
 	const token = localStorage.getItem("token");
 
-	const res = await fetch(process.env.REACT_APP_GRAPHQL_DEV, {
-		// const res = await fetch("http://192.168.0.66:8000/graphql", {
+	const res = await fetch(process.env.GRAPHQL, {
+		// const res = await fetch("http://localhost:3000/api/graphql", {
 		method: "POST",
 		headers: {
 			Authorization: token ? `Bearer ${token}` : "",

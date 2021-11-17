@@ -33,6 +33,8 @@ const AuthContextProvider = (props) => {
 	const signupHandler = async (UserForm) => {
 		setAuthLoading(true);
 
+		// console.log(`UserFrom`, UserFrom.email);
+
 		const graphqlQuery = createNewUser(
 			UserForm.email.value,
 			UserForm.name.value,

@@ -8,9 +8,18 @@
     "start": "next start"
   },
   "dependencies": {
+    "apollo-server-micro": "^3.5.0",
+    "axios": "^0.24.0",
+    "bcryptjs": "^2.4.3",
+    "graphql-react": "^15.0.0",
+    "http-link-header": "^1.0.3",
+    "jsonwebtoken": "^8.5.1",
+    "micro-cors": "^0.1.1",
+    "mongoose": "^6.0.13",
     "next": "^12.0.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "sass": "^1.43.4"
+    "sass": "^1.43.4",
+    "validator": "^13.7.0"
   }
 }
