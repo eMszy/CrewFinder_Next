@@ -44,8 +44,8 @@ const AuthContextProvider = (props) => {
 		console.log("Creating a new User: ", UserForm);
 		try {
 			await PostData(graphqlQuery);
-			setIsAuth(false);
 			setAuthLoading(false);
+			setIsAuth(true);
 		} catch (err) {
 			console.log(err);
 			setIsAuth(false);

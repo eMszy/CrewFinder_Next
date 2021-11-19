@@ -3,10 +3,12 @@ import Toolbar from "../../components/Header/Toolbar/Toolbar";
 import SideDrawer from "../../components/Header/SideDrawer/SideDrawer";
 
 import classes from "./Layout.module.scss";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../context/auth-context";
 
 const Layout = (props) => {
 	const [sideDrawerIsVisible, setSideDrawerIsVisible] = useState(false);
+	const authContext = useContext(AuthContext);
 
 	const sideDrawerClosedHandler = () => {
 		setSideDrawerIsVisible(false);
@@ -16,8 +18,12 @@ const Layout = (props) => {
 		setSideDrawerIsVisible(!sideDrawerIsVisible);
 	};
 
+	let backgroundClass = !authContext.isAuth
+		? classes.MainDivBackground
+		: (backgroundClass = classes.MainDiv);
+
 	return (
-		<div className={classes.MainDiv}>
+		<div className={backgroundClass}>
 			<header className={classes.Header}>
 				<Toolbar drawerToggleClicked={sideDrawerToggleHeandler} />
 				<SideDrawer

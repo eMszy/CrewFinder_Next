@@ -4,7 +4,6 @@ export const PostData = async (graphqlQuery) => {
 	const token = localStorage.getItem("token");
 
 	const res = await fetch(process.env.GRAPHQL, {
-		// const res = await fetch("http://localhost:3000/api/graphql", {
 		method: "POST",
 		headers: {
 			Authorization: token ? `Bearer ${token}` : "",
