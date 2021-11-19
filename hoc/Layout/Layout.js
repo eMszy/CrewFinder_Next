@@ -18,13 +18,16 @@ const Layout = (props) => {
 		setSideDrawerIsVisible(!sideDrawerIsVisible);
 	};
 
-	let backgroundClass = !authContext.isAuth
-		? classes.MainDivBackground
-		: (backgroundClass = classes.MainDiv);
+	let backgroundClass = classes.MainDivBackground;
+	let headerClass = classes.HeaderNotAuth;
+	if (authContext.isAuth) {
+		backgroundClass = backgroundClass = classes.MainDiv;
+		headerClass = classes.Header;
+	}
 
 	return (
 		<div className={backgroundClass}>
-			<header className={classes.Header}>
+			<header className={headerClass}>
 				<Toolbar drawerToggleClicked={sideDrawerToggleHeandler} />
 				<SideDrawer
 					open={sideDrawerIsVisible}

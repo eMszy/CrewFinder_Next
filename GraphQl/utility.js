@@ -12,6 +12,7 @@ export const PostData = async (graphqlQuery) => {
 		body: JSON.stringify(graphqlQuery),
 	});
 	const resData = await res.json();
+	console.log(`resData`, resData);
 
 	if (resData.errors) {
 		console.log("Error: ", resData.errors);
@@ -75,17 +76,19 @@ export const EditForm = (Form, Id, Collection, OutputData) => {
 
 export const SavingHandel = async (Id, DataForm, Collection) => {
 	let subPlusData = {};
-	for (const [key] of Object.entries(DataForm)) {
-		if (
-			DataForm[key].elementConfig.editable &&
-			DataForm[key].touched &&
-			DataForm[key].valid
-		) {
-			let subfolder = DataForm[key].elementConfig.subfolder;
-			subPlusData[subfolder] = {
-				...subPlusData[subfolder],
-				[key]: DataForm[key].value,
-			};
+	if (DataForm) {
+		for (const [key] of Object.entries(DataForm)) {
+			if (
+				DataForm[key].elementConfig.editable &&
+				DataForm[key].touched &&
+				DataForm[key].valid
+			) {
+				let subfolder = DataForm[key].elementConfig.subfolder;
+				subPlusData[subfolder] = {
+					...subPlusData[subfolder],
+					[key]: DataForm[key].value,
+				};
+			}
 		}
 	}
 	if (subPlusData) {

@@ -1,5 +1,3 @@
-import { gql } from "apollo-server-micro";
-
 export const userLogin = (email, password) => {
 	const graphqlQuery = {
 		query: `
@@ -78,7 +76,7 @@ export const updateByIdGQL = (Id, Data, Database) => {
 	}
 
 	const graphqlQuery = {
-		query: gql`
+		query: `
         mutation ${mutationName}($Data: ${inputDataType}){
 			${mutationName}(id: "${Id}", Data: $Data) {
 				updatedAt
@@ -94,7 +92,7 @@ export const updateByIdGQL = (Id, Data, Database) => {
 
 export const createEvent = (id, eventInput) => {
 	const graphqlQuery = {
-		query: gql`
+		query: `
 			mutation CreateEvent($id: ID!, $eventInput: eventInputData!) {
 				createEvent(id: $id, eventInput: $eventInput) {
 					updatedAt
@@ -111,7 +109,7 @@ export const createEvent = (id, eventInput) => {
 
 export const events = () => {
 	const graphqlQuery = {
-		query: gql`
+		query: `
 			query Event {
 				events {
 					events {
@@ -137,7 +135,7 @@ export const events = () => {
 
 export const event = (id) => {
 	const graphqlQuery = {
-		query: gql`
+		query: `
 			query Event($id: ID!) {
 				event(id: $id) {
 					title

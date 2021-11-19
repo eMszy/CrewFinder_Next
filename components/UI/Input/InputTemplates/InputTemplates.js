@@ -10,7 +10,7 @@ export const text = {
 	},
 	valid: false,
 	touched: false,
-	disabled: true
+	disabled: true,
 };
 
 export const name = {
@@ -27,7 +27,7 @@ export const name = {
 	},
 	valid: false,
 	touched: false,
-	disabled: true
+	disabled: true,
 };
 
 export const email = {
@@ -44,7 +44,7 @@ export const email = {
 	},
 	valid: false,
 	touched: false,
-	disabled: true
+	disabled: true,
 };
 
 export const password = {
@@ -61,7 +61,7 @@ export const password = {
 	},
 	valid: false,
 	touched: false,
-	disabled: true
+	disabled: true,
 };
 
 export const confirm_password = {
@@ -77,7 +77,7 @@ export const confirm_password = {
 	},
 	valid: false,
 	touched: false,
-	disabled: true
+	disabled: true,
 };
 
 export const eventType = {
@@ -91,11 +91,110 @@ export const eventType = {
 		],
 		title: "Típus",
 	},
-	value: "Private", 
+	value: "Private",
 	validation: {
 		required: false,
 	},
 	valid: true,
 	touched: false,
-	disabled: true
+	disabled: true,
+};
+
+export const formTemplate = {
+	name: name,
+	email: email,
+	nickName: {
+		...text,
+		elementConfig: {
+			title: "Becenév",
+			editable: true,
+			subfolder: "connectInfo",
+		},
+	},
+	tel: {
+		...text,
+		elementConfig: {
+			title: "Telefonszám",
+			placeholder: "",
+			editable: true,
+			subfolder: "connectInfo",
+		},
+	},
+	dob: {
+		...text,
+		elementConfig: {
+			title: "Születési dátum",
+			placeholder: "",
+			editable: true,
+			subfolder: "connectInfo",
+		},
+	},
+	gender: {
+		...text,
+		elementConfig: {
+			title: "Neme",
+			placeholder: "",
+			editable: true,
+			subfolder: "connectInfo",
+		},
+	},
+	imdb: {
+		...text,
+		elementConfig: {
+			title: "IMDB link",
+			placeholder: "",
+			editable: true,
+			subfolder: "connectInfo",
+		},
+	},
+	facebook: {
+		...text,
+		elementConfig: {
+			title: "Facebook link",
+			placeholder: "",
+			editable: true,
+			subfolder: "connectInfo",
+		},
+	},
+	city: {
+		...text,
+		elementConfig: {
+			title: "Város",
+			placeholder: "",
+			editable: true,
+			subfolder: "address",
+		},
+	},
+	street: {
+		...text,
+		elementConfig: {
+			title: "Utca",
+			placeholder: "",
+			editable: true,
+			subfolder: "address",
+		},
+	},
+	postCode: {
+		...text,
+		elementConfig: {
+			title: "Irányítószám",
+			placeholder: "",
+			editable: true,
+			subfolder: "address",
+		},
+	},
+	createdAt: {
+		...text,
+		elementConfig: {
+			title: "Létrehozva",
+			placeholder: "",
+		},
+	},
+	updatedAt: {
+		...text,
+		elementConfig: {
+			title: "Utolsó módosítás",
+			placeholder: "",
+		},
+	},
 };

@@ -56,32 +56,15 @@
 
 .Header {
 	grid-area: header;
-	// position: fixed;
 	width: 100vw;
 	z-index: 90;
-	// background-color: #5191b3;
 }
 
-// .NotAuthMain {
-// 	display: grid;
-// }
-
-// .AuthMain {
-// 	// background-color: #e8eced;
-// 	grid-area: main;
-// 	display: grid;
-// 	grid-template-columns: 25% auto;
-// 	// 	// color: white;
-
-// 	.MainContent {
-// 		background-color: rgba(255, 255, 255, 0.7);
-// 		box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.4);
-// 		width: 95%;
-// 		padding: 1rem;
-// 		border-radius: 15px;
-// 		margin: 3rem auto;
-// 		height: fit-content;
-// 	}
+.HeaderNotAuth {
+	grid-area: header;
+	width: 100vw;
+	z-index: 90;
+}
 
 // 	.Notifications {
 // 		background-color: rgba(255, 255, 255, 0.7);
