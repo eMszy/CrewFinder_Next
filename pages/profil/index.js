@@ -3,7 +3,6 @@ import Head from "next/head";
 import React, { useContext, useEffect, useRef, useState } from "react";
 
 import { AuthContext } from "../../context/auth-context";
-import { StatusContext } from "../../context/status-context";
 import { EditForm, SavingHandel } from "../../GraphQl/utility";
 import InputElement from "../../components/UI/Input/InputElement";
 import { formTemplate } from "../../components/UI/Input/InputTemplates/InputTemplates";
@@ -31,21 +30,16 @@ const Profil = () => {
 		"name email userData {address {postCode city street} connectInfo {nickName tel facebook	imdb dob gender}} createdAt updatedAt ";
 
 	const [DataForm, setDataForm] = useState();
-	const [Saving, setSaving] = useState(false);
 	const [IfError, setIfError] = useState(null);
 	const [IsEdit, setIsEdit] = useState(false);
-	const [isLoading, setIsLoading] = useState(false);
-
-	const isDataFetched = useRef(false);
-	const isFirstRun = useRef(true);
-	const saveTimer = 5 * 1000;
 
 	const fetchData = async () => {
-		setIsLoading(true);
-		const fData = await EditForm(formTemplate, Id, Collection, OutputData);
-		setDataForm(fData);
-		isDataFetched.current = true;
-		setIsLoading(false);
+		try {
+			const fData = await EditForm(formTemplate, Id, Collection, OutputData);
+			setDataForm(fData);
+		} catch (err) {
+			console.log(`err`, err);
+		}
 	};
 
 	useEffect(() => {
@@ -60,41 +54,24 @@ const Profil = () => {
 		fetchData();
 	}, []);
 
-	useEffect(() => {
-		setIfError(null);
-		setSaving(true);
-		let timer1 = setTimeout(() => {
-			SavingHandel(Id, DataForm, Collection);
-			setSaving(false);
+	const editModeHandler = async () => {
+		if (!IsEdit) {
+			setIsEdit(true);
+		} else {
 			setIsEdit(false);
-		}, saveTimer);
-		return () => {
-			clearTimeout(timer1);
-		};
-	}, [DataForm]);
-
-	const editModeHandler = () => {
-		setIsEdit(!IsEdit);
+			try {
+				await SavingHandel(Id, DataForm, Collection);
+			} catch (err) {
+				console.log(`err`, err);
+			}
+			fetchData();
+		}
 	};
 
 	const inputChanged = (event) => {
+		const test = inputChangedHandler(event, DataForm);
 		setDataForm(inputChangedHandler(event, DataForm));
 	};
-
-	let Message = <p className={classes.Green}>Mentve</p>;
-	if (IfError) Message = <ErrorHandel err={IfError} />;
-
-	let SavingSpinner = <div></div>;
-
-	if (Saving) SavingSpinner = <Spinner />;
-	if (!IsEdit) {
-		SavingSpinner = (
-			<React.Fragment>
-				<Button clicked={editModeHandler}>Szerkesztés</Button>
-				{Message}
-			</React.Fragment>
-		);
-	}
 
 	return (
 		<>
@@ -108,21 +85,20 @@ const Profil = () => {
 				<div className={classes.Profil_Panels}>
 					<form className={classes.Profil_Form}>
 						<h2>A Profilod</h2>
-						<div className={classes.Profil_SavingSpinner}>
-							<div>{SavingSpinner}</div>
+						<div className={classes.Error}>
+							{IfError ? <ErrorHandel err={IfError} /> : <p></p>}
 						</div>
-						{isLoading ? (
-							<div className={classes.Profil_SavingSpinner}>
-								<Spinner />
-							</div>
-						) : (
-							<InputElement
-								Form={DataForm}
-								changed={inputChanged}
-								IsDisabled={IsEdit}
-							/>
-						)}
+						<InputElement
+							Form={DataForm}
+							changed={inputChanged}
+							IsDisabled={IsEdit}
+						/>
 					</form>
+					<div className={classes.SubmitBtn}>
+						<Button clicked={editModeHandler}>
+							{IsEdit ? "Mentés" : "Módósítás"}
+						</Button>
+					</div>
 					<div className={classes.DeleteBtn}>
 						<Button>A profilom törlése</Button>
 					</div>

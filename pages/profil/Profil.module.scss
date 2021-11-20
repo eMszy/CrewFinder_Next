@@ -19,7 +19,7 @@
 	.Profil_Panels {
 		min-width: 30%;
 		margin: 3rem auto;
-		padding: 1rem;
+		padding: 2rem;
 		background-color: rgb(255, 255, 255, 0.7);
 		border-radius: 15px;
 		width: 90%;
@@ -35,8 +35,10 @@
 
 	h2 {
 		text-align: center;
+		// padding-bottom: 1rem;
 		@include media-min-width(1200px) {
 			grid-column: span 2;
+			// padding-bottom: 2rem;
 		}
 	}
 
@@ -108,19 +110,32 @@
 	}
 }
 
-.DeleteBtn {
+.SubmitBtn {
 	margin-top: 2rem;
 	button {
+		width: 10rem;
 		padding: 0.5rem;
-		// border-color: red;
+	}
+}
+
+.DeleteBtn {
+	margin-top: 1rem;
+	button {
+		width: 10rem;
+		padding: 0.5rem;
 		color: red;
 		&:hover {
 			color: black;
+			border-color: red;
 			background-color: red;
 		}
 	}
 }
 
-.Green {
-	color: green;
+.Error {
+	// color: red
+	min-height: 2.5rem;
+	@include media-min-width(1200px) {
+		grid-column: span 2;
+	}
 }
