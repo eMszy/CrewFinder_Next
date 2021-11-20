@@ -15,53 +15,58 @@ import Spinner from "../../components/UI/Spinner/Spinner";
 import classes from "./Profil.module.scss";
 
 const Profil = () => {
+	Profil.title = "CrewFinder - Profil";
+
 	const authContext = useContext(AuthContext);
-	const statusContext = useContext(StatusContext);
 	const router = useRouter();
 
 	let Id;
+
 	if (typeof window !== "undefined") {
 		Id = localStorage.getItem("userId");
 	}
-	console.log(`Id`, Id, authContext.isAuth);
 
 	const Collection = "user";
 	const OutputData =
 		"name email userData {address {postCode city street} connectInfo {nickName tel facebook	imdb dob gender}} createdAt updatedAt ";
 
-	const [DataForm, setDataForm] = useState(formTemplate);
+	const [DataForm, setDataForm] = useState();
 	const [Saving, setSaving] = useState(false);
 	const [IfError, setIfError] = useState(null);
 	const [IsEdit, setIsEdit] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
+	const isDataFetched = useRef(false);
 	const isFirstRun = useRef(true);
 	const saveTimer = 5 * 1000;
 
 	const fetchData = async () => {
-		statusContext.letLodingStatusTrue();
+		setIsLoading(true);
 		const fData = await EditForm(formTemplate, Id, Collection, OutputData);
-		statusContext.letLodingStatusFalse();
 		setDataForm(fData);
+		isDataFetched.current = true;
+		setIsLoading(false);
 	};
 
 	useEffect(() => {
-		if (!authContext.isAuth) {
+		if (!localStorage.getItem("token")) {
 			router.push("/");
+			authContext.logout();
+			return;
 		}
+		if (!authContext.isAuth) {
+			authContext.autoLogin();
+		}
+		fetchData();
 	}, []);
 
 	useEffect(() => {
-		if (isFirstRun.current) {
-			isFirstRun.current = false;
-			return;
-		}
 		setIfError(null);
 		setSaving(true);
-		let timer1 = setTimeout(async () => {
+		let timer1 = setTimeout(() => {
 			SavingHandel(Id, DataForm, Collection);
 			setSaving(false);
 			setIsEdit(false);
-			fetchData();
 		}, saveTimer);
 		return () => {
 			clearTimeout(timer1);
@@ -97,19 +102,30 @@ const Profil = () => {
 				<title>CrewFinder - Profil</title>
 			</Head>
 			<div className={classes.Profil}>
-				<div className={classes.Profil_Panels}>EVENTS</div>
+				<div className={classes.Profil_Panels}>
+					<h2>Eseményeid</h2>
+				</div>
 				<div className={classes.Profil_Panels}>
 					<form className={classes.Profil_Form}>
 						<h2>A Profilod</h2>
 						<div className={classes.Profil_SavingSpinner}>
 							<div>{SavingSpinner}</div>
 						</div>
-						<InputElement
-							Form={DataForm}
-							changed={inputChanged}
-							IsDisabled={IsEdit}
-						/>
+						{isLoading ? (
+							<div className={classes.Profil_SavingSpinner}>
+								<Spinner />
+							</div>
+						) : (
+							<InputElement
+								Form={DataForm}
+								changed={inputChanged}
+								IsDisabled={IsEdit}
+							/>
+						)}
 					</form>
+					<div className={classes.DeleteBtn}>
+						<Button>A profilom törlése</Button>
+					</div>
 				</div>
 			</div>
 		</>

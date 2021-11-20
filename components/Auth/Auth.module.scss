@@ -54,7 +54,7 @@
 	display: grid;
 	grid-template-columns: auto;
 	background-color: rgba(255, 255, 255, 0.2);
-
+	min-height: 20rem;
 	margin: 0 auto 3rem;
 	border: 2px solid white;
 	border-radius: 15px;
@@ -126,5 +126,7 @@
 }
 
 .Spinner {
-	grid-column: span 2;
+	@include media-min-width(800px) {
+		grid-column: span 2;
+	}
 }

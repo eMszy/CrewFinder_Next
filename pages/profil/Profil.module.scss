@@ -19,12 +19,17 @@
 	.Profil_Panels {
 		min-width: 30%;
 		margin: 3rem auto;
-		padding: 0.5rem;
+		padding: 1rem;
 		background-color: rgb(255, 255, 255, 0.7);
 		border-radius: 15px;
 		width: 90%;
+		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.25),
+			0 6px 20px 0 rgba(0, 0, 0, 0.19);
+		text-align: center;
 		@include media-min-width(1200px) {
+			min-height: 42rem;
 			width: auto;
+			padding: 2rem;
 		}
 	}
 
@@ -92,11 +97,27 @@
 	display: flex;
 	justify-content: center;
 	height: 6rem;
+	button {
+		padding: 0.5rem;
+	}
 	@include media-min-width(1200px) {
 		grid-column: span 2;
 	}
 	div {
 		align-self: center;
+	}
+}
+
+.DeleteBtn {
+	margin-top: 2rem;
+	button {
+		padding: 0.5rem;
+		// border-color: red;
+		color: red;
+		&:hover {
+			color: black;
+			background-color: red;
+		}
 	}
 }
 

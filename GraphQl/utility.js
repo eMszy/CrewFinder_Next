@@ -12,7 +12,6 @@ export const PostData = async (graphqlQuery) => {
 		body: JSON.stringify(graphqlQuery),
 	});
 	const resData = await res.json();
-	console.log(`resData`, resData);
 
 	if (resData.errors) {
 		console.log("Error: ", resData.errors);
