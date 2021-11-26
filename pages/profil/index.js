@@ -78,7 +78,7 @@ const Profil = () => {
 	return (
 		<>
 			<Head>
-				<title>CrewFinder - Profil</title>
+				<title>{Profil.title}</title>
 			</Head>
 			<div className={classes.Profil}>
 				<div className={classes.Profil_Panels}>

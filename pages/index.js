@@ -26,7 +26,7 @@ const Home = () => {
 	return (
 		<>
 			<Head>
-				<title>CrewFinder</title>
+				<title>{Home.title}</title>
 			</Head>
 			{content}
 		</>

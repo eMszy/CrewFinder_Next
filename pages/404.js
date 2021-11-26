@@ -19,7 +19,7 @@ const Costume404 = () => {
 	return (
 		<>
 			<Head>
-				<title>CrewFinder - 404</title>
+				<title>{Costume404.title}</title>
 			</Head>
 			<div className={classes.Main}>
 				<h1>Sajnáljuk, ez az oldal nem létezik.</h1>
