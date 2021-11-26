@@ -1,0 +1,26 @@
+@mixin media-min-width($width) {
+	@media (min-width: $width) {
+		@content;
+	}
+}
+
+.Main {
+	line-height: 2;
+	width: 90%;
+	margin: 3rem auto;
+	padding: 1.5rem;
+	color: black;
+	text-align: justify;
+	background-color: rgb(255, 255, 255, 0.7);
+	border-radius: 15px;
+
+	@include media-min-width(1200px) {
+		width: 80%;
+		padding: 3rem;
+	}
+
+	h1 {
+		padding: 2rem;
+		text-align: center;
+	}
+}
