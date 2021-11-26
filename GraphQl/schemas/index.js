@@ -115,9 +115,9 @@ export const typeDefs = gql`
 		createUser(userInput: mainUserInputData!): User!
 		updateUser(id: ID!, Data: userInput!): User
 		# deleteUser
+		deleteUser(id: ID!): Boolean
 
 		# Event Mutations
-		# deleteUser
 		createEvent(id: ID!, eventInput: eventInputData!): Event
 		# updateEvent
 		deleteEvent(id: ID!): Boolean

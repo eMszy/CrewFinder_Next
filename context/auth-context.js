@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { useRouter } from "next/router";
 
 import { createNewUser, userLogin } from "../GraphQl/GraphQLTemplates";
-import { PostData } from "../GraphQl/utility";
+import { FetchData, PostData } from "../GraphQl/utility";
 import { StatusContext } from "./status-context";
 
 export const AuthContext = React.createContext({
@@ -39,11 +39,12 @@ const AuthContextProvider = (props) => {
 			UserForm.password.value
 		);
 
-		console.log("Creating a new User: ", UserForm);
 		try {
 			await PostData(graphqlQuery);
 			setAuthLoading(false);
-			setIsAuth(true);
+			console.log("Creating a new User: ", UserForm);
+			statusContext.setStatus({ message: "Sikeres regisztráció" });
+			loginHandler(UserForm);
 		} catch (err) {
 			setIsAuth(false);
 			setAuthLoading(false);
@@ -77,6 +78,7 @@ const AuthContextProvider = (props) => {
 			localStorage.setItem("expiryDate", expiryDate.toISOString());
 
 			setAutoLogout(remainingMilliseconds);
+			statusContext.setStatus({ message: "Sikeres bejelentkezés" });
 		} catch (err) {
 			setIsAuth(false);
 			setAuthLoading(false);
@@ -85,19 +87,26 @@ const AuthContextProvider = (props) => {
 		}
 	};
 
-	const autoLogin = () => {
+	const autoLogin = async () => {
 		const token = localStorage.getItem("token");
+		const userId = localStorage.getItem("userId");
 		let expiryDate = localStorage.getItem("expiryDate");
-		if (!token || !expiryDate) {
+		if (!token || !expiryDate || !userId) {
 			return;
 		}
-		if (new Date(expiryDate) <= new Date()) {
+		try {
+			await FetchData("user", userId, "name");
+			if (new Date(expiryDate) <= new Date()) {
+				logoutHandler();
+				return;
+			}
+			setIsAuth(true);
+			setToken(token);
+			console.log("AutoLogin is working!");
+		} catch (err) {
+			console.log(`err`, err);
 			logoutHandler();
-			return;
 		}
-		setIsAuth(true);
-		setToken(token);
-		console.log("AutoLogin is working!");
 	};
 
 	const logoutHandler = (message) => {
@@ -108,6 +117,7 @@ const AuthContextProvider = (props) => {
 		localStorage.removeItem("expiryDate");
 		localStorage.removeItem("userId");
 		router.push("/");
+		statusContext.setStatus({ message: "Sikeres kijelentkezés" });
 	};
 
 	const setAutoLogout = (milliseconds) => {

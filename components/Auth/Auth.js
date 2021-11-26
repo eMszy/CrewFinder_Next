@@ -3,7 +3,6 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { AuthContext } from "../../context/auth-context";
-import { StatusContext } from "../../context/status-context";
 import { inputChangedHandler, isAllInputVaild } from "../../shared/utility.js";
 import * as InputTemplates from "../../components/UI/Input/InputTemplates/InputTemplates.js";
 import InputElement from "../../components/UI/Input/InputElement";
@@ -15,7 +14,6 @@ import classes from "./Auth.module.scss";
 
 const AuthForm = () => {
 	const authContext = useContext(AuthContext);
-	const statusContext = useContext(StatusContext);
 
 	const formElmentTemplates = {
 		login: {
@@ -36,7 +34,6 @@ const AuthForm = () => {
 	const signupHandler = (event) => {
 		event.preventDefault();
 		authContext.reg(LoginRegForm);
-		switchAuthModeHandler(LoginRegForm.email.value);
 	};
 
 	const loginHandler = async (event) => {
@@ -58,7 +55,6 @@ const AuthForm = () => {
 			};
 		}
 		setLoginRegForm(formElments);
-		statusContext.setStatus(null);
 	};
 
 	if (LoginRegForm.confirm_password) {

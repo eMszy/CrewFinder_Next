@@ -208,6 +208,29 @@ export const resolvers = {
 			return returnObject(user);
 		},
 
+		deleteUser: async (req, { id }, { isAuth, err, userId }) => {
+			// console.log(`object`, id, isAuth, err, userId);
+			AuthFailMsg(isAuth);
+			const user = await User.findById(id);
+			IsExist(user, "felhasználó");
+
+			console.log(`user`, user.event);
+
+			if (id !== userId) {
+				const error = new Error("Nem engedélyezett művelet!");
+				error.code = 403;
+				throw error;
+			}
+
+			await User.findByIdAndRemove(id);
+
+			// const event = await.findById(eventId);
+			// event.user.pull(id);
+			// await event.save();
+
+			return true;
+		},
+
 		createEvent: async (req, { id, eventInput }, { isAuth, err, userId }) => {
 			// console.log(`req`, req, isAuth, id, eventInput);
 

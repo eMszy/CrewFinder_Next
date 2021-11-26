@@ -1,15 +1,14 @@
 import { useRouter } from "next/router";
 import Head from "next/head";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { AuthContext } from "../../context/auth-context";
 import { StatusContext } from "../../context/status-context";
-import { EditForm, SavingHandel } from "../../GraphQl/utility";
+import { DeleteHandel, EditForm, SavingHandel } from "../../GraphQl/utility";
 import InputElement from "../../components/UI/Input/InputElement";
 import { formTemplate } from "../../components/UI/Input/InputTemplates/InputTemplates";
 import { inputChangedHandler, isAllInputVaild } from "../../shared/utility";
 import Button from "../../components/UI/Button/Button";
-// import Spinner from "../../components/UI/Spinner/Spinner";
 
 import classes from "./Profil.module.scss";
 
@@ -33,6 +32,7 @@ const Profil = () => {
 
 	const [DataForm, setDataForm] = useState();
 	const [IsEdit, setIsEdit] = useState(false);
+	const [isDelete, setIsDelete] = useState(false);
 
 	const fetchData = async () => {
 		try {
@@ -62,8 +62,7 @@ const Profil = () => {
 			setIsEdit(false);
 			try {
 				await SavingHandel(Id, DataForm, Collection);
-				const message = { message: "Sikeres mentés" };
-				statusContext.setStatus(message);
+				statusContext.setStatus({ message: "Sikeres mentés" });
 			} catch (err) {
 				statusContext.setStatus(err);
 			}
@@ -73,6 +72,24 @@ const Profil = () => {
 
 	const inputChanged = (event) => {
 		setDataForm(inputChangedHandler(event, DataForm));
+	};
+
+	const deletBtnHendle = () => {
+		if (isDelete) {
+			DeleteHandel(Id);
+			statusContext.setStatus({
+				message: "Sikeresen törölted a regisztrációdat",
+				error: true,
+			});
+			authContext.logout();
+		} else {
+			setIsDelete(true);
+			statusContext.setStatus({
+				message:
+					"Biztos hogy törlöd a Profilodat? Így az általad létrehozott eseményeid is törlésre kerülnek!",
+				error: true,
+			});
+		}
 	};
 
 	return (
@@ -101,8 +118,10 @@ const Profil = () => {
 							{IsEdit ? "Mentés" : "Módósítás"}
 						</Button>
 					</div>
-					<div className={classes.DeleteBtn}>
-						<Button>A profilom törlése</Button>
+					<div className={!isDelete ? classes.DeleteBtn : classes.DeleteAlert}>
+						<Button clicked={() => deletBtnHendle()}>
+							{!isDelete ? "A profilom törlése" : "Igen, törlöm"}
+						</Button>
 					</div>
 				</div>
 			</div>

@@ -1,4 +1,4 @@
-import { FetchByIdGQL, updateByIdGQL } from "./GraphQLTemplates";
+import { deletUser, FetchByIdGQL, updateByIdGQL } from "./GraphQLTemplates";
 
 export const PostData = async (graphqlQuery) => {
 	const token = localStorage.getItem("token");
@@ -103,5 +103,15 @@ export const SavingHandel = async (Id, DataForm, Collection) => {
 	} else {
 		errorHandel(err);
 		throw new Error("Somtihing went wrong");
+	}
+};
+
+export const DeleteHandel = async (Id) => {
+	const graphqlQuery = deletUser(Id);
+	try {
+		await PostData(graphqlQuery);
+	} catch (err) {
+		console.error(err);
+		throw err;
 	}
 };

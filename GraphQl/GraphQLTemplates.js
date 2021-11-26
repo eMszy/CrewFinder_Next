@@ -107,6 +107,20 @@ export const createEvent = (id, eventInput) => {
 	return graphqlQuery;
 };
 
+export const deletUser = (id) => {
+	const graphqlQuery = {
+		query: `
+			mutation DeleteUser($id: ID!) {
+				deleteUser(id: $id)
+			}
+		`,
+		variables: {
+			id: id,
+		},
+	};
+	return graphqlQuery;
+};
+
 export const events = () => {
 	const graphqlQuery = {
 		query: `
