@@ -11,9 +11,9 @@ const StatusContextProvider = (props) => {
 	const setStatus = (message) => {
 		if (message != null) {
 			if (message.error) {
-				console.error("Error: ", message);
+				console.error("Error:", message);
 			} else {
-				console.log("Status: ", message);
+				console.log("Status:", message);
 			}
 		}
 		setIsStatusMsg(message);
