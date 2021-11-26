@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useRouter } from "next/router";
 
 import { createNewUser, userLogin } from "../GraphQl/GraphQLTemplates";
 import { PostData } from "../GraphQl/utility";
+import { StatusContext } from "./status-context";
 
 export const AuthContext = React.createContext({
 	isAuth: false,
 	loading: false,
-	err: null,
 	token: null,
 	userId: null,
 	isAdmin: false,
@@ -15,25 +15,23 @@ export const AuthContext = React.createContext({
 	reg: () => {},
 	login: () => {},
 	logout: () => {},
-	setErrNull: () => {},
 	autoLogin: () => {},
 });
 
 const AuthContextProvider = (props) => {
+	const statusContext = useContext(StatusContext);
+
 	const [IsAuth, setIsAuth] = useState(false);
 	const [IsAdmin, setIsAdmin] = useState(false);
 	const [IsHOD, setIsHOD] = useState(false);
 	const [AuthLoading, setAuthLoading] = useState(false);
 	const [Token, setToken] = useState(null);
 	const [UserId, setUserId] = useState(null);
-	const [IfError, setIfError] = useState(null);
 
 	const router = useRouter();
 
 	const signupHandler = async (UserForm) => {
 		setAuthLoading(true);
-
-		// console.log(`UserFrom`, UserFrom.email);
 
 		const graphqlQuery = createNewUser(
 			UserForm.email.value,
@@ -47,10 +45,10 @@ const AuthContextProvider = (props) => {
 			setAuthLoading(false);
 			setIsAuth(true);
 		} catch (err) {
-			console.log(err);
 			setIsAuth(false);
 			setAuthLoading(false);
-			setIfError(err);
+			err.error = true;
+			statusContext.setStatus(err);
 		}
 	};
 
@@ -80,10 +78,10 @@ const AuthContextProvider = (props) => {
 
 			setAutoLogout(remainingMilliseconds);
 		} catch (err) {
-			console.log(err);
 			setIsAuth(false);
 			setAuthLoading(false);
-			setIfError(err);
+			err.error = true;
+			statusContext.setStatus(err);
 		}
 	};
 
@@ -99,7 +97,7 @@ const AuthContextProvider = (props) => {
 		}
 		setIsAuth(true);
 		setToken(token);
-		console.log("AutoLogin is working");
+		console.log("AutoLogin is working!");
 	};
 
 	const logoutHandler = (message) => {
@@ -118,23 +116,17 @@ const AuthContextProvider = (props) => {
 		}, milliseconds);
 	};
 
-	const setErrorNull = () => {
-		setIfError(null);
-	};
-
 	return (
 		<AuthContext.Provider
 			value={{
 				reg: signupHandler,
 				login: loginHandler,
 				logout: logoutHandler,
-				setErrNull: setErrorNull,
 				autoLogin: autoLogin,
 				isAdmin: IsAdmin,
 				isHOD: IsHOD,
 				token: Token,
 				userId: UserId,
-				err: IfError,
 				isAuth: IsAuth,
 				loading: AuthLoading,
 			}}

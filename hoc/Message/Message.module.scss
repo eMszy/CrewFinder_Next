@@ -1,0 +1,27 @@
+.MessageMain {
+	display: flex;
+	justify-content: center;
+
+	.MessageDiv {
+		position: absolute;
+		display: flex;
+		min-width: 30rem;
+		top: 2%;
+		margin: 0 5%;
+		padding: 1rem;
+		justify-content: center;
+		background-color: rgba(255, 255, 255, 0.7);
+		border: 3px green solid;
+		color: green;
+		border-radius: 25px;
+		align-items: center;
+		text-align: center;
+		transition-property: opacity, left, top, height;
+		transition-duration: 3s, 5s;
+	}
+
+	.Error {
+		border: 3px red solid;
+		color: red;
+	}
+}

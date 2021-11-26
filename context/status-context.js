@@ -1,34 +1,29 @@
 import React, { useState } from "react";
 
 export const StatusContext = React.createContext({
-	isLoading: false,
-	letLodingStatusFalse: () => {},
-	letLodingStatusTrue: () => {},
-	changedLodingStatus: () => {},
+	isStatusMsg: null,
+	setStatus: () => {},
 });
 
 const StatusContextProvider = (props) => {
-	const [Loading, setLoading] = useState(false);
+	const [isStatusMsg, setIsStatusMsg] = useState(null);
 
-	const letLodingStatusFalse = () => {
-		setLoading(false);
-	};
-
-	const letLodingStatusTrue = () => {
-		setLoading(true);
-	};
-
-	const changedLodingStatus = () => {
-		setLoading(!Loading);
+	const setStatus = (message) => {
+		if (message != null) {
+			if (message.error) {
+				console.error("Error: ", message);
+			} else {
+				console.log("Status: ", message);
+			}
+		}
+		setIsStatusMsg(message);
 	};
 
 	return (
 		<StatusContext.Provider
 			value={{
-				isLoading: Loading,
-				letLodingStatusFalse: letLodingStatusFalse,
-				letLodingStatusTrue: letLodingStatusTrue,
-				changedLodingStatus: changedLodingStatus,
+				isStatusMsg: isStatusMsg,
+				setStatus: setStatus,
 			}}
 		>
 			{props.children}

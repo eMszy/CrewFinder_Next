@@ -3,19 +3,19 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { AuthContext } from "../../context/auth-context";
+import { StatusContext } from "../../context/status-context";
 import { inputChangedHandler, isAllInputVaild } from "../../shared/utility.js";
 import * as InputTemplates from "../../components/UI/Input/InputTemplates/InputTemplates.js";
 import InputElement from "../../components/UI/Input/InputElement";
 import Button from "../../components/UI/Button/Button";
-import ErrorHandel from "../../shared/errorHandel";
 
 import crewfinderLogoWhite from "../../public/icons/crewfinderLogoWhite.svg";
 import Spinner from "../../components/UI/Spinner/Spinner.js";
 import classes from "./Auth.module.scss";
-import { autoLogin } from "../../shared/autoLogin";
 
 const AuthForm = () => {
 	const authContext = useContext(AuthContext);
+	const statusContext = useContext(StatusContext);
 
 	const formElmentTemplates = {
 		login: {
@@ -36,7 +36,6 @@ const AuthForm = () => {
 	const signupHandler = (event) => {
 		event.preventDefault();
 		authContext.reg(LoginRegForm);
-		// authContext.login(LoginRegForm);
 		switchAuthModeHandler(LoginRegForm.email.value);
 	};
 
@@ -59,7 +58,7 @@ const AuthForm = () => {
 			};
 		}
 		setLoginRegForm(formElments);
-		authContext.setErrNull();
+		statusContext.setStatus(null);
 	};
 
 	if (LoginRegForm.confirm_password) {
@@ -108,11 +107,6 @@ const AuthForm = () => {
 				className={classes.LoginMain__LoginForm}
 			>
 				<h2>{IsSignup ? "Regisztráció" : "Belépés"}</h2>
-				{authContext.err ? (
-					<div className={classes.LoginMain_Error}>
-						<ErrorHandel err={authContext.err} />
-					</div>
-				) : null}
 				{authContext.loading ? (
 					<div className={classes.Spinner}>
 						<Spinner />

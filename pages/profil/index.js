@@ -3,13 +3,13 @@ import Head from "next/head";
 import React, { useContext, useEffect, useRef, useState } from "react";
 
 import { AuthContext } from "../../context/auth-context";
+import { StatusContext } from "../../context/status-context";
 import { EditForm, SavingHandel } from "../../GraphQl/utility";
 import InputElement from "../../components/UI/Input/InputElement";
 import { formTemplate } from "../../components/UI/Input/InputTemplates/InputTemplates";
-import { inputChangedHandler } from "../../shared/utility";
+import { inputChangedHandler, isAllInputVaild } from "../../shared/utility";
 import Button from "../../components/UI/Button/Button";
-import ErrorHandel from "../../shared/errorHandel";
-import Spinner from "../../components/UI/Spinner/Spinner";
+// import Spinner from "../../components/UI/Spinner/Spinner";
 
 import classes from "./Profil.module.scss";
 
@@ -17,6 +17,8 @@ const Profil = () => {
 	Profil.title = "CrewFinder - Profil";
 
 	const authContext = useContext(AuthContext);
+	const statusContext = useContext(StatusContext);
+
 	const router = useRouter();
 
 	let Id;
@@ -30,7 +32,6 @@ const Profil = () => {
 		"name email userData {address {postCode city street} connectInfo {nickName tel facebook	imdb dob gender}} createdAt updatedAt ";
 
 	const [DataForm, setDataForm] = useState();
-	const [IfError, setIfError] = useState(null);
 	const [IsEdit, setIsEdit] = useState(false);
 
 	const fetchData = async () => {
@@ -38,7 +39,7 @@ const Profil = () => {
 			const fData = await EditForm(formTemplate, Id, Collection, OutputData);
 			setDataForm(fData);
 		} catch (err) {
-			console.log(`err`, err);
+			statusContext.setStatus(err);
 		}
 	};
 
@@ -62,7 +63,7 @@ const Profil = () => {
 			try {
 				await SavingHandel(Id, DataForm, Collection);
 			} catch (err) {
-				console.log(`err`, err);
+				statusContext.setStatus(err);
 			}
 			fetchData();
 		}
@@ -85,9 +86,6 @@ const Profil = () => {
 				<div className={classes.Profil_Panels}>
 					<form className={classes.Profil_Form}>
 						<h2>A Profilod</h2>
-						<div className={classes.Error}>
-							{IfError ? <ErrorHandel err={IfError} /> : <p></p>}
-						</div>
 						<InputElement
 							Form={DataForm}
 							changed={inputChanged}
@@ -95,7 +93,10 @@ const Profil = () => {
 						/>
 					</form>
 					<div className={classes.SubmitBtn}>
-						<Button clicked={editModeHandler}>
+						<Button
+							clicked={editModeHandler}
+							disabled={!isAllInputVaild(DataForm)}
+						>
 							{IsEdit ? "Mentés" : "Módósítás"}
 						</Button>
 					</div>

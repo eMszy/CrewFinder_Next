@@ -14,8 +14,10 @@ export const PostData = async (graphqlQuery) => {
 	const resData = await res.json();
 
 	if (resData.errors) {
-		console.log("Error: ", resData.errors);
-		throw new Error(resData.errors[0].message);
+		console.error("Error: ", resData.errors);
+		const error = resData.errors[0];
+		error.message = resData.errors[0].message;
+		throw error;
 	}
 	return resData;
 };
@@ -27,8 +29,7 @@ export const FetchData = async (Collection, Id, OutputData) => {
 		const resivedUserData = await PostData(graphqlQuery);
 		return resivedUserData;
 	} catch (err) {
-		console.log(err);
-		// setIfError(err);
+		throw err;
 	}
 };
 
@@ -65,8 +66,9 @@ export const EditForm = (Form, Id, Collection, OutputData) => {
 			}
 			return updatedObject;
 		} catch (err) {
-			console.log(err);
-			// setIfError(err);
+			err.code = 401;
+			err.error = true;
+			throw err;
 		}
 	};
 
@@ -95,12 +97,11 @@ export const SavingHandel = async (Id, DataForm, Collection) => {
 		try {
 			await PostData(graphqlQuery);
 		} catch (err) {
-			console.log(err);
-			// setIfError(err);
+			console.error(err);
+			throw err;
 		}
+	} else {
+		errorHandel(err);
+		throw new Error("Somtihing went wrong");
 	}
-	// else {
-
-	// 	return setIfError("Somtihing went wrong");
-	// }
 };
