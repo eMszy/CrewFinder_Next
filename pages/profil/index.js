@@ -62,6 +62,8 @@ const Profil = () => {
 			setIsEdit(false);
 			try {
 				await SavingHandel(Id, DataForm, Collection);
+				const message = { message: "Sikeres mentés" };
+				statusContext.setStatus(message);
 			} catch (err) {
 				statusContext.setStatus(err);
 			}
@@ -70,7 +72,6 @@ const Profil = () => {
 	};
 
 	const inputChanged = (event) => {
-		const test = inputChangedHandler(event, DataForm);
 		setDataForm(inputChangedHandler(event, DataForm));
 	};
 

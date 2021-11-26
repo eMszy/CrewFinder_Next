@@ -8,6 +8,8 @@ import { autoLogin } from "../shared/autoLogin";
 import classes from "./index.module.scss";
 
 const Home = () => {
+	Home.title = "CrewFinder";
+
 	const authContext = useContext(AuthContext);
 	autoLogin();
 

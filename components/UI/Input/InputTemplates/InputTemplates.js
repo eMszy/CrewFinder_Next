@@ -137,6 +137,9 @@ export const formTemplate = {
 			editable: true,
 			subfolder: "connectInfo",
 		},
+		validation: {
+			minLength: 2,
+		},
 	},
 	imdb: {
 		...text,
