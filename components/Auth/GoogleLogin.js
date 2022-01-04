@@ -6,7 +6,7 @@ import Button from "../UI/Button/Button";
 
 const clientId = process.env.GOOGLE_SINGIN_CLIENT_ID;
 
-const GoogleLoginButton = (props) => {
+const GoogleLoginButton = () => {
 	const authContext = useContext(AuthContext);
 
 	const onLoginSuccess = (res) => {
@@ -55,7 +55,7 @@ const GoogleLoginButton = (props) => {
 								<path fill="none" d="M0 0h18v18H0z"></path>
 							</g>
 						</svg>
-						<p>Bejelentkezés Google fiókkal</p>
+						<p>Google bejelentkezés</p>
 					</div>
 				</Button>
 			)}

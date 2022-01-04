@@ -45,6 +45,7 @@
 
 .LoginMain_Error {
 	text-align: center;
+
 	@include media-min-width(800px) {
 		grid-column: span 2;
 	}
@@ -60,7 +61,7 @@
 	padding: 1rem;
 	text-align: left;
 	width: 80vw;
-	// row-gap: 1rem;
+	row-gap: 1rem;
 
 	@include media-min-width(800px) {
 		grid-template-columns: 30% 70%;
@@ -78,9 +79,10 @@
 
 	h2 {
 		text-align: center;
-		// @include media-min-width(800px) {
-		grid-column: span 2;
-		// }
+
+		@include media-min-width(800px) {
+			grid-column: span 2;
+		}
 	}
 
 	a {
@@ -119,7 +121,6 @@
 		height: 3rem;
 		font-size: 1.2rem;
 		background-color: transparent;
-		grid-column: span 2;
 		&:hover {
 			background-color: white;
 			border-color: #afd7f8;
@@ -131,13 +132,18 @@
 			cursor: not-allowed;
 		}
 
-		// @include media-min-width(800px) {
-		// }
+		@include media-min-width(800px) {
+			grid-column: span 2;
+		}
 	}
 
 	.LoginMain__LoginForm__GoogleBtn {
-		grid-column: span 2;
+		margin: 1rem 0;
 		text-align: center;
+
+		@include media-min-width(800px) {
+			grid-column: span 2;
+		}
 
 		div {
 			display: flex;
@@ -147,10 +153,32 @@
 
 			svg {
 				margin: 0 1rem 0 0;
-				padding: 5px;
+				padding: 6px;
 				border-radius: 15px;
 				background-color: rgba(255, 255, 255, 1);
 			}
+		}
+	}
+
+	.LoginMain__LoginForm__FacebookBtn {
+		text-align: center;
+
+		@include media-min-width(800px) {
+			grid-column: span 2;
+		}
+
+		div {
+			display: flex;
+			padding: 6px 15px;
+			align-items: center;
+			height: 3rem;
+
+			// svg {
+			// margin: 0 1rem 0 0;
+			// padding: 6px;
+			// border-radius: 15px;
+			// background-color: #1977f3;
+			// }
 		}
 	}
 }

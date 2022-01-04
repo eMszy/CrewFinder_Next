@@ -7,11 +7,11 @@ import { inputChangedHandler, isAllInputVaild } from "../../shared/utility.js";
 import * as InputTemplates from "../../components/UI/Input/InputTemplates/InputTemplates.js";
 import InputElement from "../../components/UI/Input/InputElement";
 import Button from "../../components/UI/Button/Button";
-
 import crewfinderLogoWhite from "../../public/icons/crewfinderLogoWhite.svg";
 import Spinner from "../../components/UI/Spinner/Spinner.js";
 import classes from "./Auth.module.scss";
 import GoogleLoginButton from "./GoogleLogin";
+import FacebookLoginButton from "./FacebookLogin";
 
 const AuthForm = () => {
 	const authContext = useContext(AuthContext);
@@ -124,10 +124,13 @@ const AuthForm = () => {
 						value={IsSignup ? "REGISZTRÁCIÓ" : "BEJELENTKEZÉS"}
 						disabled={!isAllInputVaild(LoginRegForm)}
 					/>
-					<div className={classes.LoginMain__LoginForm__GoogleBtn}>
-						<GoogleLoginButton />
-					</div>
 				</form>
+				<div className={classes.LoginMain__LoginForm__GoogleBtn}>
+					<GoogleLoginButton />
+				</div>
+				<div className={classes.LoginMain__LoginForm__FacebookBtn}>
+					<FacebookLoginButton />
+				</div>
 			</div>
 		</React.Fragment>
 	);
