@@ -11,6 +11,7 @@ import Button from "../../components/UI/Button/Button";
 import crewfinderLogoWhite from "../../public/icons/crewfinderLogoWhite.svg";
 import Spinner from "../../components/UI/Spinner/Spinner.js";
 import classes from "./Auth.module.scss";
+import GoogleLoginButton from "./GoogleLogin";
 
 const AuthForm = () => {
 	const authContext = useContext(AuthContext);
@@ -33,6 +34,7 @@ const AuthForm = () => {
 
 	const signupHandler = (event) => {
 		event.preventDefault();
+		console.log(`event`, LoginRegForm);
 		authContext.reg(LoginRegForm);
 	};
 
@@ -98,30 +100,35 @@ const AuthForm = () => {
 	let FormElementRender = (
 		<React.Fragment>
 			{logoElement}
-			<form
-				onSubmit={IsSignup ? signupHandler : loginHandler}
-				className={classes.LoginMain__LoginForm}
-			>
-				<h2>{IsSignup ? "Regisztráció" : "Belépés"}</h2>
-				{authContext.loading ? (
-					<div className={classes.Spinner}>
-						<Spinner />
-					</div>
-				) : (
-					<InputElement
-						Form={LoginRegForm}
-						IsEdit={true}
-						changed={inputChanged}
+			<div className={classes.LoginMain__LoginDiv}>
+				<form
+					onSubmit={IsSignup ? signupHandler : loginHandler}
+					className={classes.LoginMain__LoginForm}
+				>
+					<h2>{IsSignup ? "Regisztráció" : "Belépés"}</h2>
+					{authContext.loading ? (
+						<div className={classes.Spinner}>
+							<Spinner />
+						</div>
+					) : (
+						<InputElement
+							Form={LoginRegForm}
+							IsEdit={true}
+							changed={inputChanged}
+						/>
+					)}
+					<input
+						className={classes.LoginMain__LoginForm__SubmitBtn}
+						type="submit"
+						name="submit"
+						value={IsSignup ? "REGISZTRÁCIÓ" : "BEJELENTKEZÉS"}
+						disabled={!isAllInputVaild(LoginRegForm)}
 					/>
-				)}
-				<input
-					className={classes.LoginMain__LoginForm__SubmitBtn}
-					type="submit"
-					name="submit"
-					value={IsSignup ? "REGISZTRÁCIÓ" : "BEJELENTKEZÉS"}
-					disabled={!isAllInputVaild(LoginRegForm)}
-				/>
-			</form>
+					<div className={classes.LoginMain__LoginForm__GoogleBtn}>
+						<GoogleLoginButton />
+					</div>
+				</form>
+			</div>
 		</React.Fragment>
 	);
 

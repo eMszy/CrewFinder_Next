@@ -14,6 +14,7 @@ export const AuthContext = React.createContext({
 	isHOD: false,
 	reg: () => {},
 	login: () => {},
+	googleLoginHandler: () => {},
 	logout: () => {},
 	autoLogin: () => {},
 });
@@ -31,12 +32,14 @@ const AuthContextProvider = (props) => {
 	const router = useRouter();
 
 	const signupHandler = async (UserForm) => {
+		const imgUrl = UserForm?.imageUrl?.value || "";
 		setAuthLoading(true);
 
 		const graphqlQuery = createNewUser(
 			UserForm.email.value,
 			UserForm.name.value,
-			UserForm.password.value
+			UserForm.password.value,
+			imgUrl
 		);
 
 		try {
@@ -87,6 +90,21 @@ const AuthContextProvider = (props) => {
 		}
 	};
 
+	const googleLoginHandler = async (UserForm) => {
+		const graphqlQuery = userLogin(
+			UserForm.email.value,
+			UserForm.password.value
+		);
+
+		try {
+			const resData = await PostData(graphqlQuery);
+			console.log(`resData`, resData);
+			loginHandler(UserForm);
+		} catch (err) {
+			signupHandler(UserForm);
+		}
+	};
+
 	const autoLogin = async () => {
 		const token = localStorage.getItem("token");
 		const userId = localStorage.getItem("userId");
@@ -109,7 +127,7 @@ const AuthContextProvider = (props) => {
 		}
 	};
 
-	const logoutHandler = (message) => {
+	const logoutHandler = () => {
 		setIsAuth(false);
 		setToken(null);
 		setUserId(null);
@@ -131,6 +149,7 @@ const AuthContextProvider = (props) => {
 			value={{
 				reg: signupHandler,
 				login: loginHandler,
+				googleLoginHandler: googleLoginHandler,
 				logout: logoutHandler,
 				autoLogin: autoLogin,
 				isAdmin: IsAdmin,

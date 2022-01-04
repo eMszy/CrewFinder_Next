@@ -68,6 +68,7 @@ export const typeDefs = gql`
 		name: String!
 		email: String!
 		password: String!
+		imageUrl: String
 	}
 
 	input userInput {

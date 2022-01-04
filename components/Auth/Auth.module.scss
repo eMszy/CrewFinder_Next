@@ -50,8 +50,7 @@
 	}
 }
 
-.LoginMain__LoginForm {
-	display: grid;
+.LoginMain__LoginDiv {
 	grid-template-columns: auto;
 	background-color: rgba(255, 255, 255, 0.2);
 	min-height: 20rem;
@@ -61,7 +60,7 @@
 	padding: 1rem;
 	text-align: left;
 	width: 80vw;
-	row-gap: 1rem;
+	// row-gap: 1rem;
 
 	@include media-min-width(800px) {
 		grid-template-columns: 30% 70%;
@@ -79,9 +78,9 @@
 
 	h2 {
 		text-align: center;
-		@include media-min-width(800px) {
-			grid-column: span 2;
-		}
+		// @include media-min-width(800px) {
+		grid-column: span 2;
+		// }
 	}
 
 	a {
@@ -100,6 +99,18 @@
 		min-width: 80%;
 	}
 
+	.LoginMain__LoginForm {
+		display: grid;
+		grid-template-columns: auto;
+		row-gap: 1rem;
+
+		@include media-min-width(800px) {
+			grid-template-columns: 30% 70%;
+			margin: 0;
+			row-gap: 2rem;
+		}
+	}
+
 	.LoginMain__LoginForm__SubmitBtn {
 		color: white;
 		background-color: rgba(255, 255, 255, 0.3);
@@ -108,6 +119,7 @@
 		height: 3rem;
 		font-size: 1.2rem;
 		background-color: transparent;
+		grid-column: span 2;
 		&:hover {
 			background-color: white;
 			border-color: #afd7f8;
@@ -119,8 +131,26 @@
 			cursor: not-allowed;
 		}
 
-		@include media-min-width(800px) {
-			grid-column: span 2;
+		// @include media-min-width(800px) {
+		// }
+	}
+
+	.LoginMain__LoginForm__GoogleBtn {
+		grid-column: span 2;
+		text-align: center;
+
+		div {
+			display: flex;
+			padding: 6px 15px;
+			align-items: center;
+			height: 3rem;
+
+			svg {
+				margin: 0 1rem 0 0;
+				padding: 5px;
+				border-radius: 15px;
+				background-color: rgba(255, 255, 255, 1);
+			}
 		}
 	}
 }

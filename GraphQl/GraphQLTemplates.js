@@ -20,16 +20,17 @@ export const userLogin = (email, password) => {
 	return graphqlQuery;
 };
 
-export const createNewUser = (email, name, password) => {
+export const createNewUser = (email, name, password, imageUrl) => {
 	const graphqlQuery = {
 		query: `
 			mutation CreateNewUser(
 				$email: String!
 				$name: String!
 				$password: String!
+				$imageUrl: String
 			) {
 				createUser(
-					userInput: { email: $email, name: $name, password: $password }
+					userInput: { email: $email, name: $name, password: $password, imageUrl: $imageUrl }
 				) {
 					_id
 					email
@@ -41,6 +42,7 @@ export const createNewUser = (email, name, password) => {
 			email: email,
 			name: name,
 			password: password,
+			imageUrl: imageUrl,
 		},
 	};
 	return graphqlQuery;

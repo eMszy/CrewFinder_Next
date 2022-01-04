@@ -172,8 +172,9 @@ export const resolvers = {
 			const hashedPw = await bcrypt.hash(userInput.password, 12);
 			const user = new User({
 				email: userInput.email,
-				name: userInput.name,
 				password: hashedPw,
+				name: userInput.name,
+				imageUrl: userInput.imageUrl || "",
 				metaData: {
 					isAdmin: false,
 					isHOD: false,
