@@ -13,7 +13,7 @@ const Message = () => {
 			return;
 		}
 		setMessages([
-			...messages,
+			// ...messages,
 			{
 				msg: statusContext.isStatusMsg.message,
 				isError: statusContext.isStatusMsg.error || null,
@@ -25,12 +25,12 @@ const Message = () => {
 		return () => clearTimeout(timer);
 	}, [statusContext]);
 
+	console.log(`statusContext`, statusContext);
+
 	const items = (
 		<h3>
 			{messages.map((m) => (
-				<p key={m.msg + Math.random()} style={m.isError && { color: "red" }}>
-					{m.msg}
-				</p>
+				<p key={m.msg + Math.random()}>{m.msg}</p>
 			))}
 		</h3>
 	);

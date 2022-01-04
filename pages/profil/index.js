@@ -64,7 +64,7 @@ const Profil = () => {
 				await SavingHandel(Id, DataForm, Collection);
 				statusContext.setStatus({ message: "Sikeres mentés" });
 			} catch (err) {
-				statusContext.setStatus(err);
+				statusContext.setStatus({ message: err, error: true });
 			}
 			fetchData();
 		}
