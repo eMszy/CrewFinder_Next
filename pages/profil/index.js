@@ -38,6 +38,7 @@ const Profil = () => {
 		try {
 			const fData = await EditForm(formTemplate, Id, Collection, OutputData);
 			setDataForm(fData);
+			console.log("fData", fData);
 		} catch (err) {
 			statusContext.setStatus(err);
 		}

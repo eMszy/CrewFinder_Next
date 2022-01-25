@@ -27,12 +27,10 @@ const userSchema = new Schema(
 					type: String,
 					required: false,
 				},
-
 				dob: {
 					type: Date,
 					required: false,
 				},
-
 				tel: {
 					type: String,
 					required: false,

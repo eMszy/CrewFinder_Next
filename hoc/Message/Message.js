@@ -25,7 +25,7 @@ const Message = () => {
 		return () => clearTimeout(timer);
 	}, [statusContext]);
 
-	console.log(`statusContext`, statusContext);
+	// console.log(`statusContext`, statusContext);
 
 	const items = (
 		<h3>

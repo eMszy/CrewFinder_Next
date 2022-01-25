@@ -66,6 +66,7 @@ const AuthContextProvider = (props) => {
 
 		try {
 			const resData = await PostData(graphqlQuery);
+			console.log(`login`, resData.data);
 			setIsAuth(true);
 			setAuthLoading(false);
 			setToken(resData.data.login.token);
@@ -98,7 +99,6 @@ const AuthContextProvider = (props) => {
 
 		try {
 			const resData = await PostData(graphqlQuery);
-			console.log(`resData`, resData);
 			loginHandler(UserForm);
 		} catch (err) {
 			signupHandler(UserForm);
