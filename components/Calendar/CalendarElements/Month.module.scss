@@ -1,0 +1,26 @@
+.CalendarMain_Body_Month {
+	display: grid;
+	grid-template-columns: repeat(7, minmax(0, 1fr));
+	grid-template-rows: repeat(5, minmax(0, 1fr));
+	flex: 1 1 0%;
+	height: 72vh;
+
+	> div {
+		--tw-border-opacity: 1;
+		border: 1px solid rgba(229, 231, 235, var(--tw-border-opacity));
+		display: flex;
+		flex-direction: column;
+		text-align: center;
+
+		header {
+			font-size: 0.875rem;
+			display: flex;
+			flex-direction: column;
+			padding: 0.25rem;
+
+			p {
+				font-weight: 500;
+			}
+		}
+	}
+}

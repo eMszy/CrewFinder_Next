@@ -1,11 +1,13 @@
+import { useContext } from "react";
 import Head from "next/head";
 // import Image from "next/image";
-import { useContext } from "react";
-import Login from "../components/Login/Login";
 import { AuthContext } from "../context/auth-context";
 import { autoLogin } from "../shared/autoLogin";
 
-import classes from "./index.module.scss";
+import Login from "../components/Login/Login";
+import { Calendar } from "../components/Calendar/Calendar";
+
+// import classes from "./index.module.scss";
 
 const Home = () => {
 	Home.title = "CrewFinder";
@@ -16,11 +18,7 @@ const Home = () => {
 	let content = <Login />;
 
 	if (authContext.isAuth) {
-		content = (
-			<div>
-				<h1>Be vagy jelentkezve!!</h1>
-			</div>
-		);
+		content = <Calendar />;
 	}
 
 	return (

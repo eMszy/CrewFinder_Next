@@ -5,9 +5,10 @@
 }
 
 .FooterDiv {
-	text-align: left;
+	// text-align: left;
 	color: #909090;
 	background-color: #181818;
+	// height: auto;
 
 	&::before {
 		content: "";
@@ -21,20 +22,17 @@
 
 	.FooterDiv__Nav {
 		width: 80vw;
-		margin: 0 auto;
-		padding-bottom: 2rem;
+		margin: 0.25rem auto;
 	}
+
+	ul {
+		display: flex;
+		justify-content: space-around;
+	}
+
 	h3,
 	ul {
 		font-weight: 400;
-	}
-
-	h3 {
-		padding-bottom: 1rem;
-	}
-
-	li {
-		padding: 0.25rem 0;
 	}
 
 	a {
@@ -48,7 +46,7 @@
 	.Copyright {
 		font-size: 0.7rem;
 		color: #ffffff40;
-		padding: 1rem 2rem;
+		padding: 0.5rem 0;
 		text-align: center;
 		background: black;
 

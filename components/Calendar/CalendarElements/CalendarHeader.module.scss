@@ -1,0 +1,27 @@
+.CalendarHeader {
+	height: 100%;
+
+	display: flex;
+	padding: 0 1rem 0.5rem 1rem;
+	align-items: center;
+
+	h1,
+	h2 {
+		--tw-text-opacity: 1;
+		color: rgba(107, 114, 128, var(--tw-text-opacity));
+		font-size: 1.25rem;
+		line-height: 1.75rem;
+		margin-right: 2.5rem;
+		font-weight: 700;
+	}
+
+	button {
+		// border: 1px solid rgb(175, 215, 248);
+		padding: 8px 16px;
+		margin-right: 20px;
+	}
+
+	span {
+		margin: 0 8px;
+	}
+}

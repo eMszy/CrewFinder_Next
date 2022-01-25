@@ -125,12 +125,12 @@ const AuthForm = () => {
 						disabled={!isAllInputVaild(LoginRegForm)}
 					/>
 				</form>
-				<div className={classes.LoginMain__LoginForm__GoogleBtn}>
+				{/* <div className={classes.LoginMain__LoginForm__GoogleBtn}>
 					<GoogleLoginButton />
 				</div>
 				<div className={classes.LoginMain__LoginForm__FacebookBtn}>
 					<FacebookLoginButton />
-				</div>
+				</div> */}
 			</div>
 		</React.Fragment>
 	);

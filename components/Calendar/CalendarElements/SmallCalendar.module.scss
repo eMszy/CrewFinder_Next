@@ -1,0 +1,29 @@
+.SmallCal {
+	margin-top: 2.25rem;
+	--tw-text-opacity: 1;
+	color: rgba(107, 114, 128, var(--tw-text-opacity));
+
+	.SmallCal_header {
+		display: flex;
+		justify-content: space-between;
+		text-align: left;
+	}
+
+	.SmallCal_calendar {
+		display: grid;
+		grid-template-columns: repeat(7, minmax(0, 1fr));
+		grid-template-rows: repeat(6, minmax(0, 1fr));
+
+		button {
+			padding: 0.25rem 0;
+			width: 100%;
+		}
+
+		span {
+			font-size: 0.875rem;
+			line-height: 1.25rem;
+			padding: 0.25rem 0;
+			font-weight: 400;
+		}
+	}
+}

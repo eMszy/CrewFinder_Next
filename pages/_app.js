@@ -1,4 +1,5 @@
 import AuthContextProvider from "../context/auth-context";
+import StateContextProvider from "../context/state-context";
 import StatusContextProvider from "../context/status-context";
 import Layout from "../hoc/Layout/Layout";
 import "../styles/globals.scss";
@@ -9,9 +10,11 @@ const App = ({ Component, pageProps }) => {
 	return (
 		<StatusContextProvider>
 			<AuthContextProvider>
-				<Layout>
-					<Component {...pageProps} />
-				</Layout>
+				<StateContextProvider>
+					<Layout>
+						<Component {...pageProps} />
+					</Layout>
+				</StateContextProvider>
 			</AuthContextProvider>
 		</StatusContextProvider>
 	);
