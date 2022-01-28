@@ -34,8 +34,8 @@
 			display: flex;
 			justify-content: space-between;
 			padding: 0.5rem 1rem;
-			--tw-bg-opacity: 0.8;
-			background-color: rgba(175, 215, 248, var(--tw-bg-opacity));
+			--tw-bg-opacity: 0.6;
+			background-color: rgb(175, 215, 248, var(--tw-bg-opacity));
 			align-items: center;
 
 			button {
@@ -47,7 +47,7 @@
 	.EventModal_Body {
 		display: grid;
 		padding: 0.75rem;
-		grid-template-columns: 1fr 5fr;
+		grid-template-columns: 1fr 7fr;
 		align-items: flex-end;
 		row-gap: 1.75rem;
 
@@ -57,7 +57,6 @@
 			line-height: 1.75rem;
 			padding: 0.75rem 1rem;
 			width: 100%;
-			border-width: 0px;
 			--tw-border-opacity: 1;
 			border: 0 solid rgba(229, 231, 235, var(--tw-border-opacity));
 			border-bottom-width: 2px;
@@ -77,12 +76,41 @@
 		margin-top: 1.25rem;
 		padding: 0.75rem;
 		border-radius: 0.5rem;
-		--tw-border-opacity: 1;
+		--tw-border-opacity: 0.6;
+		background-color: rgb(175, 215, 248, var(--tw-bg-opacity));
 		border-top: 1px solid rgba(229, 231, 235, var(--tw-border-opacity));
-		background-color: rgba(175, 215, 248, var(--tw-bg-opacity));
 
 		button {
 			padding: 0.5rem 1.5rem;
+		}
+	}
+}
+
+.Icon {
+	justify-self: center;
+	align-self: center;
+	svg {
+		width: 1.5rem;
+		height: 1.5rem;
+	}
+}
+
+.labelsClass {
+	display: flex;
+
+	span {
+		color: white;
+		justify-content: center;
+		align-items: center;
+		width: 1.7rem;
+		min-height: 1.7rem;
+		border-radius: 999px;
+		margin: 0 0.5rem;
+		cursor: pointer;
+
+		svg {
+			width: 1.5rem;
+			height: 1.5rem;
 		}
 	}
 }

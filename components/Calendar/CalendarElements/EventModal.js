@@ -1,11 +1,23 @@
 import dayjs from "dayjs";
 import React, { useContext, useState } from "react";
 import { StateContext } from "../../../context/state-context";
+import {
+	IoClose,
+	IoBookmarkOutline,
+	IoCheckmark,
+	IoCalendarOutline,
+	IoCalendarSharp,
+} from "react-icons/io5";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { MdDelete, MdOutlineDescription, MdTitle } from "react-icons/md";
+
 import Button from "../../UI/Button/Button";
 
 import classes from "./EventModal.module.scss";
 
 const labelsClasses = ["indigo", "gray", "green", "blue", "red", "purple"];
+
+const dayFormating = (day) => dayjs(day).format("YYYY-MM-DDTHH:mm");
 
 const EventModal = () => {
 	const { setShowEventModal, daySelected, dispatchCalEvent, selectedEvent } =
@@ -19,13 +31,14 @@ const EventModal = () => {
 
 	const [startDate, setStartDate] = useState(
 		selectedEvent
-			? dayjs(selectedEvent.startDate).format("YYYY-MM-DD")
-			: dayjs(daySelected).format("YYYY-MM-DD")
+			? dayFormating(selectedEvent.startDate)
+			: dayFormating(daySelected)
 	);
+
 	const [endDate, setEndDate] = useState(
 		selectedEvent
-			? dayjs(selectedEvent.endDate).format("YYYY-MM-DD")
-			: dayjs(daySelected).format("YYYY-MM-DD")
+			? dayFormating(selectedEvent.endDate)
+			: dayFormating(daySelected)
 	);
 
 	const [selectedLabel, setSelectedLabel] = useState(
@@ -56,9 +69,9 @@ const EventModal = () => {
 		<div className={classes.EventModal_Main}>
 			<form>
 				<header>
-					<span className="material-icons-outlined text-gray-400">
-						drag_handle
-					</span>
+					<div className={classes.Icon}>
+						<GiHamburgerMenu />
+					</div>
 					<div>
 						{selectedEvent && (
 							<Button
@@ -69,86 +82,81 @@ const EventModal = () => {
 									});
 									setShowEventModal(false);
 								}}
-								className="material-icons-outlined text-gray-400 cursor-pointer"
 							>
-								delete
+								<div className={classes.Icon}>
+									<MdDelete />
+								</div>
 							</Button>
 						)}
 						<Button clicked={() => setShowEventModal(false)}>
-							<span className="material-icons-outlined text-gray-400">
-								close
-							</span>
+							<div className={classes.Icon}>
+								<IoClose />
+							</div>
 						</Button>
 					</div>
 				</header>
 				<div className={classes.EventModal_Body}>
-					<div></div>
+					<div className={classes.Icon}>
+						<MdTitle />
+					</div>
 					<input
 						type="text"
 						name="title"
 						placeholder="Add title"
 						value={title}
 						required
-						className="pt-3 border-0 text-gray-600 text-xl font-semibold pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
 						onChange={(e) => setTitle(e.target.value)}
 					/>
-					<span className="material-icons-outlined text-gray-400">
-						schedule
-					</span>
+					<div className={classes.Icon}>
+						<IoCalendarOutline />
+					</div>
 					<input
-						type="date"
+						type="datetime-local"
 						name="startDate"
 						value={startDate}
 						required
-						className="pt-3 border-0 text-gray-600 pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
 						onChange={(e) => setStartDate(e.target.value)}
 					/>
-					<span className="material-icons-outlined text-gray-400">task</span>
+					<div className={classes.Icon}>
+						<IoCalendarSharp />
+					</div>
 					<input
-						type="date"
+						type="datetime-local"
 						name="endDate"
 						value={endDate}
 						min={startDate}
 						required
-						className="pt-3 border-0 text-gray-600 pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
 						onChange={(e) => setEndDate(e.target.value)}
 					/>
-					<span className="material-icons-outlined text-gray-400">segment</span>
+					<div className={classes.Icon}>
+						<MdOutlineDescription />
+					</div>
 					<input
 						type="text"
 						name="description"
 						placeholder="Add a description"
 						value={description}
 						required
-						className="pt-3 border-0 text-gray-600 pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
 						onChange={(e) => setDescription(e.target.value)}
 					/>
-					<span className="material-icons-outlined text-gray-400">
-						bookmark_border
-					</span>
-					<div className="flex gap-x-2">
+					<div className={classes.Icon}>
+						<IoBookmarkOutline />
+					</div>
+					<div className={classes.labelsClass}>
 						{labelsClasses.map((lblClass, i) => (
 							<span
 								key={i}
 								onClick={() => setSelectedLabel(lblClass)}
-								className={`bg-${lblClass}-500 w-6 h-6 rounded-full flex items-center justify-center cursor-pointer`}
+								style={{ "background-color": lblClass }}
 							>
-								{selectedLabel === lblClass && (
-									<span className="material-icons-outlined text-white text-sm">
-										check
-									</span>
-								)}
+								{selectedLabel === lblClass && <IoCheckmark />}
 							</span>
 						))}
 					</div>
 				</div>
 				<footer className={classes.EventModal_Footer}>
-					<Button
-						type="submit"
-						clicked={handleSubmit}
-						className="bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded text-white"
-					>
-						Save
+					<Button type="submit" clicked={handleSubmit}>
+						Mentés
 					</Button>
 				</footer>
 			</form>

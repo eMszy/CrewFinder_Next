@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
+import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 
 import { StateContext } from "../../../context/state-context";
 import { getMonth } from "../../../shared/utility";
@@ -39,13 +40,16 @@ const SmallCalendar = () => {
 		);
 
 		if (nowDay === currDay) {
-			return "bg-blue-500 rounded-full text-white";
+			return { backgroundColor: "blue", color: "white", borderRadius: "999px" };
 		} else if (currDay === slcDay) {
-			return "bg-blue-100  text-blue-600 font-bold";
+			return { backgroundColor: "lightblue", borderRadius: "999px" };
 		} else if (fEventByDay) {
-			return `bg-${fEventByDay.label}-300 text-white ${
-				fEventByDay.startDate === day.valueOf() && "rounded-l-xl"
-			} ${fEventByDay.endDate === day.valueOf() && "rounded-r-xl"}`;
+			return {
+				backgroundColor: fEventByDay.label,
+				color: "white",
+			};
+			// 	fEventByDay.startDate === day.valueOf() && "rounded-l-xl"
+			// } ${fEventByDay.endDate === day.valueOf() && "rounded-r-xl"}`;
 		} else {
 			return "";
 		}
@@ -59,14 +63,10 @@ const SmallCalendar = () => {
 				</p>
 				<div>
 					<Button clicked={() => setCurrentMonthIdx(currentMonthIdx - 1)}>
-						<span className="material-icons-outlined cursor-pointer text-gray-600 mx-2">
-							chevron_left
-						</span>
+						<IoChevronBack />
 					</Button>
 					<Button clicked={() => setCurrentMonthIdx(currentMonthIdx + 1)}>
-						<span className="material-icons-outlined cursor-pointer text-gray-600 mx-2">
-							chevron_right
-						</span>
+						<IoChevronForward />
 					</Button>
 				</div>
 			</header>
@@ -80,16 +80,21 @@ const SmallCalendar = () => {
 					<React.Fragment key={i}>
 						{row.map((day, idx) => {
 							return (
-								<Button
+								<div
 									key={idx}
-									clicked={() => {
-										setSmallCalendarMonth(currentMonthIdx);
-										setDaySelected(day);
-									}}
-									className={`py-1 w-full ${getDayClass(day)}`}
+									className={classes.SmallDates}
+									style={getDayClass(day) || null}
 								>
-									<span className="text-sm">{day.format("D")}</span>
-								</Button>
+									<Button
+										clicked={() => {
+											setSmallCalendarMonth(currentMonthIdx);
+											setDaySelected(day);
+										}}
+										// className={`py-1 w-full ${getDayClass(day)}`}
+									>
+										<span className="text-sm">{day.format("D")}</span>
+									</Button>
+								</div>
 							);
 						})}
 					</React.Fragment>

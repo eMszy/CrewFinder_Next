@@ -2,6 +2,8 @@ import React, { useContext } from "react";
 
 import dayjs from "dayjs";
 import "dayjs/locale/hu";
+import { IoChevronBack, IoChevronForward } from "react-icons/io5";
+
 import { StateContext } from "../../../context/state-context";
 
 import classes from "./CalendarHeader.module.scss";
@@ -24,14 +26,10 @@ const CalendarHeader = () => {
 			<h1>Calendar</h1>
 			<Button clicked={handleReset}>Today</Button>
 			<Button clicked={() => setMonthIndex(monthIndex - 1)}>
-				<span className="material-icons-outlined text-gray-600">
-					chevron_left
-				</span>
+				<IoChevronBack />
 			</Button>
 			<Button clicked={() => setMonthIndex(monthIndex + 1)}>
-				<span className="material-icons-outlined text-gray-600">
-					chevron_right
-				</span>
+				<IoChevronForward />
 			</Button>
 			<h2>{dayjs(new Date(dayjs().year(), monthIndex)).format("YYYY MMMM")}</h2>
 		</header>
