@@ -65,6 +65,15 @@ const EventModal = () => {
 
 		setShowEventModal(false);
 	};
+
+	const deletHandel = (e) => {
+		dispatchCalEvent({
+			type: "delete",
+			payload: selectedEvent,
+		});
+		setShowEventModal(false);
+	};
+
 	return (
 		<div className={classes.EventModal_Main}>
 			<form>
@@ -74,15 +83,7 @@ const EventModal = () => {
 					</div>
 					<div>
 						{selectedEvent && (
-							<Button
-								onClick={() => {
-									dispatchCalEvent({
-										type: "delete",
-										payload: selectedEvent,
-									});
-									setShowEventModal(false);
-								}}
-							>
+							<Button type="button" clicked={deletHandel}>
 								<div className={classes.Icon}>
 									<MdDelete />
 								</div>

@@ -73,7 +73,7 @@ const Day = ({ day, rowIdx }) => {
 								{idx <= 3 &&
 									(dayEvents.length > 4 && idx === 3 ? (
 										<div className={classes.MoreEvent}>
-											<p className="text-center">További események</p>
+											<p>További események</p>
 										</div>
 									) : (
 										<div

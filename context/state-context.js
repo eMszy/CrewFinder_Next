@@ -22,6 +22,8 @@ export const StateContext = React.createContext({
 
 const savedEventsReducer = (state, { type, payload }) => {
 	switch (type) {
+		case "init":
+			return payload;
 		case "push":
 			return [...state, payload];
 		case "update":
@@ -41,23 +43,16 @@ const StateContextProvider = (props) => {
 	const [selectedEvent, setSelectedEvent] = useState(null);
 	const [labels, setLabels] = useState([]);
 
-	const [storageEvents, setStorageEvents] = useState();
+	const [savedEvents, dispatchCalEvent] = useReducer(savedEventsReducer, []);
 
 	useEffect(() => {
-		setStorageEvents(localStorage.getItem("savedEvents"));
+		if (JSON.parse(localStorage.getItem("savedEvents"))) {
+			dispatchCalEvent({
+				type: "init",
+				payload: JSON.parse(localStorage.getItem("savedEvents")),
+			});
+		}
 	}, []);
-
-	const initEvents = () => {
-		// const storageEvents = localStorage.getItem("savedEvents");
-		const parsedEvents = storageEvents ? JSON.parse(storageEvents) : [];
-		return parsedEvents;
-	};
-
-	const [savedEvents, dispatchCalEvent] = useReducer(
-		savedEventsReducer,
-		[],
-		initEvents
-	);
 
 	const filteredEvents = useMemo(() => {
 		return savedEvents.filter((evt) =>
