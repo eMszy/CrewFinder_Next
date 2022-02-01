@@ -147,7 +147,7 @@ const EventModal = () => {
 							<span
 								key={i}
 								onClick={() => setSelectedLabel(lblClass)}
-								style={{ "background-color": lblClass }}
+								style={{ backgroundColor: lblClass }}
 							>
 								{selectedLabel === lblClass && <IoCheckmark />}
 							</span>

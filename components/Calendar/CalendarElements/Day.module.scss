@@ -1,0 +1,42 @@
+.MinaDayDiv {
+	border: gray 1px solid;
+
+	header {
+		display: flex;
+		flex-direction: column;
+
+		.ThisDay {
+			border-radius: 999px;
+			background-color: lightblue;
+			margin: 0 auto;
+			padding: 0 0.3rem;
+		}
+	}
+
+	.EventDiv {
+		cursor: pointer;
+		height: 100%;
+
+		.Event {
+			height: 1.3rem;
+			display: flex;
+			padding: 0.1rem 1rem;
+			margin-bottom: 1px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			font-weight: 400;
+			font-size: small;
+			color: white;
+		}
+
+		.MoreEvent {
+			background-color: rgba(0, 0, 0, 0.2);
+			border-radius: 999px;
+			margin: 0 3px;
+			font-weight: 400;
+			font-size: small;
+			padding: 0.1rem 0.5rem;
+		}
+	}
+}

@@ -27,16 +27,21 @@
 	}
 
 	.SmallDates {
-		button {
-			display: flex;
-			width: 2rem;
-			height: 2rem;
-			border: 0;
-			justify-content: center;
-			align-items: center;
-			&:hover {
-				background-color: lightblue;
-			}
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin: 3px 1px;
+		border: 2px transparent solid;
+		&:hover {
+			border: 2px blue solid;
+			border-radius: 999px;
+			padding: 0;
+		}
+
+		div {
+			width: 1.5rem;
+			height: 1.5rem;
+			cursor: pointer;
 		}
 	}
 }

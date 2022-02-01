@@ -39,17 +39,14 @@ const SmallCalendar = () => {
 			(f) => day.valueOf() >= f.startDate && day.valueOf() <= f.endDate
 		);
 
-		if (nowDay === currDay) {
-			return { backgroundColor: "blue", color: "white", borderRadius: "999px" };
-		} else if (currDay === slcDay) {
-			return { backgroundColor: "lightblue", borderRadius: "999px" };
+		let style = { borderRadius: "999px" };
+
+		if (currDay === slcDay) {
+			return { ...style, backgroundColor: "blue", color: "white" };
+		} else if (nowDay === currDay) {
+			return { ...style, backgroundColor: "lightblue" };
 		} else if (fEventByDay) {
-			return {
-				backgroundColor: fEventByDay.label,
-				color: "white",
-			};
-			// 	fEventByDay.startDate === day.valueOf() && "rounded-l-xl"
-			// } ${fEventByDay.endDate === day.valueOf() && "rounded-r-xl"}`;
+			return { backgroundColor: fEventByDay.label, color: "white" };
 		} else {
 			return "";
 		}
@@ -85,15 +82,14 @@ const SmallCalendar = () => {
 									className={classes.SmallDates}
 									style={getDayClass(day) || null}
 								>
-									<Button
-										clicked={() => {
+									<div
+										onClick={() => {
 											setSmallCalendarMonth(currentMonthIdx);
 											setDaySelected(day);
 										}}
-										// className={`py-1 w-full ${getDayClass(day)}`}
 									>
 										<span className="text-sm">{day.format("D")}</span>
-									</Button>
+									</div>
 								</div>
 							);
 						})}
