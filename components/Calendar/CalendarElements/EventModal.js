@@ -67,6 +67,7 @@ const EventModal = () => {
 	};
 
 	const deletHandel = (e) => {
+		e.preventDefault();
 		dispatchCalEvent({
 			type: "delete",
 			payload: selectedEvent,
@@ -81,19 +82,19 @@ const EventModal = () => {
 					<div className={classes.Icon}>
 						<GiHamburgerMenu />
 					</div>
-					<div>
+					<div className={classes.ButtomDiv}>
 						{selectedEvent && (
-							<Button type="button" clicked={deletHandel}>
-								<div className={classes.Icon}>
-									<MdDelete />
-								</div>
-							</Button>
-						)}
-						<Button clicked={() => setShowEventModal(false)}>
-							<div className={classes.Icon}>
-								<IoClose />
+							<div type="button" className={classes.Icon} onClick={deletHandel}>
+								<MdDelete />
 							</div>
-						</Button>
+						)}
+						<div
+							type="button"
+							className={classes.Icon}
+							onClick={() => setShowEventModal(false)}
+						>
+							<IoClose />
+						</div>
 					</div>
 				</header>
 				<div className={classes.EventModal_Body}>

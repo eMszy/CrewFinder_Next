@@ -42,9 +42,9 @@ const SmallCalendar = () => {
 		let style = { borderRadius: "999px" };
 
 		if (currDay === slcDay) {
-			return { ...style, backgroundColor: "blue", color: "white" };
+			return { ...style, borderColor: "#afd7f8" };
 		} else if (nowDay === currDay) {
-			return { ...style, backgroundColor: "lightblue" };
+			return { ...style, backgroundColor: "#afd7f8" };
 		} else if (fEventByDay) {
 			return { backgroundColor: fEventByDay.label, color: "white" };
 		} else {

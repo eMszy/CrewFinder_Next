@@ -86,6 +86,20 @@
 	}
 }
 
+.ButtomDiv {
+	display: flex;
+	div {
+		padding: 0.2rem;
+		border: 3px white solid;
+		border-radius: 999px;
+		margin-left: 1rem;
+		&:hover {
+			cursor: pointer;
+			background-color: rgba(255, 0, 0, 0.5);
+		}
+	}
+}
+
 .Icon {
 	display: flex;
 	justify-self: center;
