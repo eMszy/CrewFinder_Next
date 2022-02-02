@@ -5,11 +5,9 @@ import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { StateContext } from "../../../context/state-context";
 import { getMonth } from "../../../shared/utility";
 
-import Button from "../../UI/Button/Button";
-
 import classes from "./SmallCalendar.module.scss";
 
-const SmallCalendar = () => {
+const SmallCalendar = ({ daySelected, filteredEvents }) => {
 	const [currentMonthIdx, setCurrentMonthIdx] = useState(dayjs().month());
 	const [currentMonth, setCurrentMonth] = useState(getMonth());
 
@@ -17,13 +15,8 @@ const SmallCalendar = () => {
 		setCurrentMonth(getMonth(currentMonthIdx));
 	}, [currentMonthIdx]);
 
-	const {
-		monthIndex,
-		setSmallCalendarMonth,
-		setDaySelected,
-		daySelected,
-		filteredEvents,
-	} = useContext(StateContext);
+	const { setDaySelected, monthIndex, setSmallCalendarMonth } =
+		useContext(StateContext);
 
 	useEffect(() => {
 		setCurrentMonthIdx(monthIndex);
@@ -36,42 +29,44 @@ const SmallCalendar = () => {
 		const slcDay = daySelected && daySelected.format(format);
 
 		const fEventByDay = filteredEvents.find(
-			(f) => day.valueOf() >= f.startDate && day.valueOf() <= f.endDate
+			(f) =>
+				f.weekDays.includes(day.format("dd")) &&
+				day.add(1, "day").subtract(1, "minute").valueOf() >= f.startDate &&
+				day.valueOf() <= f.endDate
 		);
 
 		let style = { borderRadius: "999px" };
 
 		if (currDay === slcDay) {
-			return { ...style, borderColor: "#afd7f8" };
-		} else if (nowDay === currDay) {
-			return { ...style, backgroundColor: "#afd7f8" };
-		} else if (fEventByDay) {
-			return { backgroundColor: fEventByDay.label, color: "white" };
-		} else {
-			return "";
+			style = { ...style, borderColor: "#afd7f8" };
 		}
+		if (nowDay === currDay) {
+			style = { ...style, backgroundColor: "#afd7f8" };
+		}
+		if (fEventByDay) {
+			style = { ...style, backgroundColor: fEventByDay.label, color: "white" };
+		}
+		return style;
 	};
 
 	return (
 		<div className={classes.SmallCal}>
 			<header className={classes.SmallCal_header}>
-				<p className="text-gray-500 font-bold">
+				<p>
 					{dayjs(new Date(dayjs().year(), currentMonthIdx)).format("YYYY MMMM")}
 				</p>
-				<div>
-					<Button clicked={() => setCurrentMonthIdx(currentMonthIdx - 1)}>
+				<div className={classes.MonthControlDiv}>
+					<div onClick={() => setCurrentMonthIdx(currentMonthIdx - 1)}>
 						<IoChevronBack />
-					</Button>
-					<Button clicked={() => setCurrentMonthIdx(currentMonthIdx + 1)}>
+					</div>
+					<div onClick={() => setCurrentMonthIdx(currentMonthIdx + 1)}>
 						<IoChevronForward />
-					</Button>
+					</div>
 				</div>
 			</header>
 			<div className={classes.SmallCal_calendar}>
 				{currentMonth[0].map((day, i) => (
-					<span key={i} className="text-sm py-1 text-center">
-						{day.format("dd").charAt(0)}
-					</span>
+					<span key={i}>{day.format("dd").charAt(0)}</span>
 				))}
 				{currentMonth.map((row, i) => (
 					<React.Fragment key={i}>
@@ -88,7 +83,7 @@ const SmallCalendar = () => {
 											setDaySelected(day);
 										}}
 									>
-										<span className="text-sm">{day.format("D")}</span>
+										<span>{day.format("D")}</span>
 									</div>
 								</div>
 							);

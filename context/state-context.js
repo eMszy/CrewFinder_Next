@@ -21,7 +21,7 @@ export const StateContext = React.createContext({
 });
 
 const savedEventsReducer = (state, { type, payload }) => {
-	console.log("type", type);
+	console.log("type", type, payload);
 	switch (type) {
 		case "init":
 			return payload;

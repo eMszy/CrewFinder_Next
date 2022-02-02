@@ -1,5 +1,4 @@
 .SmallCal {
-	margin-top: 2.25rem;
 	--tw-text-opacity: 1;
 	color: rgba(107, 114, 128, var(--tw-text-opacity));
 
@@ -15,14 +14,18 @@
 		grid-template-rows: repeat(6, minmax(0, 1fr));
 		align-self: center;
 
-		button {
-			width: 100%;
-		}
-
 		span {
 			font-size: 0.875rem;
 			line-height: 1.25rem;
 			font-weight: 400;
+		}
+	}
+
+	.MonthControlDiv {
+		display: flex;
+		div {
+			display: flex;
+			align-items: center;
 		}
 	}
 

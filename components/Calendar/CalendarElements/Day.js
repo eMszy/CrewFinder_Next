@@ -15,9 +15,12 @@ const Day = ({ day, rowIdx }) => {
 		setSelectedEvent,
 	} = useContext(StateContext);
 
+	console.log("filteredEvents", filteredEvents);
+
 	useEffect(() => {
 		const events = filteredEvents.filter(
 			(evt) =>
+				evt.weekDays.includes(day.format("dd")) &&
 				day.format("YY-MM-DD") >= dayjs(evt.startDate).format("YY-MM-DD") &&
 				day.format("YY-MM-DD") <= dayjs(evt.endDate).format("YY-MM-DD")
 		);
