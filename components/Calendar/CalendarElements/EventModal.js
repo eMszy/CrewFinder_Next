@@ -15,7 +15,7 @@ import Button from "../../UI/Button/Button";
 import classes from "./EventModal.module.scss";
 import SmallCalendar from "./SmallCalendar";
 
-const labelsClasses = ["indigo", "gray", "green", "blue", "red", "purple"];
+const labelsClasses = ["purple", "green", "blue", "orange", "yellow"];
 const weekDays = [1, 2, 3, 4, 5, 6, 0];
 
 const dayFormating = (day) => dayjs(day).format("YYYY-MM-DDTHH:mm");
@@ -24,50 +24,45 @@ const EventModal = () => {
 	const { setShowEventModal, daySelected, dispatchCalEvent, selectedEvent } =
 		useContext(StateContext);
 
-	const [title, setTitle] = useState(selectedEvent ? selectedEvent.title : "");
-	const [shortTitle, setShortTitle] = useState(
-		selectedEvent ? selectedEvent.shortTitle : ""
-	);
-
-	const [description, setDescription] = useState(
-		selectedEvent ? selectedEvent.description : ""
-	);
-
-	const [startDate, setStartDate] = useState(
-		selectedEvent
-			? dayFormating(selectedEvent.startDate)
-			: dayFormating(daySelected.hour(6))
-	);
-
-	const [endDate, setEndDate] = useState(
-		selectedEvent
-			? dayFormating(selectedEvent.endDate)
-			: dayFormating(daySelected.hour(18))
-	);
-
-	const [selectedLabel, setSelectedLabel] = useState(
-		selectedEvent
+	const [inputData, setInputData] = useState({
+		title: selectedEvent ? selectedEvent.shortTitle : "",
+		shortTitle: selectedEvent ? selectedEvent.shortTitle : "",
+		description: selectedEvent ? selectedEvent.description : "",
+		label: selectedEvent
 			? labelsClasses.find((lbl) => lbl === selectedEvent.label)
-			: labelsClasses[0]
-	);
-
-	const [selectedWeekDays, setSelectedWeekDays] = useState(
-		selectedEvent ? selectedEvent.weekDays : weekDays
-	);
+			: labelsClasses[0],
+		dates: selectedEvent ? selectedEvent.dates : [],
+		baseCrew: selectedEvent ? selectedEvent.baseCrew : {},
+		startDate: selectedEvent
+			? dayFormating(selectedEvent.startDate)
+			: dayFormating(daySelected.hour(6)),
+		endDate: selectedEvent
+			? dayFormating(selectedEvent.endDate)
+			: dayFormating(daySelected.hour(18)),
+		weekDays: selectedEvent ? selectedEvent.weekDays : weekDays,
+	});
 
 	const getDates = () => {
-		const daysBetween = dayjs(endDate).diff(dayjs(startDate), "d");
-		const sTime = dayjs(startDate).format("THHmm");
-		const eTime = dayjs(endDate).format("THHmm");
+		const daysBetween = dayjs(inputData.endDate).diff(
+			dayjs(inputData.startDate),
+			"d"
+		);
+		const sTime = dayjs(inputData.startDate).format("THHmm");
+		const eTime = dayjs(inputData.endDate).format("THHmm");
 		let dates = [];
 
 		for (let i = 0; i <= daysBetween; i++) {
-			const startTime = dayjs(startDate).add(i, "d").format(`YYYYMMDD${sTime}`);
+			const startTime = dayjs(inputData.startDate)
+				.add(i, "d")
+				.format(`YYYYMMDD${sTime}`);
 
-			if (selectedWeekDays.includes(+dayjs(startTime).format("d"))) {
-				const endTime = dayjs(startDate).add(i, "d").format(`YYYYMMDD${eTime}`);
+			if (inputData.weekDays.includes(+dayjs(startTime).format("d"))) {
+				const endTime = dayjs(inputData.startDate)
+					.add(i, "d")
+					.format(`YYYYMMDD${eTime}`);
 
 				dates.push({
+					id: i,
 					startTime: +dayjs(startTime),
 					endTime: +dayjs(endTime),
 					crew: {},
@@ -81,18 +76,13 @@ const EventModal = () => {
 		e.preventDefault();
 
 		const calendarEvent = {
-			title,
-			shortTitle,
-			description,
-			label: selectedLabel,
+			...inputData,
 			dates: getDates(),
-			baseCrew: {},
-
-			startDate: dayjs(startDate).valueOf(),
-			endDate: dayjs(endDate).valueOf(),
-			weekDays: selectedWeekDays,
-			id: selectedEvent ? selectedEvent.id : Date.now(),
+			id: selectedEvent
+				? selectedEvent.id
+				: +dayjs(inputData.startDate) + Math.random(),
 		};
+
 		if (selectedEvent) {
 			dispatchCalEvent({ type: "update", payload: calendarEvent });
 		} else {
@@ -143,17 +133,21 @@ const EventModal = () => {
 								type="text"
 								name="title"
 								placeholder="Projek neve"
-								value={title}
+								value={inputData.title}
 								required
-								onChange={(e) => setTitle(e.target.value)}
+								onChange={(e) =>
+									setInputData({ ...inputData, title: e.target.value })
+								}
 							/>
 							<input
 								type="text"
 								name="shortTitle"
 								placeholder="Rövidítés"
-								value={shortTitle}
+								value={inputData.shortTitle}
 								required
-								onChange={(e) => setShortTitle(e.target.value)}
+								onChange={(e) =>
+									setInputData({ ...inputData, shortTitle: e.target.value })
+								}
 							/>
 						</div>
 						<div className={classes.Icon}>
@@ -163,17 +157,21 @@ const EventModal = () => {
 							<input
 								type="datetime-local"
 								name="startDate"
-								value={startDate}
+								value={inputData.startDate}
 								required
-								onChange={(e) => setStartDate(e.target.value)}
+								onChange={(e) =>
+									setInputData({ ...inputData, startDate: e.target.value })
+								}
 							/>
 							<input
 								type="datetime-local"
 								name="endDate"
-								value={endDate}
-								min={startDate}
+								value={inputData.endDate}
+								min={inputData.startDate}
 								required
-								onChange={(e) => setEndDate(e.target.value)}
+								onChange={(e) =>
+									setInputData({ ...inputData, endDate: e.target.value })
+								}
 							/>
 						</div>
 						<div className={classes.Icon}>
@@ -183,28 +181,33 @@ const EventModal = () => {
 							type="text"
 							name="Leírás"
 							placeholder="Leírás"
-							value={description}
+							value={inputData.description}
 							required
-							onChange={(e) => setDescription(e.target.value)}
+							onChange={(e) =>
+								setInputData({ ...inputData, description: e.target.value })
+							}
 						/>
 						<div></div>
 						<div className={classes.weekDayClass}>
 							{weekDays.map((dayNum, i) => {
 								const day = dayjs().day(dayNum).format("dd");
 								let style = {};
-								selectedWeekDays.includes(dayNum) ||
+								inputData.weekDays.includes(dayNum) ||
 									(style = { backgroundColor: "#ff000080" });
 								return (
 									<span
 										key={i}
 										onClick={() => {
-											let updatedDaySelection = [...selectedWeekDays];
-											selectedWeekDays.includes(dayNum)
-												? (updatedDaySelection = selectedWeekDays.filter(
+											let updatedDaySelection = [...inputData.weekDays];
+											inputData.weekDays.includes(dayNum)
+												? (updatedDaySelection = inputData.weekDays.filter(
 														(d) => dayNum !== d
 												  ))
 												: updatedDaySelection.push(dayNum);
-											setSelectedWeekDays(updatedDaySelection);
+											setInputData({
+												...inputData,
+												weekDays: updatedDaySelection,
+											});
 										}}
 										style={style}
 									>
@@ -220,10 +223,12 @@ const EventModal = () => {
 							{labelsClasses.map((lblClass, i) => (
 								<span
 									key={i}
-									onClick={() => setSelectedLabel(lblClass)}
+									onClick={() =>
+										setInputData({ ...inputData, label: lblClass })
+									}
 									style={{ backgroundColor: lblClass }}
 								>
-									{selectedLabel === lblClass && <IoCheckmark />}
+									{inputData.label === lblClass && <IoCheckmark />}
 								</span>
 							))}
 						</div>
@@ -234,9 +239,9 @@ const EventModal = () => {
 							type="text"
 							name="Leírás"
 							placeholder="Saját pozíció"
-							value={description}
+							value={inputData.description}
 							required
-							onChange={(e) => setDescription(e.target.value)}
+							onChange={(e) => {}}
 						/>
 						<div></div>
 						<div>Alapcsapat</div>
@@ -246,10 +251,10 @@ const EventModal = () => {
 							daySelected={dayjs()}
 							filteredEvents={[
 								{
-									label: selectedLabel,
-									startDate: dayjs(startDate).valueOf(),
-									endDate: dayjs(endDate).valueOf(),
-									weekDays: selectedWeekDays,
+									label: inputData.label,
+									startDate: +dayjs(inputData.startDate),
+									endDate: +dayjs(inputData.endDate),
+									weekDays: inputData.weekDays,
 								},
 							]}
 						/>

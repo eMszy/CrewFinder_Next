@@ -1,0 +1,31 @@
+.SidebarMain {
+	flex: 1;
+	background-color: white;
+	// width: 16rem;
+	border-width: 1px;
+	border-radius: 1rem;
+	margin: 1rem;
+	padding: 1rem;
+	height: min-content;
+
+	.SidebarHeader {
+		padding-bottom: 1rem;
+		display: flex;
+		align-items: baseline;
+		justify-content: space-evenly;
+
+		p {
+			color: red;
+		}
+	}
+
+	.SidebarElements {
+		.SidebarElement {
+			cursor: pointer;
+			padding: 0.25rem;
+			margin: 0.25rem;
+			border-radius: 1rem;
+			font-weight: 500;
+		}
+	}
+}

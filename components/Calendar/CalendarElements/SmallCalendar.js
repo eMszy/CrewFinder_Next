@@ -31,8 +31,8 @@ const SmallCalendar = ({ daySelected, filteredEvents }) => {
 		const fEventByDay = filteredEvents.find(
 			(f) =>
 				f.weekDays.includes(+day.format("d")) &&
-				day.add(1, "day").subtract(1, "minute").valueOf() >= f.startDate &&
-				day.valueOf() <= f.endDate
+				+day.add(1, "day").subtract(1, "minute") >= f.startDate &&
+				+day <= f.endDate
 		);
 
 		let style = { borderRadius: "999px" };

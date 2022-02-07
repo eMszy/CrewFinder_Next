@@ -1,6 +1,5 @@
 .CalendarHeader {
 	height: 100%;
-
 	display: flex;
 	padding: 0 1rem 0.5rem 1rem;
 	align-items: center;
@@ -11,18 +10,34 @@
 		color: rgba(107, 114, 128, var(--tw-text-opacity));
 		font-size: 1.25rem;
 		line-height: 1.75rem;
-		margin-right: 2.5rem;
+		// margin-right: 2.5rem;
 		font-weight: 700;
 	}
 
 	button {
 		// border: 1px solid rgb(175, 215, 248);
 		padding: 8px 16px;
-		margin-right: 20px;
+		margin: 0 0.25rem;
 		display: flex;
+		align-items: center;
 	}
 
 	span {
 		margin: 0 8px;
+	}
+}
+
+.ViewModeClass {
+	display: flex;
+	height: 100%;
+	padding: 0.5rem 1rem;
+	margin: 0 0.25rem;
+	align-items: center;
+	border-radius: 1rem;
+	border: 3px solid white;
+
+	&:hover {
+		cursor: pointer;
+		border-color: #afd7f8;
 	}
 }

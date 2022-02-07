@@ -27,8 +27,10 @@ const savedEventsReducer = (state, { type, payload }) => {
 			return payload;
 		case "push":
 			return [...state, payload];
-		case "update":
+		case "update": {
+			console.log("evt", payload);
 			return state.map((evt) => (evt.id === payload.id ? payload : evt));
+		}
 		case "delete":
 			return state.filter((evt) => evt.id !== payload.id);
 		default:
@@ -42,7 +44,13 @@ const StateContextProvider = (props) => {
 	const [daySelected, setDaySelected] = useState(dayjs());
 	const [showEventModal, setShowEventModal] = useState(false);
 	const [selectedEvent, setSelectedEvent] = useState(null);
-	const [labels, setLabels] = useState([]);
+	const [labels, setLabels] = useState([
+		{ label: "purple", title: "Privát esemény", checked: true },
+		{ label: "green", title: "Visszaigazolt", checked: true },
+		{ label: "blue", title: "Jelentkeztél", checked: true },
+		{ label: "orange", title: "Célzott megkeresés", checked: true },
+		{ label: "yellow", title: "Nyitott pozicíó", checked: true },
+	]);
 
 	const [savedEvents, dispatchCalEvent] = useReducer(savedEventsReducer, []);
 
@@ -69,15 +77,17 @@ const StateContextProvider = (props) => {
 	}, [savedEvents]);
 
 	useEffect(() => {
-		setLabels((prevLabels) => {
-			return [...new Set(savedEvents.map((evt) => evt.label))].map((label) => {
-				const currentLabel = prevLabels.find((lbl) => lbl.label === label);
-				return {
-					label,
-					checked: currentLabel ? currentLabel.checked : true,
-				};
-			});
-		});
+		// setLabels((prevLabels) => {
+		// 	return [...new Set(savedEvents.map((evt) => evt.label))].map((label) => {
+		// 		const currentLabel = prevLabels.find((lbl) => lbl.label === label);
+		// 		console.log("lbl", currentLabel);
+		// 		return {
+		// 			label,
+		// 			checked: currentLabel.checked,
+		// 			title: currentLabel.title,
+		// 		};
+		// 	});
+		// });
 	}, [savedEvents]);
 
 	useEffect(() => {

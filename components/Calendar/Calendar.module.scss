@@ -5,8 +5,9 @@
 }
 
 .CalendarMain {
+	flex: 5;
 	min-width: 30%;
-	margin: 1rem auto;
+	margin: 1rem;
 	background-color: rgb(255, 255, 255);
 	border-radius: 15px;
 	width: 90%;
@@ -25,11 +26,5 @@
 		flex-grow: 1;
 		flex-shrink: 1;
 		flex-basis: 0%;
-
-		.CalendarMain_Body_Sidebar {
-			width: 16rem;
-			padding: 1.25rem;
-			border-width: 1px;
-		}
 	}
 }

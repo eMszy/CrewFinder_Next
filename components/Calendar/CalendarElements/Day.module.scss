@@ -1,4 +1,4 @@
-.MinaDayDiv {
+.MainDayDiv {
 	border: gray 1px solid;
 
 	header {
@@ -34,6 +34,24 @@
 			font-weight: 400;
 			font-size: small;
 			padding: 0.1rem 0.5rem;
+		}
+	}
+}
+
+.Title {
+	grid-area: title;
+	gap: 1rem;
+	.Filters {
+		div {
+			cursor: pointer;
+			margin: 0.25rem;
+			padding: 0.5rem;
+			font-weight: 500;
+			border-radius: 1rem;
+			border: 2px solid transparent;
+			&:hover {
+				border-color: #afd7f8;
+			}
 		}
 	}
 }
