@@ -16,7 +16,7 @@ import classes from "./EventModal.module.scss";
 import SmallCalendar from "./SmallCalendar";
 
 const labelsClasses = ["indigo", "gray", "green", "blue", "red", "purple"];
-const weekDays = ["h", "k", "sze", "cs", "p", "szo", "v"];
+const weekDays = [1, 2, 3, 4, 5, 6, 0];
 
 const dayFormating = (day) => dayjs(day).format("YYYY-MM-DDTHH:mm");
 
@@ -36,13 +36,13 @@ const EventModal = () => {
 	const [startDate, setStartDate] = useState(
 		selectedEvent
 			? dayFormating(selectedEvent.startDate)
-			: dayFormating(daySelected.add(6, "hour"))
+			: dayFormating(daySelected.hour(6))
 	);
 
 	const [endDate, setEndDate] = useState(
 		selectedEvent
 			? dayFormating(selectedEvent.endDate)
-			: dayFormating(daySelected.add(18, "hour"))
+			: dayFormating(daySelected.hour(18))
 	);
 
 	const [selectedLabel, setSelectedLabel] = useState(
@@ -55,13 +55,39 @@ const EventModal = () => {
 		selectedEvent ? selectedEvent.weekDays : weekDays
 	);
 
+	const getDates = () => {
+		const daysBetween = dayjs(endDate).diff(dayjs(startDate), "d");
+		const sTime = dayjs(startDate).format("THHmm");
+		const eTime = dayjs(endDate).format("THHmm");
+		let dates = [];
+
+		for (let i = 0; i <= daysBetween; i++) {
+			const startTime = dayjs(startDate).add(i, "d").format(`YYYYMMDD${sTime}`);
+
+			if (selectedWeekDays.includes(+dayjs(startTime).format("d"))) {
+				const endTime = dayjs(startDate).add(i, "d").format(`YYYYMMDD${eTime}`);
+
+				dates.push({
+					startTime: +dayjs(startTime),
+					endTime: +dayjs(endTime),
+					crew: {},
+				});
+			}
+		}
+		return dates;
+	};
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
+
 		const calendarEvent = {
 			title,
 			shortTitle,
 			description,
 			label: selectedLabel,
+			dates: getDates(),
+			baseCrew: {},
+
 			startDate: dayjs(startDate).valueOf(),
 			endDate: dayjs(endDate).valueOf(),
 			weekDays: selectedWeekDays,
@@ -163,21 +189,21 @@ const EventModal = () => {
 						/>
 						<div></div>
 						<div className={classes.weekDayClass}>
-							{weekDays.map((day, i) => {
+							{weekDays.map((dayNum, i) => {
+								const day = dayjs().day(dayNum).format("dd");
 								let style = {};
-								selectedWeekDays.includes(day) ||
+								selectedWeekDays.includes(dayNum) ||
 									(style = { backgroundColor: "#ff000080" });
-
 								return (
 									<span
 										key={i}
 										onClick={() => {
 											let updatedDaySelection = [...selectedWeekDays];
-											selectedWeekDays.includes(day)
+											selectedWeekDays.includes(dayNum)
 												? (updatedDaySelection = selectedWeekDays.filter(
-														(d) => day !== d
+														(d) => dayNum !== d
 												  ))
-												: updatedDaySelection.push(day);
+												: updatedDaySelection.push(dayNum);
 											setSelectedWeekDays(updatedDaySelection);
 										}}
 										style={style}
