@@ -79,3 +79,14 @@ export const getMonth = (month = dayjs().month()) => {
 	});
 	return daysMatrix;
 };
+
+export const getWeek = (day = dayjs().date()) => {
+	const year = dayjs().year();
+	const month = dayjs().month();
+
+	const weekMatrix = new Array(7).fill([]).map(() => {
+		day++;
+		return dayjs(new Date(year, month, day - 1));
+	});
+	return weekMatrix;
+};

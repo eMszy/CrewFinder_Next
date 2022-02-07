@@ -24,7 +24,7 @@ const CalendarHeader = ({ viewTypes, viewMode, setViewMode }) => {
 
 	return (
 		<header className={classes.CalendarHeader}>
-			<div className={classes.Flex}>
+			<div className={classes.Control}>
 				<Button clicked={() => setShowEventModal(true)}>
 					<Image src="/icons/plus.svg" alt="calendar" width={28} height={28} />
 					<span>Létrehoz</span>
@@ -49,7 +49,11 @@ const CalendarHeader = ({ viewTypes, viewMode, setViewMode }) => {
 					<IoChevronForward />
 				</Button>
 			</div>
-			<h2>{dayjs(new Date(dayjs().year(), monthIndex)).format("YYYY MMMM")}</h2>
+			<div className={classes.Date}>
+				<h2>
+					{dayjs(new Date(dayjs().year(), monthIndex)).format("YYYY MMMM")}
+				</h2>
+			</div>
 		</header>
 	);
 };

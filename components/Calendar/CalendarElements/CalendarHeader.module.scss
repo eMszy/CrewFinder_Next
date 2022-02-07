@@ -2,11 +2,21 @@
 	height: 100%;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
-	padding: 0 1rem 0.5rem 1rem;
+	padding-bottom: 1rem;
 	align-items: center;
 	justify-items: center;
 
 	.Flex {
+		display: flex;
+		align-items: center;
+	}
+
+	.Date {
+		justify-self: end;
+	}
+
+	.Control {
+		justify-self: start;
 		display: flex;
 		align-items: center;
 	}

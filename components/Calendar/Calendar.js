@@ -2,9 +2,11 @@ import React, { useContext, useState } from "react";
 import { StateContext } from "../../context/state-context";
 import CalendarHeader from "./CalendarElements/CalendarHeader";
 import Month from "./CalendarElements/Month";
+import { Week } from "./CalendarElements/Week";
 import EventModal from "./CalendarElements/EventModal";
 
 import classes from "./Calendar.module.scss";
+import { List } from "./CalendarElements/List";
 
 export const Calendar = () => {
 	const { showEventModal } = useContext(StateContext);
@@ -22,6 +24,8 @@ export const Calendar = () => {
 				/>
 				<div className={classes.CalendarMain_Body}>
 					{viewMode === "Havi" && <Month />}
+					{viewMode === "Heti" && <Week />}
+					{viewMode === "Lista" && <List />}
 				</div>
 			</div>
 		</div>

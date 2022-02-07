@@ -1,0 +1,20 @@
+.ListMain {
+	margin: 1rem;
+}
+
+.ListElement {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	margin: 1rem auto;
+	padding: 1rem 2rem;
+	border-radius: 1rem;
+	width: 80%;
+
+	.ListTitle {
+		justify-self: start;
+	}
+
+	.ListDates {
+		justify-self: end;
+	}
+}

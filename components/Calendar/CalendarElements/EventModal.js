@@ -77,6 +77,8 @@ const EventModal = () => {
 
 		const calendarEvent = {
 			...inputData,
+			startDate: +dayjs(inputData.startDate),
+			endDate: +dayjs(inputData.endDate),
 			dates: getDates(),
 			id: selectedEvent
 				? selectedEvent.id
@@ -160,7 +162,10 @@ const EventModal = () => {
 								value={inputData.startDate}
 								required
 								onChange={(e) =>
-									setInputData({ ...inputData, startDate: e.target.value })
+									setInputData({
+										...inputData,
+										startDate: e.target.value,
+									})
 								}
 							/>
 							<input
@@ -170,7 +175,10 @@ const EventModal = () => {
 								min={inputData.startDate}
 								required
 								onChange={(e) =>
-									setInputData({ ...inputData, endDate: e.target.value })
+									setInputData({
+										...inputData,
+										endDate: e.target.value,
+									})
 								}
 							/>
 						</div>

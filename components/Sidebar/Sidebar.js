@@ -4,13 +4,8 @@ import { StateContext } from "../../context/state-context";
 import classes from "./Sidebar.module.scss";
 
 const Sidebar = () => {
-	const {
-		filteredEvents,
-		setSelectedEvent,
-		setShowEventModal,
-		labels,
-		updateLabel,
-	} = useContext(StateContext);
+	const { filteredEvents, setSelectedEvent, setShowEventModal } =
+		useContext(StateContext);
 
 	return (
 		<div className={classes.SidebarMain}>
