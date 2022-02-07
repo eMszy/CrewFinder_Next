@@ -5,7 +5,7 @@ import { StateContext } from "../../../context/state-context";
 
 import classes from "./Day.module.scss";
 
-const Day = ({ day, rowIdx, column }) => {
+const Day = ({ day, rowIdx }) => {
 	const [dayEvents, setDayEvents] = useState([]);
 
 	const {
@@ -16,8 +16,6 @@ const Day = ({ day, rowIdx, column }) => {
 		labels,
 		updateLabel,
 	} = useContext(StateContext);
-
-	// console.log("first", labels);
 
 	useEffect(() => {
 		const events = filteredEvents.filter(

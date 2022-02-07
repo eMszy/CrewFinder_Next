@@ -1,8 +1,15 @@
 .CalendarHeader {
 	height: 100%;
-	display: flex;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
 	padding: 0 1rem 0.5rem 1rem;
 	align-items: center;
+	justify-items: center;
+
+	.Flex {
+		display: flex;
+		align-items: center;
+	}
 
 	h1,
 	h2 {
@@ -10,12 +17,10 @@
 		color: rgba(107, 114, 128, var(--tw-text-opacity));
 		font-size: 1.25rem;
 		line-height: 1.75rem;
-		// margin-right: 2.5rem;
 		font-weight: 700;
 	}
 
 	button {
-		// border: 1px solid rgb(175, 215, 248);
 		padding: 8px 16px;
 		margin: 0 0.25rem;
 		display: flex;

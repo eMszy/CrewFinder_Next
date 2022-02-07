@@ -23,8 +23,8 @@ const CalendarHeader = ({ viewTypes, viewMode, setViewMode }) => {
 	};
 
 	return (
-		<>
-			<header className={classes.CalendarHeader}>
+		<header className={classes.CalendarHeader}>
+			<div className={classes.Flex}>
 				<Button clicked={() => setShowEventModal(true)}>
 					<Image src="/icons/plus.svg" alt="calendar" width={28} height={28} />
 					<span>Létrehoz</span>
@@ -39,6 +39,8 @@ const CalendarHeader = ({ viewTypes, viewMode, setViewMode }) => {
 						{vT}
 					</div>
 				))}
+			</div>
+			<div className={classes.Flex}>
 				<Button clicked={() => setMonthIndex(monthIndex - 1)}>
 					<IoChevronBack />
 				</Button>
@@ -46,11 +48,9 @@ const CalendarHeader = ({ viewTypes, viewMode, setViewMode }) => {
 				<Button clicked={() => setMonthIndex(monthIndex + 1)}>
 					<IoChevronForward />
 				</Button>
-				<h2>
-					{dayjs(new Date(dayjs().year(), monthIndex)).format("YYYY MMMM")}
-				</h2>
-			</header>
-		</>
+			</div>
+			<h2>{dayjs(new Date(dayjs().year(), monthIndex)).format("YYYY MMMM")}</h2>
+		</header>
 	);
 };
 

@@ -68,7 +68,6 @@ export const checkValidity = (value, rules) => {
 };
 
 export const getMonth = (month = dayjs().month()) => {
-	month = Math.floor(month);
 	const year = dayjs().year();
 	const firstDayOfTheMonth = dayjs(new Date(year, month, 0)).day();
 	let currentMonthCount = 0 - firstDayOfTheMonth;
