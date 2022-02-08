@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 
-import { StateContext } from "../../../context/state-context";
 import { getMonth } from "../../../shared/utility";
 
 import classes from "./SmallCalendar.module.scss";
@@ -14,13 +13,6 @@ const SmallCalendar = ({ daySelected, filteredEvents }) => {
 	useEffect(() => {
 		setCurrentMonth(getMonth(currentMonthIdx));
 	}, [currentMonthIdx]);
-
-	const { setDaySelected, monthIndex, setSmallCalendarMonth } =
-		useContext(StateContext);
-
-	useEffect(() => {
-		setCurrentMonthIdx(monthIndex);
-	}, [monthIndex]);
 
 	const getDayClass = (day) => {
 		const format = "YY-MM-DD";
@@ -79,8 +71,7 @@ const SmallCalendar = ({ daySelected, filteredEvents }) => {
 								>
 									<div
 										onClick={() => {
-											setSmallCalendarMonth(currentMonthIdx);
-											setDaySelected(day);
+											console.log(+dayjs(day));
 										}}
 									>
 										<span>{day.format("D")}</span>

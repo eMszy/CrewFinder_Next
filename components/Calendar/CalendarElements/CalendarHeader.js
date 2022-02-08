@@ -1,26 +1,46 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import dayjs from "dayjs";
+import weekOfYear from "dayjs/plugin/weekOfYear";
+import "dayjs/locale/hu";
+
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 
 import { StateContext } from "../../../context/state-context";
 import Button from "../../UI/Button/Button";
 
 import classes from "./CalendarHeader.module.scss";
+import { getMonth, getWeek } from "../../../shared/utility";
 
-const CalendarHeader = ({ viewTypes, viewMode, setViewMode }) => {
-	dayjs.locale("hu");
+dayjs.locale("hu");
+dayjs.extend(weekOfYear);
 
-	const { monthIndex, setMonthIndex, setShowEventModal } =
-		useContext(StateContext);
+const CalendarHeader = ({
+	viewTypes,
+	viewMode,
+	setViewMode,
+	setCurrentWeek,
+	setCurrentMonth,
+}) => {
+	const [monthIndex, setMonthIndex] = useState(dayjs().month());
+	const [weekIndex, setWeekIndex] = useState(
+		dayjs().date() - dayjs().day() + 1
+	);
 
-	const handleReset = () => {
-		setMonthIndex(
-			monthIndex === dayjs().month()
-				? monthIndex + Math.random()
-				: dayjs().month()
-		);
-	};
+	useEffect(() => {
+		switch (viewMode) {
+			case "Havi":
+				setCurrentMonth(getMonth(monthIndex));
+				break;
+			case "Heti":
+				setCurrentWeek(getWeek(weekIndex));
+				break;
+			default:
+				break;
+		}
+	}, [monthIndex, viewMode]);
+
+	const { setShowEventModal } = useContext(StateContext);
 
 	return (
 		<header className={classes.CalendarHeader}>
@@ -34,25 +54,58 @@ const CalendarHeader = ({ viewTypes, viewMode, setViewMode }) => {
 						className={classes.ViewModeClass}
 						key={idx}
 						style={{ backgroundColor: viewMode === vT && "#afd7f8" }}
-						onClick={() => setViewMode(vT)}
+						onClick={() => {
+							setViewMode(vT);
+							setMonthIndex(dayjs().month());
+							setWeekIndex(dayjs().date() - dayjs().day() + 1);
+						}}
 					>
 						{vT}
 					</div>
 				))}
 			</div>
-			<div className={classes.Flex}>
-				<Button clicked={() => setMonthIndex(monthIndex - 1)}>
-					<IoChevronBack />
-				</Button>
-				<Button clicked={handleReset}>Ma</Button>
-				<Button clicked={() => setMonthIndex(monthIndex + 1)}>
-					<IoChevronForward />
-				</Button>
-			</div>
+			{viewMode === "Lista" || (
+				<div className={classes.Flex}>
+					<Button
+						clicked={() => {
+							setMonthIndex(monthIndex - 1);
+							setWeekIndex(weekIndex - 7);
+						}}
+					>
+						<IoChevronBack />
+					</Button>
+					<Button
+						clicked={() => {
+							setMonthIndex(dayjs().month());
+							setWeekIndex(dayjs().date() - dayjs().day() + 1);
+						}}
+					>
+						Ma
+					</Button>
+					<Button
+						clicked={() => {
+							setMonthIndex(monthIndex + 1);
+							setWeekIndex(weekIndex + 7);
+						}}
+					>
+						<IoChevronForward />
+					</Button>
+				</div>
+			)}
 			<div className={classes.Date}>
-				<h2>
-					{dayjs(new Date(dayjs().year(), monthIndex)).format("YYYY MMMM")}
-				</h2>
+				{viewMode === "Havi" && (
+					<h2>
+						{dayjs(new Date(dayjs().year(), monthIndex)).format("YYYY MMMM")}
+					</h2>
+				)}
+				{viewMode === "Heti" && (
+					<h2>
+						{dayjs(new Date(dayjs())).format("YYYY. MMMM")} -{" "}
+						{dayjs(new Date(dayjs().year(), dayjs().month(), weekIndex)).week()}
+						. hét
+					</h2>
+				)}
+				{viewMode === "Lista" && <h2> {dayjs().format("YYYY. MMMM DD.")}</h2>}
 			</div>
 		</header>
 	);

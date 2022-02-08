@@ -2,10 +2,6 @@ import React, { useState, useEffect, useReducer, useMemo } from "react";
 import dayjs from "dayjs";
 
 export const StateContext = React.createContext({
-	monthIndex: 0,
-	setMonthIndex: (index) => {},
-	smallCalendarMonth: 0,
-	setSmallCalendarMonth: (index) => {},
 	daySelected: null,
 	setDaySelected: (day) => {},
 	showEventModal: false,
@@ -39,8 +35,6 @@ const savedEventsReducer = (state, { type, payload }) => {
 };
 
 const StateContextProvider = (props) => {
-	const [monthIndex, setMonthIndex] = useState(dayjs().month());
-	const [smallCalendarMonth, setSmallCalendarMonth] = useState(null);
 	const [daySelected, setDaySelected] = useState(dayjs());
 	const [showEventModal, setShowEventModal] = useState(false);
 	const [selectedEvent, setSelectedEvent] = useState(null);
@@ -77,26 +71,6 @@ const StateContextProvider = (props) => {
 	}, [savedEvents]);
 
 	useEffect(() => {
-		// setLabels((prevLabels) => {
-		// 	return [...new Set(savedEvents.map((evt) => evt.label))].map((label) => {
-		// 		const currentLabel = prevLabels.find((lbl) => lbl.label === label);
-		// 		console.log("lbl", currentLabel);
-		// 		return {
-		// 			label,
-		// 			checked: currentLabel.checked,
-		// 			title: currentLabel.title,
-		// 		};
-		// 	});
-		// });
-	}, [savedEvents]);
-
-	useEffect(() => {
-		if (smallCalendarMonth !== null) {
-			setMonthIndex(smallCalendarMonth);
-		}
-	}, [smallCalendarMonth]);
-
-	useEffect(() => {
 		if (!showEventModal) {
 			setSelectedEvent(null);
 		}
@@ -109,10 +83,6 @@ const StateContextProvider = (props) => {
 	return (
 		<StateContext.Provider
 			value={{
-				monthIndex,
-				setMonthIndex,
-				smallCalendarMonth,
-				setSmallCalendarMonth,
 				daySelected,
 				setDaySelected,
 				showEventModal,
