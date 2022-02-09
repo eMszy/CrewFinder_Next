@@ -1,7 +1,7 @@
 .CalendarMain_Body_Month {
 	display: grid;
 	grid-template-columns: repeat(8, minmax(0, 1fr));
-	grid-template-rows: auto;
+	grid-template-rows: repeat(5, minmax(0, 1fr));
 	grid-template-areas:
 		"title calendar calendar calendar calendar calendar calendar calendar"
 		"title calendar calendar calendar calendar calendar calendar calendar"

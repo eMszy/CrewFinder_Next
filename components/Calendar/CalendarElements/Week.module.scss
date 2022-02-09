@@ -8,25 +8,22 @@
 	.Title {
 		display: grid;
 		grid-template-columns: 1fr;
-		grid-template-rows: 3rem 1fr 1fr 1fr 1fr 1fr;
 		align-self: center;
 		height: 80vh;
 		--tw-border-opacity: 1;
 		border: 1px solid rgba(229, 231, 235, var(--tw-border-opacity));
 		border-radius: 1rem 0 0 1rem;
-
-		.Filters {
-			cursor: pointer;
-			&:hover {
-				opacity: 0.9;
-			}
-		}
+		cursor: pointer;
 
 		div {
 			display: flex;
 			justify-content: center;
 			align-items: center;
 			border-radius: 1rem 0 0 1rem;
+
+			&:hover {
+				opacity: 0.9;
+			}
 		}
 	}
 }

@@ -1,11 +1,9 @@
 .MainDayDiv {
 	display: grid;
 	grid-template-columns: 1fr;
-	grid-template-rows: 3rem 1fr 1fr 1fr 1fr 1fr;
 	height: 80vh;
 	--tw-border-opacity: 1;
 	border: 1px solid rgba(229, 231, 235, var(--tw-border-opacity));
-	// align-self: center;
 	border-radius: 0 1rem 1rem 0;
 
 	header {

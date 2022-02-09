@@ -72,7 +72,6 @@ const StateContextProvider = (props) => {
 	}, [showEventModal]);
 
 	const updateLabel = (label) => {
-		console.log("label", label, labels);
 		setLabels(labels.map((lbl) => (lbl.id === label.id ? label : lbl)));
 	};
 

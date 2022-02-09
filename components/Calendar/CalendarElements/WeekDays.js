@@ -6,7 +6,7 @@ import { StateContext } from "../../../context/state-context";
 import classes from "./WeekDays.module.scss";
 import { findColor } from "../../../shared/utility";
 
-const WeekDays = ({ day }) => {
+const WeekDays = ({ day, rowStyle }) => {
 	const {
 		setDaySelected,
 		setShowEventModal,
@@ -60,7 +60,7 @@ const WeekDays = ({ day }) => {
 	};
 
 	return (
-		<div className={classes.MainDayDiv}>
+		<div className={classes.MainDayDiv} style={rowStyle()}>
 			<header>
 				<div>
 					<p>{day.format("ddd").toUpperCase()}</p>
