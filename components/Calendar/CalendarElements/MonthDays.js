@@ -69,8 +69,8 @@ const MonthDays = ({ day, rowIdx }) => {
 					.sort((a, b) => a.startDate - b.startDate)
 					.map((evt, idx) => (
 						<React.Fragment key={idx}>
-							{idx <= 3 &&
-								(dayEvents.length > 6 && idx === 5 ? (
+							{idx <= 4 &&
+								(dayEvents.length > 5 && idx === 4 ? (
 									<div className={classes.MoreEvent}>
 										<p>További események</p>
 									</div>
