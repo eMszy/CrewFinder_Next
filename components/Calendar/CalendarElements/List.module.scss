@@ -1,20 +1,48 @@
-.ListElement {
-	display: grid;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
-	margin: 1rem auto;
-	padding: 1rem 2rem;
-	border-radius: 1rem;
-	width: 80%;
-	cursor: pointer;
-	&:hover {
-		opacity: 0.9;
+.ListMain {
+	display: flex;
+	justify-content: space-between;
+
+	.ListEvents {
+		flex: 7;
+		.ListElement {
+			display: grid;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			margin: 1rem auto;
+			padding: 1rem 2rem;
+			border-radius: 1rem;
+			width: 90%;
+			cursor: pointer;
+			&:hover {
+				opacity: 0.9;
+			}
+
+			.ListTitle {
+				justify-self: start;
+			}
+
+			.ListDates {
+				justify-self: end;
+			}
+		}
 	}
 
-	.ListTitle {
-		justify-self: start;
-	}
+	.Filter {
+		flex: 1;
 
-	.ListDates {
-		justify-self: end;
+		h3 {
+			margin-bottom: 1.25rem;
+		}
+
+		div {
+			cursor: pointer;
+			margin: 0.25rem;
+			padding: 0.5rem;
+			font-weight: 500;
+			border-radius: 1rem;
+			border: 2px solid transparent;
+			&:hover {
+				opacity: 0.9;
+			}
+		}
 	}
 }

@@ -32,5 +32,29 @@
       "checked": true
     }
   ],
-  "firstDayofTheWeek": 1
+  "firstDayofTheWeek": 1,
+  "departments": {
+    "AD's": {
+      "1st AD": {
+        "name": "1st AD",
+        "weight": 10
+      },
+      "2nd AD": {
+        "name": "2nd AD",
+        "weight": 5
+      },
+      "3rd AD": {
+        "name": "3rd AD",
+        "weight": 3
+      },
+      "Key SetPA": {
+        "name": "Key SetPa",
+        "weight": 2
+      },
+      "SetPA": {
+        "name": "SetPa",
+        "weight": 1
+      }
+    }
+  }
 }
