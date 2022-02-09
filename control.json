@@ -3,19 +3,19 @@
   "labels": [
     {
       "id": 1,
-      "label": "hsl(300, 100%, 25%)",
+      "label": "hsl(300, 100%, 30%)",
       "title": "Privát esemény",
       "checked": true
     },
     {
       "id": 2,
-      "label": "hsl(120, 100%, 25%)",
+      "label": "hsl(120, 100%, 30%)",
       "title": "Visszaigazolt",
       "checked": true
     },
     {
       "id": 3,
-      "label": "hsl(240, 100%, 50%)",
+      "label": "hsl(240, 100%, 60%)",
       "title": "Jelentkeztél",
       "checked": true
     },
@@ -54,6 +54,12 @@
       "SetPA": {
         "name": "SetPa",
         "weight": 1
+      }
+    },
+    "Valami_más": {
+      "Más": {
+        "name": "Más",
+        "weight": 10
       }
     }
   }

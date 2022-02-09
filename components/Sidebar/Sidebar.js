@@ -28,7 +28,9 @@ const Sidebar = () => {
 							className={classes.SidebarElement}
 							style={{ backgroundColor: findColor(event.label) }}
 						>
-							<h3>{event.title}</h3>
+							<h3>
+								{event.title} - {event.yourPosition}
+							</h3>
 							<div>{dayjs(event.startDate).format("YYYY. MMMM. DD.")}</div>
 							<div>
 								{dayjs(event.startDate).format("HH:mm")} -{" "}

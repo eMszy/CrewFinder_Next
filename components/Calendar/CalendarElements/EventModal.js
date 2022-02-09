@@ -1,20 +1,22 @@
-import dayjs from "dayjs";
 import React, { useContext, useEffect, useState } from "react";
-import { StateContext } from "../../../context/state-context";
+import dayjs from "dayjs";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { MdDelete, MdOutlineDescription, MdTitle } from "react-icons/md";
 import {
 	IoClose,
 	IoBookmarkOutline,
 	IoCheckmark,
 	IoCalendarOutline,
 } from "react-icons/io5";
-import { GiHamburgerMenu } from "react-icons/gi";
-import { MdDelete, MdOutlineDescription, MdTitle } from "react-icons/md";
 
-import Button from "../../UI/Button/Button";
-
-import classes from "./EventModal.module.scss";
+import { StateContext } from "../../../context/state-context";
 import SmallCalendar from "./SmallCalendar";
 import { findColor } from "../../../shared/utility";
+import Button from "../../UI/Button/Button";
+
+import control from "../../../control.json";
+
+import classes from "./EventModal.module.scss";
 
 const weekDays = [1, 2, 3, 4, 5, 6, 0];
 
@@ -35,6 +37,7 @@ const EventModal = () => {
 		description: selectedEvent ? selectedEvent.description : "",
 		label: selectedEvent ? selectedEvent.label : labels[0].id,
 		dates: selectedEvent ? selectedEvent.dates : [],
+		yourPosition: selectedEvent ? selectedEvent.yourPosition : "",
 		baseCrew: selectedEvent ? selectedEvent.baseCrew : {},
 		startDate: selectedEvent
 			? dayFormating(selectedEvent.startDate)
@@ -46,6 +49,19 @@ const EventModal = () => {
 	});
 
 	const [clickedDate, setClickedDate] = useState([]);
+
+	const [department, setDepartment] = useState(
+		Object.keys(control.departments)[0]
+	);
+
+	useEffect(() => {
+		setInputData({
+			...inputData,
+			yourPosition: Object.keys(control.departments[department])[0],
+		});
+	}, [department]);
+
+	console.log("first", department, inputData.yourPosition);
 
 	const getDates = () => {
 		const daysBetween = dayjs(inputData.endDate).diff(
@@ -253,14 +269,34 @@ const EventModal = () => {
 						<div className={classes.Icon}>
 							<MdOutlineDescription />
 						</div>
-						<input
-							type="text"
-							name="Leírás"
-							placeholder="Saját pozíció"
-							value={inputData.description}
-							required
-							onChange={(e) => {}}
-						/>
+						<div className={classes.YourPosition}>
+							<p>Saját pozicíód: </p>
+							<select
+								value={department}
+								onChange={(e) => setDepartment(e.target.value)}
+							>
+								{Object.keys(control.departments).map((dep, id) => (
+									<option key={id} value={dep}>
+										{dep}
+									</option>
+								))}
+							</select>
+							<select
+								value={inputData.yourPosition}
+								onChange={(e) =>
+									setInputData({ ...inputData, yourPosition: e.target.value })
+								}
+							>
+								{control.departments[department] &&
+									Object.keys(control.departments[department]).map(
+										(pos, id) => (
+											<option key={id} value={pos}>
+												{pos}
+											</option>
+										)
+									)}
+							</select>
+						</div>
 						<div></div>
 						<div>Alapcsapat</div>
 					</div>

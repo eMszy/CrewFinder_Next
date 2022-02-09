@@ -81,7 +81,7 @@ const MonthDays = ({ day, rowIdx }) => {
 										className={classes.Event}
 									>
 										{dayjs(evt.startDate).format("YY-MM-DD") ===
-											day.format("YY-MM-DD") && evt.title}
+											day.format("YY-MM-DD") && <p>{evt.title}</p>}
 									</div>
 								))}
 						</React.Fragment>

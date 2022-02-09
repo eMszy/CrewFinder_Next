@@ -33,10 +33,11 @@
 			overflow: hidden;
 			text-overflow: ellipsis;
 			white-space: nowrap;
-			font-weight: 400;
-			font-size: small;
-			color: white;
 			align-items: center;
+			font-size: small;
+			p {
+				font-weight: 500;
+			}
 
 			&:hover {
 				opacity: 0.9;
@@ -44,12 +45,19 @@
 		}
 
 		.MoreEvent {
+			display: flex;
 			background-color: rgba(0, 0, 0, 0.2);
 			border-radius: 999px;
+			height: 1.5rem;
 			margin: 0 3px;
 			font-weight: 400;
 			font-size: small;
 			padding: 0.1rem 0.5rem;
+			align-items: center;
+			justify-content: center;
+			p {
+				font-weight: 500;
+			}
 		}
 	}
 }
