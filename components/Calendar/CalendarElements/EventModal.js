@@ -25,7 +25,7 @@ const EventModal = () => {
 		useContext(StateContext);
 
 	const [inputData, setInputData] = useState({
-		title: selectedEvent ? selectedEvent.shortTitle : "",
+		title: selectedEvent ? selectedEvent.title : "",
 		shortTitle: selectedEvent ? selectedEvent.shortTitle : "",
 		description: selectedEvent ? selectedEvent.description : "",
 		label: selectedEvent
@@ -42,6 +42,10 @@ const EventModal = () => {
 		weekDays: selectedEvent ? selectedEvent.weekDays : weekDays,
 	});
 
+	const [clickedDate, setClickedDate] = useState([]);
+
+	console.log("selectedEvent", selectedEvent);
+
 	const getDates = () => {
 		const daysBetween = dayjs(inputData.endDate).diff(
 			dayjs(inputData.startDate),
@@ -57,8 +61,13 @@ const EventModal = () => {
 				.format(`YYYYMMDD${sTime}`);
 
 			if (inputData.weekDays.includes(+dayjs(startTime).format("d"))) {
+				let j = i;
+				if (sTime > eTime) {
+					j++;
+				}
+
 				const endTime = dayjs(inputData.startDate)
-					.add(i, "d")
+					.add(j, "d")
 					.format(`YYYYMMDD${eTime}`);
 
 				dates.push({
@@ -256,7 +265,6 @@ const EventModal = () => {
 					</div>
 					<div className={classes.EventModal_Calendar}>
 						<SmallCalendar
-							daySelected={dayjs()}
 							filteredEvents={[
 								{
 									label: inputData.label,
@@ -265,6 +273,8 @@ const EventModal = () => {
 									weekDays: inputData.weekDays,
 								},
 							]}
+							clickedDate={clickedDate}
+							setClickedDate={setClickedDate}
 						/>
 					</div>
 				</div>

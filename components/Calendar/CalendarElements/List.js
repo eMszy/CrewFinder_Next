@@ -10,7 +10,7 @@ export const List = () => {
 
 	return (
 		<div>
-			<div className={classes.ListMain}>Eseményeid</div>
+			<h2>Eseményeid</h2>
 			{filteredEvents
 				.sort((a, b) => +dayjs(a.startDate) - +dayjs(b.startDate))
 				.map((e) => (

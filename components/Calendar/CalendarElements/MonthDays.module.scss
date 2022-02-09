@@ -1,10 +1,23 @@
 .MainDayDiv {
+	--tw-border-opacity: 1;
+	border: 1px solid rgba(229, 231, 235, var(--tw-border-opacity));
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+
 	header {
+		font-size: 0.875rem;
 		display: flex;
 		flex-direction: column;
+		justify-content: center;
+		padding: 0.25rem;
 
 		.ThisDay {
 			background-color: #afd7f8;
+		}
+
+		p {
+			font-weight: 500;
 		}
 	}
 
@@ -13,7 +26,7 @@
 		height: 100%;
 
 		.Event {
-			height: 1.3rem;
+			height: 1.5rem;
 			display: flex;
 			padding: 0.1rem 1rem;
 			margin-bottom: 1px;
@@ -23,6 +36,11 @@
 			font-weight: 400;
 			font-size: small;
 			color: white;
+			align-items: center;
+
+			&:hover {
+				opacity: 0.9;
+			}
 		}
 
 		.MoreEvent {
@@ -32,24 +50,6 @@
 			font-weight: 400;
 			font-size: small;
 			padding: 0.1rem 0.5rem;
-		}
-	}
-}
-
-.Title {
-	grid-area: title;
-	gap: 1rem;
-	.Filters {
-		div {
-			cursor: pointer;
-			margin: 0.25rem;
-			padding: 0.5rem;
-			font-weight: 500;
-			border-radius: 1rem;
-			border: 2px solid transparent;
-			&:hover {
-				border-color: #afd7f8;
-			}
 		}
 	}
 }

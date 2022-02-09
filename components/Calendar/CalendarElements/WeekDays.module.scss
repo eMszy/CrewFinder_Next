@@ -1,0 +1,56 @@
+.MainDayDiv {
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: 3rem 1fr 1fr 1fr 1fr 1fr;
+	height: 80vh;
+	--tw-border-opacity: 1;
+	border: 1px solid rgba(229, 231, 235, var(--tw-border-opacity));
+	// align-self: center;
+	border-radius: 0 1rem 1rem 0;
+
+	header {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		font-size: 0.875rem;
+		padding: 0.25rem;
+
+		.ThisDay {
+			background-color: #afd7f8;
+		}
+
+		p {
+			font-weight: 500;
+		}
+	}
+
+	.EventDiv {
+		cursor: pointer;
+
+		.Event {
+			height: 1.7rem;
+			display: flex;
+			padding: 0.1rem 1rem;
+			margin-bottom: 1px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			font-weight: 400;
+			font-size: small;
+			color: white;
+			align-items: center;
+			&:hover {
+				opacity: 0.9;
+			}
+		}
+
+		.MoreEvent {
+			background-color: rgba(0, 0, 0, 0.2);
+			border-radius: 999px;
+			margin: 0 3px;
+			font-weight: 400;
+			font-size: small;
+			padding: 0.1rem 0.5rem;
+		}
+	}
+}

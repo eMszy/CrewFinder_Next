@@ -26,6 +26,14 @@
 			margin: 0.25rem;
 			border-radius: 1rem;
 			font-weight: 500;
+			&:hover {
+				opacity: 0.9;
+			}
+
+			> div {
+				font-weight: 500;
+				font-size: medium;
+			}
 		}
 	}
 }

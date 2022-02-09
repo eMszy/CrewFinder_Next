@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 
@@ -6,7 +6,7 @@ import { getMonth } from "../../../shared/utility";
 
 import classes from "./SmallCalendar.module.scss";
 
-const SmallCalendar = ({ daySelected, filteredEvents }) => {
+const SmallCalendar = ({ filteredEvents, clickedDate, setClickedDate }) => {
 	const [currentMonthIdx, setCurrentMonthIdx] = useState(dayjs().month());
 	const [currentMonth, setCurrentMonth] = useState(getMonth());
 
@@ -18,7 +18,6 @@ const SmallCalendar = ({ daySelected, filteredEvents }) => {
 		const format = "YY-MM-DD";
 		const nowDay = dayjs().format(format);
 		const currDay = day.format(format);
-		const slcDay = daySelected && daySelected.format(format);
 
 		const fEventByDay = filteredEvents.find(
 			(f) =>
@@ -29,11 +28,8 @@ const SmallCalendar = ({ daySelected, filteredEvents }) => {
 
 		let style = { borderRadius: "999px" };
 
-		if (currDay === slcDay) {
-			style = { ...style, borderColor: "#afd7f8" };
-		}
 		if (nowDay === currDay) {
-			style = { ...style, backgroundColor: "#afd7f8" };
+			style = { ...style, borderColor: "#afd7f8" };
 		}
 		if (fEventByDay) {
 			style = { ...style, backgroundColor: fEventByDay.label, color: "white" };
@@ -67,11 +63,18 @@ const SmallCalendar = ({ daySelected, filteredEvents }) => {
 								<div
 									key={idx}
 									className={classes.SmallDates}
-									style={getDayClass(day) || null}
+									style={getDayClass(day)}
 								>
 									<div
 										onClick={() => {
-											console.log(+dayjs(day));
+											if (clickedDate.includes(day)) {
+												const filtedCDate = clickedDate.filter(
+													(e) => +dayjs(e) !== +dayjs(day)
+												);
+												setClickedDate(filtedCDate);
+											} else {
+												setClickedDate([...clickedDate, day]);
+											}
 										}}
 									>
 										<span>{day.format("D")}</span>

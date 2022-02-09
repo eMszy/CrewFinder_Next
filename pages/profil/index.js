@@ -11,6 +11,7 @@ import { inputChangedHandler, isAllInputVaild } from "../../shared/utility";
 import Button from "../../components/UI/Button/Button";
 
 import classes from "./Profil.module.scss";
+import { List } from "../../components/Calendar/CalendarElements/List";
 
 const Profil = () => {
 	Profil.title = "CrewFinder - Profil";
@@ -100,7 +101,7 @@ const Profil = () => {
 			</Head>
 			<div className={classes.Profil}>
 				<div className={classes.Profil_Panels}>
-					<h2>Eseményeid</h2>
+					<List />
 				</div>
 				<div className={classes.Profil_Panels}>
 					<form className={classes.Profil_Form}>
