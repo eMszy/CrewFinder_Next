@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import React, { useContext } from "react";
 import { StateContext } from "../../context/state-context";
+import { findColor } from "../../shared/utility";
 
 import classes from "./Sidebar.module.scss";
 
@@ -25,12 +26,10 @@ const Sidebar = () => {
 								setShowEventModal(true);
 							}}
 							className={classes.SidebarElement}
-							style={{ backgroundColor: event.label }}
+							style={{ backgroundColor: findColor(event.label) }}
 						>
-							<h3>{event.shortTitle}</h3>
-							<div>
-								{dayjs(event.startDate).format("YYYY. MMMM. DD. HH:mm")}
-							</div>
+							<h3>{event.title}</h3>
+							<div>{dayjs(event.startDate).format("YYYY. MMMM. DD.")}</div>
 							<div>
 								{dayjs(event.startDate).format("HH:mm")} -{" "}
 								{dayjs(event.endDate).format("HH:mm")}

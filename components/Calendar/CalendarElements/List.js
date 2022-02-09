@@ -1,22 +1,23 @@
 import dayjs from "dayjs";
 import React, { useContext, useEffect, useState } from "react";
 import { StateContext } from "../../../context/state-context";
+import { findColor } from "../../../shared/utility";
 
 import classes from "./List.module.scss";
 
 export const List = () => {
-	const { filteredEvents, setSelectedEvent, setShowEventModal } =
+	const { savedEvents, setSelectedEvent, setShowEventModal } =
 		useContext(StateContext);
 
 	return (
 		<div>
 			<h2>Eseményeid</h2>
-			{filteredEvents
+			{savedEvents
 				.sort((a, b) => +dayjs(a.startDate) - +dayjs(b.startDate))
 				.map((e) => (
 					<div
 						className={classes.ListElement}
-						style={{ backgroundColor: e.label }}
+						style={{ backgroundColor: findColor(e.label) }}
 						key={e.id}
 						onClick={() => {
 							setSelectedEvent(e);

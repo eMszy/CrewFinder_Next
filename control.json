@@ -1,0 +1,36 @@
+{
+  "test": "valami",
+  "labels": [
+    {
+      "id": 1,
+      "label": "hsl(300, 100%, 25%)",
+      "title": "Privát esemény",
+      "checked": true
+    },
+    {
+      "id": 2,
+      "label": "hsl(120, 100%, 25%)",
+      "title": "Visszaigazolt",
+      "checked": true
+    },
+    {
+      "id": 3,
+      "label": "hsl(240, 100%, 50%)",
+      "title": "Jelentkeztél",
+      "checked": true
+    },
+    {
+      "id": 4,
+      "label": "hsl(39, 100%, 50%)",
+      "title": "Célzott megkeresés",
+      "checked": true
+    },
+    {
+      "id": 5,
+      "label": "hsl(60, 100%, 50%)",
+      "title": "Nyitott pozicíó",
+      "checked": true
+    }
+  ],
+  "firstDayofTheWeek": 1
+}

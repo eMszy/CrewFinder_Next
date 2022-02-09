@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import { StateContext } from "../../../context/state-context";
 
 import classes from "./MonthDays.module.scss";
+import { findColor } from "../../../shared/utility";
 
 const MonthDays = ({ day, rowIdx }) => {
 	const [dayEvents, setDayEvents] = useState([]);
@@ -32,7 +33,7 @@ const MonthDays = ({ day, rowIdx }) => {
 	};
 
 	const getStyle = (evt) => {
-		let style = { background: evt.label };
+		let style = { background: findColor(evt.label) };
 		if (dayjs(evt.startDate).format("YY-MM-DD") === day.format("YY-MM-DD")) {
 			style = {
 				...style,

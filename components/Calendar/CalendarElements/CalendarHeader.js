@@ -22,10 +22,8 @@ const CalendarHeader = ({
 	setCurrentWeek,
 	setCurrentMonth,
 }) => {
-	const [monthIndex, setMonthIndex] = useState(dayjs().month());
-	const [weekIndex, setWeekIndex] = useState(
-		dayjs().date() - dayjs().day() + 1
-	);
+	const [monthIndex, setMonthIndex] = useState();
+	const [weekIndex, setWeekIndex] = useState();
 
 	useEffect(() => {
 		switch (viewMode) {

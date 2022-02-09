@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import { StateContext } from "../../../context/state-context";
 
 import classes from "./WeekDays.module.scss";
+import { findColor } from "../../../shared/utility";
 
 const WeekDays = ({ day }) => {
 	const {
@@ -34,7 +35,7 @@ const WeekDays = ({ day }) => {
 	};
 
 	const getStyle = (evt) => {
-		let style = { background: evt.label };
+		let style = { background: findColor(evt.label) };
 
 		if (dayjs(evt.startDate).format("YY-MM-DD") === day.format("YY-MM-DD")) {
 			style = {
@@ -54,6 +55,10 @@ const WeekDays = ({ day }) => {
 		return style;
 	};
 
+	const getBackGround = (e) => {
+		return { backgroundColor: e.label.slice(0, -4).concat("90%)") };
+	};
+
 	return (
 		<div className={classes.MainDayDiv}>
 			<header>
@@ -62,11 +67,11 @@ const WeekDays = ({ day }) => {
 					<p className={getCurrentDayClass()}>{day.format("DD")}</p>
 				</div>
 			</header>
-			{labels.map((e) => (
-				<div>
+			{labels.map((e, id) => (
+				<div key={id} style={getBackGround(e)}>
 					{dayEvents.map(
 						(d, idx) =>
-							d.label === e.label && (
+							d.label === e.id && (
 								<div
 									key={idx}
 									className={classes.EventDiv}

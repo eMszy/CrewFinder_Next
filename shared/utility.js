@@ -1,3 +1,4 @@
+import control from "../control.json";
 import dayjs from "dayjs";
 
 const updateObject = (oldObject, updatedProperties) => {
@@ -70,7 +71,8 @@ export const checkValidity = (value, rules) => {
 export const getMonth = (month = dayjs().month()) => {
 	const year = dayjs().year();
 	const firstDayOfTheMonth = dayjs(new Date(year, month, 0)).day();
-	let currentMonthCount = 0 - firstDayOfTheMonth;
+	let currentMonthCount =
+		0 - firstDayOfTheMonth - 1 + control.firstDayofTheWeek;
 	const daysMatrix = new Array(5).fill([]).map(() => {
 		return new Array(7).fill(null).map(() => {
 			currentMonthCount++;
@@ -80,13 +82,18 @@ export const getMonth = (month = dayjs().month()) => {
 	return daysMatrix;
 };
 
-export const getWeek = (day = dayjs().date() - dayjs().day() + 1) => {
+export const getWeek = (day) => {
 	const year = dayjs().year();
 	const month = dayjs().month();
 
 	const weekMatrix = new Array(7).fill([]).map(() => {
 		day++;
-		return dayjs(new Date(year, month, day - 1));
+		return dayjs(new Date(year, month, day - 2 + control.firstDayofTheWeek));
 	});
 	return weekMatrix;
+};
+
+export const findColor = (id) => {
+	const color = control.labels.find((l) => l.id === id);
+	return color.label;
 };

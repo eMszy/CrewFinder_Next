@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
 import dayjs from "dayjs";
+import control from "../control.json";
 
 export const StateContext = React.createContext({
 	daySelected: null,
@@ -38,13 +39,7 @@ const StateContextProvider = (props) => {
 	const [daySelected, setDaySelected] = useState(dayjs());
 	const [showEventModal, setShowEventModal] = useState(false);
 	const [selectedEvent, setSelectedEvent] = useState(null);
-	const [labels, setLabels] = useState([
-		{ label: "purple", title: "Privát esemény", checked: true },
-		{ label: "green", title: "Visszaigazolt", checked: true },
-		{ label: "blue", title: "Jelentkeztél", checked: true },
-		{ label: "orange", title: "Célzott megkeresés", checked: true },
-		{ label: "yellow", title: "Nyitott pozicíó", checked: true },
-	]);
+	const [labels, setLabels] = useState(control.labels);
 
 	const [savedEvents, dispatchCalEvent] = useReducer(savedEventsReducer, []);
 
@@ -61,7 +56,7 @@ const StateContextProvider = (props) => {
 		return savedEvents.filter((evt) =>
 			labels
 				.filter((lbl) => lbl.checked)
-				.map((lbl) => lbl.label)
+				.map((lbl) => lbl.id)
 				.includes(evt.label)
 		);
 	}, [savedEvents, labels]);
@@ -77,7 +72,8 @@ const StateContextProvider = (props) => {
 	}, [showEventModal]);
 
 	const updateLabel = (label) => {
-		setLabels(labels.map((lbl) => (lbl.label === label.label ? label : lbl)));
+		console.log("label", label, labels);
+		setLabels(labels.map((lbl) => (lbl.id === label.id ? label : lbl)));
 	};
 
 	return (

@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StateContext } from "../../../context/state-context";
 import {
 	IoClose,
@@ -14,23 +14,26 @@ import Button from "../../UI/Button/Button";
 
 import classes from "./EventModal.module.scss";
 import SmallCalendar from "./SmallCalendar";
+import { findColor } from "../../../shared/utility";
 
-const labelsClasses = ["purple", "green", "blue", "orange", "yellow"];
 const weekDays = [1, 2, 3, 4, 5, 6, 0];
 
 const dayFormating = (day) => dayjs(day).format("YYYY-MM-DDTHH:mm");
 
 const EventModal = () => {
-	const { setShowEventModal, daySelected, dispatchCalEvent, selectedEvent } =
-		useContext(StateContext);
+	const {
+		setShowEventModal,
+		daySelected,
+		dispatchCalEvent,
+		selectedEvent,
+		labels,
+	} = useContext(StateContext);
 
 	const [inputData, setInputData] = useState({
 		title: selectedEvent ? selectedEvent.title : "",
 		shortTitle: selectedEvent ? selectedEvent.shortTitle : "",
 		description: selectedEvent ? selectedEvent.description : "",
-		label: selectedEvent
-			? labelsClasses.find((lbl) => lbl === selectedEvent.label)
-			: labelsClasses[0],
+		label: selectedEvent ? selectedEvent.label : labels[0].id,
 		dates: selectedEvent ? selectedEvent.dates : [],
 		baseCrew: selectedEvent ? selectedEvent.baseCrew : {},
 		startDate: selectedEvent
@@ -43,8 +46,6 @@ const EventModal = () => {
 	});
 
 	const [clickedDate, setClickedDate] = useState([]);
-
-	console.log("selectedEvent", selectedEvent);
 
 	const getDates = () => {
 		const daysBetween = dayjs(inputData.endDate).diff(
@@ -237,15 +238,15 @@ const EventModal = () => {
 							<IoBookmarkOutline />
 						</div>
 						<div className={classes.labelsClass}>
-							{labelsClasses.map((lblClass, i) => (
+							{labels.map((lblClass, i) => (
 								<span
 									key={i}
 									onClick={() =>
-										setInputData({ ...inputData, label: lblClass })
+										setInputData({ ...inputData, label: lblClass.id })
 									}
-									style={{ backgroundColor: lblClass }}
+									style={{ backgroundColor: findColor(lblClass.id) }}
 								>
-									{inputData.label === lblClass && <IoCheckmark />}
+									{inputData.label === lblClass.id && <IoCheckmark />}
 								</span>
 							))}
 						</div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 
-import { getMonth } from "../../../shared/utility";
+import { findColor, getMonth } from "../../../shared/utility";
 
 import classes from "./SmallCalendar.module.scss";
 
@@ -32,7 +32,11 @@ const SmallCalendar = ({ filteredEvents, clickedDate, setClickedDate }) => {
 			style = { ...style, borderColor: "#afd7f8" };
 		}
 		if (fEventByDay) {
-			style = { ...style, backgroundColor: fEventByDay.label, color: "white" };
+			style = {
+				...style,
+				backgroundColor: findColor(fEventByDay.label),
+				color: "white",
+			};
 		}
 		return style;
 	};
