@@ -6,7 +6,7 @@ import { findColor, getMonth } from "../../../shared/utility";
 
 import classes from "./SmallCalendar.module.scss";
 
-const SmallCalendar = ({ filteredEvents, clickedDate, setClickedDate }) => {
+const SmallCalendar = ({ filteredEvents, setClickedDate, setIsClicked }) => {
 	const [currentMonthIdx, setCurrentMonthIdx] = useState(dayjs().month());
 	const [currentMonth, setCurrentMonth] = useState(getMonth());
 
@@ -19,11 +19,8 @@ const SmallCalendar = ({ filteredEvents, clickedDate, setClickedDate }) => {
 		const nowDay = dayjs().format(format);
 		const currDay = day.format(format);
 
-		const fEventByDay = filteredEvents.find(
-			(f) =>
-				f.weekDays.includes(+day.format("d")) &&
-				+day.add(1, "day").subtract(1, "minute") >= f.startDate &&
-				+day <= f.endDate
+		let fEventByDay = filteredEvents[0].dates.find(
+			(date) => dayjs(date.startTime).format(format) === currDay
 		);
 
 		let style = { borderRadius: "999px" };
@@ -34,8 +31,7 @@ const SmallCalendar = ({ filteredEvents, clickedDate, setClickedDate }) => {
 		if (fEventByDay) {
 			style = {
 				...style,
-				backgroundColor: findColor(fEventByDay.label),
-				color: "white",
+				backgroundColor: findColor(filteredEvents[0].label),
 			};
 		}
 		return style;
@@ -71,14 +67,7 @@ const SmallCalendar = ({ filteredEvents, clickedDate, setClickedDate }) => {
 								>
 									<div
 										onClick={() => {
-											if (clickedDate.includes(day)) {
-												const filtedCDate = clickedDate.filter(
-													(e) => +dayjs(e) !== +dayjs(day)
-												);
-												setClickedDate(filtedCDate);
-											} else {
-												setClickedDate([...clickedDate, day]);
-											}
+											setClickedDate(day), setIsClicked(Math.random());
 										}}
 									>
 										<span>{day.format("D")}</span>

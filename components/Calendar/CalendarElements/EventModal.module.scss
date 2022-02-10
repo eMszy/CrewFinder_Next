@@ -163,17 +163,23 @@
 
 .weekDayClass {
 	display: flex;
+	align-items: center;
 
-	span {
+	span,
+	div {
 		background-color: #afd7f8;
-		color: black;
-		justify-content: center;
-		align-items: center;
-		width: 2rem;
-		min-height: 2rem;
 		border-radius: 999px;
 		margin: 0 0.5rem;
+		border: #afd7f8 solid 3px;
 		cursor: pointer;
+		&:hover {
+			background-color: transparent;
+		}
+	}
+
+	span {
+		min-height: 2rem;
+		width: 2rem;
 	}
 }
 

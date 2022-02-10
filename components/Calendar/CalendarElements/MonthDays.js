@@ -17,13 +17,17 @@ const MonthDays = ({ day, rowIdx }) => {
 	} = useContext(StateContext);
 
 	useEffect(() => {
-		const events = filteredEvents.filter(
-			(evt) =>
-				evt.weekDays.includes(+day.format("d")) &&
-				day.format("YY-MM-DD") >= dayjs(evt.startDate).format("YY-MM-DD") &&
-				day.format("YY-MM-DD") <= dayjs(evt.endDate).format("YY-MM-DD")
-		);
-		setDayEvents(events);
+		let events = [];
+		filteredEvents.forEach((event) => {
+			let isExist = event.dates.find(
+				(d) =>
+					dayjs(d.startTime).format("YYMMDD") === dayjs(day).format("YYMMDD")
+			);
+			if (isExist) {
+				events.push(event);
+			}
+			setDayEvents(events);
+		});
 	}, [filteredEvents, day]);
 
 	const getCurrentDayClass = () => {

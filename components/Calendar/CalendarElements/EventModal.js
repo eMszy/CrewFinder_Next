@@ -18,7 +18,7 @@ import control from "../../../control.json";
 
 import classes from "./EventModal.module.scss";
 
-const weekDays = [1, 2, 3, 4, 5, 6, 0];
+const weekdaysSet = [1, 2, 3, 4, 5, 6, 0];
 
 const dayFormating = (day) => dayjs(day).format("YYYY-MM-DDTHH:mm");
 
@@ -39,16 +39,19 @@ const EventModal = () => {
 		dates: selectedEvent ? selectedEvent.dates : [],
 		yourPosition: selectedEvent ? selectedEvent.yourPosition : "",
 		baseCrew: selectedEvent ? selectedEvent.baseCrew : {},
+		// ha nincs egy nap se kijelölve akkor vissza ugrik az aktuális napra
 		startDate: selectedEvent
 			? dayFormating(selectedEvent.startDate)
 			: dayFormating(daySelected.hour(6)),
 		endDate: selectedEvent
 			? dayFormating(selectedEvent.endDate)
 			: dayFormating(daySelected.hour(18)),
-		weekDays: selectedEvent ? selectedEvent.weekDays : weekDays,
+		id: selectedEvent ? selectedEvent.id : Math.random(),
 	});
 
-	const [clickedDate, setClickedDate] = useState([]);
+	const [weekdays, setWeekdays] = useState(weekdaysSet);
+	const [clickedDate, setClickedDate] = useState();
+	const [isClicked, setIsClicked] = useState();
 
 	const [department, setDepartment] = useState(
 		Object.keys(control.departments)[0]
@@ -61,54 +64,155 @@ const EventModal = () => {
 		});
 	}, [department]);
 
-	console.log("first", department, inputData.yourPosition);
+	const addDatesWithTimes = (startDate, endDate, weekdays = undefined) => {
+		let updatedDates = [];
 
-	const getDates = () => {
-		const daysBetween = dayjs(inputData.endDate).diff(
-			dayjs(inputData.startDate),
-			"d"
-		);
-		const sTime = dayjs(inputData.startDate).format("THHmm");
-		const eTime = dayjs(inputData.endDate).format("THHmm");
-		let dates = [];
-
+		const daysBetween = dayjs(endDate).diff(dayjs(startDate), "d");
+		const sTime = dayjs(startDate).format("THHmm");
+		const eTime = dayjs(endDate).format("THHmm");
 		for (let i = 0; i <= daysBetween; i++) {
-			const startTime = dayjs(inputData.startDate)
-				.add(i, "d")
-				.format(`YYYYMMDD${sTime}`);
+			let isExist = false;
 
-			if (inputData.weekDays.includes(+dayjs(startTime).format("d"))) {
+			inputData.dates.forEach((date) => {
+				if (date.id === +dayjs(startDate).add(i, "d").format(`YYYYMMDD`)) {
+					isExist = true;
+				}
+			});
+
+			// vasárnap visszajelölésénél van valami para
+
+			if (
+				!isExist &&
+				(!weekdays || dayjs(startDate).add(i, "d").day() === weekdays)
+			) {
+				const startTime = dayjs(startDate)
+					.add(i, "d")
+					.format(`YYYYMMDD${sTime}`);
+
 				let j = i;
 				if (sTime > eTime) {
 					j++;
 				}
 
-				const endTime = dayjs(inputData.startDate)
-					.add(j, "d")
-					.format(`YYYYMMDD${eTime}`);
+				const endTime = dayjs(startDate).add(j, "d").format(`YYYYMMDD${eTime}`);
 
-				dates.push({
-					id: i,
+				updatedDates.push({
+					id: +dayjs(startDate).add(i, "d").format(`YYYYMMDD`),
 					startTime: +dayjs(startTime),
 					endTime: +dayjs(endTime),
 					crew: {},
 				});
 			}
 		}
-		return dates;
+		return updatedDates;
 	};
+
+	const allDayCheck = () => {
+		const updatedDates = addDatesWithTimes(
+			inputData.startDate,
+			inputData.endDate
+		);
+		setWeekdays(weekdaysSet);
+		setClickedDate();
+		setInputData({
+			...inputData,
+			dates: [...inputData.dates, ...updatedDates],
+		});
+	};
+
+	const setWeekdaysHandel = (dayNum) => {
+		let updatedDaySelection = [...weekdays];
+
+		if (weekdays.includes(dayNum)) {
+			updatedDaySelection = weekdays.filter((d) => dayNum !== d);
+			const updatedDates = inputData.dates.filter(
+				(dt) => dayjs(dt.startTime).day() !== dayNum
+			);
+			setInputData({ ...inputData, dates: updatedDates });
+		} else {
+			updatedDaySelection.push(dayNum);
+			const updatedDates = addDatesWithTimes(
+				dayFormating(inputData.startDate),
+				dayFormating(inputData.endDate),
+				dayNum
+			);
+			setInputData({
+				...inputData,
+				dates: [...inputData.dates, ...updatedDates],
+			});
+		}
+		setWeekdays(updatedDaySelection);
+	};
+
+	useEffect(() => {
+		const updatedDates = addDatesWithTimes(
+			inputData.startDate,
+			inputData.startDate
+		);
+		setInputData({
+			...inputData,
+			dates: [...inputData.dates, ...updatedDates],
+		});
+	}, [inputData.startDate]);
+
+	useEffect(() => {
+		const updatedDates = addDatesWithTimes(
+			inputData.endDate,
+			inputData.endDate
+		);
+		setInputData({
+			...inputData,
+			dates: [...inputData.dates, ...updatedDates],
+		});
+	}, [inputData.endDate]);
+
+	useEffect(() => {
+		let pickedDate = inputData.dates.find(
+			(date) =>
+				dayjs(date.startTime).format("YYMMDD") ===
+				dayjs(clickedDate).format("YYMMDD")
+		);
+
+		if (pickedDate) {
+			const updatedDates = inputData.dates.filter(
+				(dt) => dt.id !== pickedDate.id
+			);
+			setInputData({ ...inputData, dates: updatedDates });
+		} else {
+			const updatedDates = addDatesWithTimes(
+				dayFormating(clickedDate),
+				dayFormating(clickedDate)
+			);
+			setInputData({
+				...inputData,
+				dates: [...inputData.dates, ...updatedDates],
+			});
+		}
+		setClickedDate();
+	}, [isClicked]);
+
+	useEffect(() => {
+		let sDate;
+		let eDate;
+		inputData.dates.forEach((date) => {
+			date.startTime < sDate || !sDate ? (sDate = date.startTime) : null;
+			date.startTime > eDate || !eDate ? (eDate = date.startTime) : null;
+		});
+		const sTime = dayjs(inputData.startDate).format("THH:mm");
+		const eTime = dayjs(inputData.endDate).format("THH:mm");
+
+		const startDay = dayjs(sDate).format(`YYYY-MM-DD${sTime}`);
+		const endDay = dayjs(eDate).format(`YYYY-MM-DD${eTime}`);
+
+		setInputData({ ...inputData, startDate: startDay, endDate: endDay });
+	}, [inputData.dates]);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-
 		const calendarEvent = {
 			...inputData,
 			startDate: +dayjs(inputData.startDate),
 			endDate: +dayjs(inputData.endDate),
-			dates: getDates(),
-			id: selectedEvent
-				? selectedEvent.id
-				: +dayjs(inputData.startDate) + Math.random(),
 		};
 
 		if (selectedEvent) {
@@ -223,32 +327,24 @@ const EventModal = () => {
 						/>
 						<div></div>
 						<div className={classes.weekDayClass}>
-							{weekDays.map((dayNum, i) => {
+							{weekdaysSet.map((dayNum, i) => {
 								const day = dayjs().day(dayNum).format("dd");
 								let style = {};
-								inputData.weekDays.includes(dayNum) ||
+								weekdays.includes(dayNum) ||
 									(style = { backgroundColor: "#ff000080" });
 								return (
 									<span
 										key={i}
-										onClick={() => {
-											let updatedDaySelection = [...inputData.weekDays];
-											inputData.weekDays.includes(dayNum)
-												? (updatedDaySelection = inputData.weekDays.filter(
-														(d) => dayNum !== d
-												  ))
-												: updatedDaySelection.push(dayNum);
-											setInputData({
-												...inputData,
-												weekDays: updatedDaySelection,
-											});
-										}}
+										onClick={() => setWeekdaysHandel(dayNum)}
 										style={style}
 									>
 										{day}
 									</span>
 								);
 							})}
+							<div onClick={allDayCheck}>
+								<p>Minden nap kijelöl</p>
+							</div>
 						</div>
 						<div className={classes.Icon}>
 							<IoBookmarkOutline />
@@ -307,11 +403,11 @@ const EventModal = () => {
 									label: inputData.label,
 									startDate: +dayjs(inputData.startDate),
 									endDate: +dayjs(inputData.endDate),
-									weekDays: inputData.weekDays,
+									dates: inputData.dates,
 								},
 							]}
-							clickedDate={clickedDate}
 							setClickedDate={setClickedDate}
+							setIsClicked={setIsClicked}
 						/>
 					</div>
 				</div>
