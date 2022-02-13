@@ -12,6 +12,7 @@ import control from "../../../control.json";
 import classes from "./../EventModal.module.scss";
 
 import {
+	IoAddCircleOutline,
 	IoAmericanFootballOutline,
 	IoCalendarOutline,
 	IoCloseCircleOutline,
@@ -74,17 +75,17 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 		setPickedDays(updatedPickedDates);
 	}, [isClicked, crewMembers]);
 
-	const addPosHandel = (pos, id) => {
+	const addPosHandel = (pos, id, name = "") => {
 		if (pos && pos !== "") {
 			const updatedPos = [
 				...crewMembers,
-				{ id: id + Math.random(), pos: pos, name: "" },
+				{ id: id + Math.random(), pos, name },
 			];
 			setCrewMembers(updatedPos);
 		}
 	};
 
-	const deletPosHandel = (id) => {
+	const deletPosHandel = (id, days = undefined) => {
 		const updatedPos = crewMembers.filter((p) => p.id !== id);
 		setCrewMembers(updatedPos);
 
@@ -128,17 +129,27 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 						<div className={classes.datesCrew_div}>
 							{pickedDays
 								.sort((a, b) => a.id - b.id)
-								.map((p, id) => (
-									<div key={id}>
+								.map((p, _idx) => (
+									<div key={_idx}>
 										<div className={classes.datesCrew}>
 											{dayjs(p.startTime).format("YYYY. MMMM. DD.")}
 											<div>
-												{p.crew.map((c, idx) => (
-													<div key={idx} className={classes.CrewPosName}>
-														<div>{c.pos}</div>
-														<div>{c.name}</div>
-													</div>
-												))}
+												{p.crew
+													.sort((a, b) => a.id - b.id)
+													.map(({ id, name, pos }, idx) => (
+														<div key={idx} className={classes.CrewPosName}>
+															<div>{pos}</div>
+															<div>{name}</div>
+															<div
+																className={classes.Icon}
+																onClick={() => {
+																	deletPosHandel(id, p.id);
+																}}
+															>
+																<IoCloseCircleOutline />
+															</div>
+														</div>
+													))}
 											</div>
 										</div>
 									</div>
