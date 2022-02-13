@@ -23,11 +23,25 @@ const SmallCalendar = ({ filteredEvents, setClickedDate, setIsClicked }) => {
 			(date) => dayjs(date.startTime).format(format) === currDay
 		);
 
+		let fEventAllDay = filteredEvents[0].selectedEventDates.find(
+			(date) => dayjs(date.startTime).format(format) === currDay
+		);
+
 		let style = { borderRadius: "999px" };
 
 		if (nowDay === currDay) {
 			style = { ...style, borderColor: "#afd7f8" };
 		}
+
+		if (fEventAllDay) {
+			style = {
+				...style,
+				backgroundColor: findColor(filteredEvents[0].label)
+					.slice(0, -4)
+					.concat("90%)"),
+			};
+		}
+
 		if (fEventByDay) {
 			style = {
 				...style,
@@ -54,7 +68,9 @@ const SmallCalendar = ({ filteredEvents, setClickedDate, setIsClicked }) => {
 			</header>
 			<div className={classes.SmallCal_calendar}>
 				{currentMonth[0].map((day, i) => (
-					<span key={i}>{day.format("dd").charAt(0)}</span>
+					<div key={i} className={classes.SmallDates}>
+						<span>{day.format("dd").charAt(0)}</span>
+					</div>
 				))}
 				{currentMonth.map((row, i) => (
 					<React.Fragment key={i}>
@@ -64,14 +80,11 @@ const SmallCalendar = ({ filteredEvents, setClickedDate, setIsClicked }) => {
 									key={idx}
 									className={classes.SmallDates}
 									style={getDayClass(day)}
+									onClick={() => {
+										setClickedDate(day), setIsClicked(Math.random());
+									}}
 								>
-									<div
-										onClick={() => {
-											setClickedDate(day), setIsClicked(Math.random());
-										}}
-									>
-										<span>{day.format("D")}</span>
-									</div>
+									<span>{day.format("D")}</span>
 								</div>
 							);
 						})}

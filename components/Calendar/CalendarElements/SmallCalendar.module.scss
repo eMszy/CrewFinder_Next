@@ -13,7 +13,6 @@
 		grid-template-columns: repeat(7, minmax(0, 1fr));
 		grid-template-rows: repeat(6, minmax(0, 1fr));
 		align-self: center;
-
 		span {
 			font-size: 0.875rem;
 			line-height: 1.25rem;
@@ -33,18 +32,15 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		margin: 3px 1px;
+		margin: 0 2px;
 		border: 2px transparent solid;
 		&:hover {
 			border: 2px #afd7f8 solid;
 			border-radius: 999px;
 			padding: 0;
 		}
-
-		div {
-			width: 1.5rem;
-			height: 1.5rem;
-			cursor: pointer;
-		}
+		width: 2rem;
+		height: 2rem;
+		cursor: pointer;
 	}
 }

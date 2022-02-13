@@ -1,13 +1,15 @@
 import React, { useContext, useState } from "react";
 import { StateContext } from "../../context/state-context";
+
 import CalendarHeader from "./CalendarElements/CalendarHeader";
 import Month from "./CalendarElements/Month";
 import { Week } from "./CalendarElements/Week";
-import EventModal from "./CalendarElements/EventModal";
+import { List } from "./CalendarElements/List";
+import EventCreaterModal from "../EventCreator/EventCreater";
+
+import { getMonth, getWeek } from "../../shared/utility";
 
 import classes from "./Calendar.module.scss";
-import { List } from "./CalendarElements/List";
-import { getMonth, getWeek } from "../../shared/utility";
 
 export const Calendar = () => {
 	const { showEventModal } = useContext(StateContext);
@@ -21,7 +23,7 @@ export const Calendar = () => {
 
 	return (
 		<div className={classes.CalendarMain}>
-			{showEventModal && <EventModal />}
+			{showEventModal && <EventCreaterModal />}
 			<div className={classes.CalendarMain_Header}>
 				<CalendarHeader
 					viewTypes={viewTypes}
