@@ -16,8 +16,6 @@ const MonthDays = ({ day, rowIdx }) => {
 		setSelectedEvent,
 	} = useContext(StateContext);
 
-	// console.log("filteredEvents", filteredEvents);
-
 	useEffect(() => {
 		let events = [];
 		filteredEvents.forEach((event) => {

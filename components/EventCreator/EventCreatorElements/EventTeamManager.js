@@ -32,9 +32,10 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 	};
 
 	const saveHandle = () => {
+		const datesArray = uniqueArray(selectedEvent.dates, pickedDays)
 		const calendarEvent = {
 			...selectedEvent,
-			dates: [...selectedEvent.dates, ...pickedDays],
+			dates: datesArray,
 		};
 
 		dispatchCallEvent({ type: "update", payload: calendarEvent });
@@ -120,7 +121,17 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 								.map((p, _idx) => (
 									<div key={_idx}>
 										<div className={classes.datesCrew}>
-											{dayjs(p?.startTime).format("YYYY. MMMM. DD.")}
+											<div>
+												<div>
+													{dayjs(p?.startTime).format("YYYY. MMMM. DD.")}
+												</div>
+												<div>
+													{dayjs(p?.startTime).format("HH:mm")} - {dayjs(p?.endTime).format("HH:mm")}
+												</div>
+												<div>
+													helyszín
+												</div>
+											</div>
 											<div>
 												{p?.crew
 													.sort((a, b) => a.id - b.id)

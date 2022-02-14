@@ -42,6 +42,8 @@ const StateContextProvider = (props) => {
 
 	const [savedEvents, dispatchCallEvent] = useReducer(savedEventsReducer, []);
 
+	console.log("daySelected", daySelected);
+
 	useEffect(() => {
 		if (JSON.parse(localStorage.getItem("savedEvents"))) {
 			dispatchCallEvent({

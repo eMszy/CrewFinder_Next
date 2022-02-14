@@ -55,6 +55,13 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 		id: selectedEvent ? selectedEvent.id : Math.random(),
 	});
 
+	console.log(
+		"s",
+		dayFormating(daySelected.hour(6)),
+		inputData.startDate,
+		selectedEvent
+	);
+
 	const [baseCrew, setBaseCrew] = useState(
 		selectedEvent ? selectedEvent.baseCrew : []
 	);
@@ -159,11 +166,12 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 
 	const submitHandel = (e) => {
 		e.preventDefault();
-
 		let updatedDates = [];
-
 		inputData.dates.forEach((d) => {
-			const crew = uniqueArray(d.crew, baseCrew);
+			const crew = uniqueArray(d.crew, [
+				...baseCrew,
+				{ id: -1, name: "Saját pozicíó", pos: inputData.yourPosition },
+			]);
 			updatedDates.push({ ...d, crew });
 		});
 
@@ -183,7 +191,6 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 		} else {
 			dispatchCallEvent({ type: "push", payload: calendarEvent });
 		}
-
 		setIsCreatroPage(false);
 	};
 
