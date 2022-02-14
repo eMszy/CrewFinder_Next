@@ -25,8 +25,9 @@
 		cursor: pointer;
 
 		.Event {
-			height: 1.7rem;
+			height: 3rem;
 			display: flex;
+			justify-content: space-between;
 			padding: 0.1rem 1rem;
 			margin-bottom: 1px;
 			overflow: hidden;

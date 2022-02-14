@@ -7,7 +7,7 @@ export const StateContext = React.createContext({
 	setDaySelected: (day) => {},
 	showEventModal: false,
 	setShowEventModal: () => {},
-	dispatchCalEvent: ({ type, payload }) => {},
+	dispatchCallEvent: ({ type, payload }) => {},
 	savedEvents: [],
 	selectedEvent: null,
 	setSelectedEvent: () => {},
@@ -25,7 +25,6 @@ const savedEventsReducer = (state, { type, payload }) => {
 		case "push":
 			return [...state, payload];
 		case "update": {
-			console.log("evt", payload);
 			return state.map((evt) => (evt.id === payload.id ? payload : evt));
 		}
 		case "delete":
@@ -41,11 +40,11 @@ const StateContextProvider = (props) => {
 	const [selectedEvent, setSelectedEvent] = useState(null);
 	const [labels, setLabels] = useState(control.labels);
 
-	const [savedEvents, dispatchCalEvent] = useReducer(savedEventsReducer, []);
+	const [savedEvents, dispatchCallEvent] = useReducer(savedEventsReducer, []);
 
 	useEffect(() => {
 		if (JSON.parse(localStorage.getItem("savedEvents"))) {
-			dispatchCalEvent({
+			dispatchCallEvent({
 				type: "init",
 				payload: JSON.parse(localStorage.getItem("savedEvents")),
 			});
@@ -53,12 +52,14 @@ const StateContextProvider = (props) => {
 	}, []);
 
 	const filteredEvents = useMemo(() => {
-		return savedEvents.filter((evt) =>
-			labels
-				.filter((lbl) => lbl.checked)
-				.map((lbl) => lbl.id)
-				.includes(evt.label)
-		);
+		return savedEvents
+			.filter((evt) =>
+				labels
+					.filter((lbl) => lbl.checked)
+					.map((lbl) => lbl.id)
+					.includes(evt.label)
+			)
+			.sort((a, b) => b.id - a.id);
 	}, [savedEvents, labels]);
 
 	useEffect(() => {
@@ -82,7 +83,7 @@ const StateContextProvider = (props) => {
 				setDaySelected,
 				showEventModal,
 				setShowEventModal,
-				dispatchCalEvent,
+				dispatchCallEvent,
 				selectedEvent,
 				setSelectedEvent,
 				savedEvents,

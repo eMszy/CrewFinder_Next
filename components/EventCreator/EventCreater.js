@@ -11,7 +11,7 @@ import control from "../../control.json";
 import classes from "./EventModal.module.scss";
 
 const EventCreaterModal = () => {
-	const { setShowEventModal, selectedEvent, dispatchCalEvent } =
+	const { setShowEventModal, selectedEvent, dispatchCallEvent } =
 		useContext(StateContext);
 
 	const [isCreatroPage, setIsCreatroPage] = useState(true);
@@ -21,7 +21,7 @@ const EventCreaterModal = () => {
 
 	const deletHandel = (e) => {
 		e.preventDefault();
-		dispatchCalEvent({
+		dispatchCallEvent({
 			type: "delete",
 			payload: selectedEvent,
 		});

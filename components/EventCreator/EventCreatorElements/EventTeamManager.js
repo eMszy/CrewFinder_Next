@@ -1,32 +1,27 @@
+import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
-import React, { useContext } from "react";
-import { useEffect } from "react";
-import { useState } from "react";
-
-import { StateContext } from "../../../context/state-context";
-import SmallCalendar from "../../Calendar/CalendarElements/SmallCalendar";
-import Button from "../../UI/Button/Button";
-
-import control from "../../../control.json";
-
-import classes from "./../EventModal.module.scss";
-
 import {
-	IoAddCircleOutline,
 	IoAmericanFootballOutline,
 	IoCalendarOutline,
 	IoCloseCircleOutline,
 } from "react-icons/io5";
 
+import { StateContext } from "../../../context/state-context";
+import SmallCalendar from "../../Calendar/CalendarElements/SmallCalendar";
+import Button from "../../UI/Button/Button";
+import { uniqueArray } from "./utility";
+
+import control from "../../../control.json";
+
+import classes from "./../EventModal.module.scss";
+
 const EventTeamManager = ({ department, setIsCreatroPage }) => {
-	const { setShowEventModal, selectedEvent, dispatchCalEvent } =
+	const { setShowEventModal, selectedEvent, dispatchCallEvent } =
 		useContext(StateContext);
 
 	const [pickedDays, setPickedDays] = useState([]);
 	const [isClicked, setIsClicked] = useState();
-
 	const [clickedDate, setClickedDate] = useState();
-
 	const [crewMembers, setCrewMembers] = useState([]);
 
 	const submitHandle = (e) => {
@@ -39,9 +34,10 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 	const saveHandle = () => {
 		const calendarEvent = {
 			...selectedEvent,
-			dates: [...selectedEvent.dates, pickedDays],
+			dates: [...selectedEvent.dates, ...pickedDays],
 		};
-		dispatchCalEvent({ type: "update", payload: calendarEvent });
+
+		dispatchCallEvent({ type: "update", payload: calendarEvent });
 	};
 
 	const resetHandle = () => {
@@ -51,7 +47,6 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 	};
 
 	const onChangeHandle = (e, pos, id) => {
-		console.log("crewMembers", crewMembers, pickedDays);
 		const inputedMember = { id, pos, name: e.target.value };
 		let updatedCrew = crewMembers.filter((crewMember) => crewMember.id !== id);
 		updatedCrew.push(inputedMember);
@@ -60,18 +55,9 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 
 	useEffect(() => {
 		let updatedPickedDates = [...pickedDays];
-		let pickedDaysCrew = {};
-
 		updatedPickedDates.forEach((pday) => {
-			pday.crew.forEach((c) => {
-				pickedDaysCrew = { ...pickedDaysCrew, [c.id]: { ...c } };
-			});
-			crewMembers.forEach((cm) => {
-				pickedDaysCrew = { ...pickedDaysCrew, [cm.id]: { ...cm } };
-			});
-			pday.crew = Object.values(pickedDaysCrew);
+			pday?.crew = uniqueArray(pday?.crew, crewMembers);
 		});
-
 		setPickedDays(updatedPickedDates);
 	}, [isClicked, crewMembers]);
 
@@ -105,16 +91,18 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 				(d) => d.id === +dayjs(clickedDate).format("YYYYMMDD")
 			);
 
-			let isExist = updatedpickedDays.find((d) => d.id === pickedDay.id);
-
-			if (!isExist) {
-				updatedpickedDays.push(pickedDay);
-			} else {
-				updatedpickedDays = pickedDays.filter((d) => d.id !== pickedDay.id);
+			if (pickedDay) {
+				let isExist = updatedpickedDays.find((d) => d.id === pickedDay.id);
+				
+				if (!isExist) {
+					updatedpickedDays.push(pickedDay);
+				} else {
+					updatedpickedDays = pickedDays.filter((d) => d.id !== pickedDay.id);
+				}
+				
+				setClickedDate();
+				setPickedDays(updatedpickedDays);
 			}
-
-			setClickedDate();
-			setPickedDays(updatedpickedDays);
 		}
 	}, [isClicked]);
 
@@ -132,9 +120,9 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 								.map((p, _idx) => (
 									<div key={_idx}>
 										<div className={classes.datesCrew}>
-											{dayjs(p.startTime).format("YYYY. MMMM. DD.")}
+											{dayjs(p?.startTime).format("YYYY. MMMM. DD.")}
 											<div>
-												{p.crew
+												{p?.crew
 													.sort((a, b) => a.id - b.id)
 													.map(({ id, name, pos }, idx) => (
 														<div key={idx} className={classes.CrewPosName}>

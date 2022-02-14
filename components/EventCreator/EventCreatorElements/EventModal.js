@@ -18,6 +18,7 @@ import Button from "../../UI/Button/Button";
 import control from "../../../control.json";
 
 import classes from "./../EventModal.module.scss";
+import { uniqueArray } from "./utility";
 
 const weekdaysSet = [1, 2, 3, 4, 5, 6, 0];
 
@@ -28,7 +29,7 @@ const dayFormating = (day) => dayjs(day).format("YYYY-MM-DDTHH:mm");
 const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 	const {
 		daySelected,
-		dispatchCalEvent,
+		dispatchCallEvent,
 		selectedEvent,
 		setSelectedEvent,
 		labels,
@@ -40,7 +41,9 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 		description: selectedEvent ? selectedEvent.description : "",
 		label: selectedEvent ? selectedEvent.label : labels[0].id,
 		dates: selectedEvent ? selectedEvent.dates : [],
-		yourPosition: selectedEvent ? selectedEvent.yourPosition : "",
+		yourPosition: selectedEvent
+			? selectedEvent.yourPosition
+			: Object.keys(control.departments[department])[0],
 		baseCrew: selectedEvent ? selectedEvent.baseCrew : [],
 		// ha nincs egy nap se kijelölve akkor vissza ugrik az aktuális napra
 		startDate: selectedEvent
@@ -159,25 +162,10 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 
 		let updatedDates = [];
 
-		const id = Math.random();
-		inputData.dates.forEach((d) =>
-			updatedDates.push({
-				...d,
-				crew: [
-					...baseCrew,
-					{
-						id: id,
-						pos: inputData.yourPosition,
-						name: "A te poziciód",
-					},
-				],
-			})
-		);
-
-		console.log(
-			"ezt kell kijavítani, hogy ne írjon mindent stábtagot felül",
-			updatedDates
-		);
+		inputData.dates.forEach((d) => {
+			const crew = uniqueArray(d.crew, baseCrew);
+			updatedDates.push({ ...d, crew });
+		});
 
 		const calendarEvent = {
 			...inputData,
@@ -185,14 +173,15 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 			endDate: +dayjs(inputData.endDate),
 			baseCrew: baseCrew,
 			dates: updatedDates,
+			id: selectedEvent ? selectedEvent.id : inputData.label + Math.random(),
 		};
 
 		setSelectedEvent(calendarEvent);
 
 		if (selectedEvent) {
-			dispatchCalEvent({ type: "update", payload: calendarEvent });
+			dispatchCallEvent({ type: "update", payload: calendarEvent });
 		} else {
-			dispatchCalEvent({ type: "push", payload: calendarEvent });
+			dispatchCallEvent({ type: "push", payload: calendarEvent });
 		}
 
 		setIsCreatroPage(false);
@@ -203,7 +192,7 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 			...inputData,
 			yourPosition: Object.keys(control.departments[department])[0],
 		});
-		setBaseCrew(selectedEvent ? selectedEvent.baseCrew : []);
+		// setBaseCrew(selectedEvent ? selectedEvent.baseCrew : []);
 	}, [department]);
 
 	useEffect(() => {

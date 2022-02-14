@@ -20,7 +20,7 @@ const SmallCalendar = ({ filteredEvents, setClickedDate, setIsClicked }) => {
 		const currDay = day.format(format);
 
 		let fEventByDay = filteredEvents[0].dates.find(
-			(date) => dayjs(date.startTime).format(format) === currDay
+			(date) => dayjs(date?.startTime).format(format) === currDay
 		);
 
 		let fEventAllDay = filteredEvents[0].selectedEventDates.find(

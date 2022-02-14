@@ -62,6 +62,8 @@ const WeekDays = ({ day, rowStyle }) => {
 		return { backgroundColor: e.label.slice(0, -4).concat("90%)") };
 	};
 
+	console.log("dayEvents", dayEvents);
+
 	return (
 		<div className={classes.MainDayDiv} style={rowStyle()}>
 			<header>
@@ -72,8 +74,13 @@ const WeekDays = ({ day, rowStyle }) => {
 			</header>
 			{labels.map((e, id) => (
 				<div key={id} style={getBackGround(e)}>
-					{dayEvents.map(
-						(d, idx) =>
+					{dayEvents.map((d, idx) => {
+						let findedDay = d.dates?.find(
+							(date) => date.id === +day.format("YYYYMMDD")
+						);
+
+						console.log("d.dates", findedDay?.crew?.length);
+						return (
 							d.label === e.id && (
 								<div
 									key={idx}
@@ -88,14 +95,18 @@ const WeekDays = ({ day, rowStyle }) => {
 										style={getStyle(d)}
 										className={classes.Event}
 									>
-										{(dayjs(day).day() === 1 ||
-											dayjs(d.startDate).format("YY-MM-DD") ===
-												day.format("YY-MM-DD")) &&
-											d.title}
+										<div>
+											{(dayjs(day).day() === 1 ||
+												dayjs(d.startDate).format("YY-MM-DD") ===
+													day.format("YY-MM-DD")) &&
+												d.title}
+										</div>
+										<div>Stáb: {findedDay?.crew?.length}</div>
 									</div>
 								</div>
 							)
-					)}
+						);
+					})}
 				</div>
 			))}
 		</div>
