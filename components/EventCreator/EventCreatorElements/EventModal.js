@@ -47,6 +47,7 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 			: Object.values(control.departments[department].positions)[0].name,
 		baseCrew: selectedEvent ? selectedEvent.baseCrew : [],
 		// ha nincs egy nap se kijelölve akkor vissza ugrik az aktuális napra
+		// Valami nem jó a napok óra-perc beállításán
 		startDate: selectedEvent
 			? dayFormating(selectedEvent.startDate)
 			: dayFormating(daySelected.hour(6)),
@@ -57,7 +58,6 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 	});
 
 	const [baseCrew, setBaseCrew] = useState([]);
-
 	const [weekdays, setWeekdays] = useState(weekdaysSet);
 	const [clickedDate, setClickedDate] = useState();
 	const [isClicked, setIsClicked] = useState();
@@ -66,8 +66,9 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 		let updatedDates = [];
 
 		const daysBetween = dayjs(endDate).diff(dayjs(startDate), "d");
-		const sTime = dayjs(startDate).format("THHmm");
-		const eTime = dayjs(endDate).format("THHmm");
+		const sTime = dayjs(inputData.startDate).format("THHmm");
+		const eTime = dayjs(inputData.endDate).format("THHmm");
+
 		for (let i = 0; i <= daysBetween; i++) {
 			let isExist = false;
 
@@ -93,6 +94,8 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 				}
 
 				const endTime = dayjs(startDate).add(j, "d").format(`YYYYMMDD${eTime}`);
+
+				console.log("first", dayFormating(startTime), dayFormating(endTime));
 
 				updatedDates.push({
 					id: +dayjs(startDate).add(i, "d").format(`YYYYMMDD`),
@@ -145,11 +148,13 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 		e.preventDefault();
 		let updatedDates = [];
 		inputData.dates.forEach((d) => {
+			console.log("d", dayjs(d.startTime).format("MM. DD. HH:mm"));
+
 			const crew = uniqueArray(d.crew, [
 				...baseCrew,
 				{ id: -1, name: "Saját pozicíó", pos: inputData.yourPosition },
 			]);
-			const loc = d.location || inputData.location;
+			const loc = d.location ? d.location : inputData.location;
 			updatedDates.push({ ...d, crew, location: loc });
 		});
 
@@ -219,27 +224,28 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 		});
 	}, [department]);
 
-	useEffect(() => {
-		const updatedDates = addDatesWithTimes(
-			inputData.startDate,
-			inputData.startDate
-		);
-		setInputData({
-			...inputData,
-			dates: [...inputData.dates, ...updatedDates],
-		});
-	}, [inputData.startDate]);
+	// useEffect(() => {
+	// 	const updatedDates = addDatesWithTimes(
+	// 		inputData.startDate,
+	// 		inputData.endDate
+	// 	);
+	// 	console.log("first", updatedDates);
+	// 	setInputData({
+	// 		...inputData,
+	// 		dates: [...inputData.dates, ...updatedDates],
+	// 	});
+	// }, [inputData.startDate, inputData.endDate]);
 
-	useEffect(() => {
-		const updatedDates = addDatesWithTimes(
-			inputData.endDate,
-			inputData.endDate
-		);
-		setInputData({
-			...inputData,
-			dates: [...inputData.dates, ...updatedDates],
-		});
-	}, [inputData.endDate]);
+	// useEffect(() => {
+	// 	const updatedDates = addDatesWithTimes(
+	// 		inputData.endDate,
+	// 		inputData.endDate
+	// 	);
+	// 	setInputData({
+	// 		...inputData,
+	// 		dates: [...inputData.dates, ...updatedDates],
+	// 	});
+	// }, [inputData.endDate]);
 
 	useEffect(() => {
 		let pickedDate = inputData.dates.find(
@@ -267,6 +273,7 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 	}, [isClicked]);
 
 	useEffect(() => {
+		// Mi a sDate és az eDate?
 		let sDate;
 		let eDate;
 		const sTime = dayjs(inputData.startDate).format("THH:mm");
