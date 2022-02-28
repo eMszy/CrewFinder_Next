@@ -48,40 +48,40 @@ const returnObject = (data) => {
 
 export const resolvers = {
 	Query: {
-		login: async (obj, { email, password }, context, info) => {
-			const user = await User.findOne({ email: email });
-			if (!user) {
-				const error = new Error("Ezzel az email címmel még nem regisztráltak");
-				error.code = 401;
-				throw error;
-			}
-			const isEqual = await bcrypt.compare(password, user.password);
-			if (!isEqual) {
-				const error = new Error("Helytelen jelszó");
-				error.code = 401;
-				throw error;
-			}
-			const token = jwt.sign(
-				{
-					userId: user._id.toString(),
-					email: user.email,
-				},
-				process.env.SECRET_WORD,
-				{ expiresIn: "1h" }
-			);
-			console.log("user", user.userData.connectInfo);
-			return {
-				token: token,
-				userId: user._id.toString(),
-				userData: {
-					name: user.name,
-					userData: {
-						connectInfo: { nickName: user.userData.connectInfo.nickName },
-					},
-				},
-				metaData: user.metaData,
-			};
-		},
+		// login: async (obj, { email, password }, context, info) => {
+		// 	const user = await User.findOne({ email: email });
+		// 	if (!user) {
+		// 		const error = new Error("Ezzel az email címmel még nem regisztráltak");
+		// 		error.code = 401;
+		// 		throw error;
+		// 	}
+		// 	const isEqual = await bcrypt.compare(password, user.password);
+		// 	if (!isEqual) {
+		// 		const error = new Error("Helytelen jelszó");
+		// 		error.code = 401;
+		// 		throw error;
+		// 	}
+		// 	const token = jwt.sign(
+		// 		{
+		// 			userId: user._id.toString(),
+		// 			email: user.email,
+		// 		},
+		// 		process.env.SECRET_WORD,
+		// 		{ expiresIn: "1h" }
+		// 	);
+		// 	console.log("user", user.userData.connectInfo);
+		// 	return {
+		// 		token: token,
+		// 		userId: user._id.toString(),
+		// 		userData: {
+		// 			name: user.name,
+		// 			userData: {
+		// 				connectInfo: { nickName: user.userData.connectInfo.nickName },
+		// 			},
+		// 		},
+		// 		metaData: user.metaData,
+		// 	};
+		// },
 
 		user: async (obj, { id }, { isAuth, err, userId }, info) => {
 			AuthFailMsg(isAuth);

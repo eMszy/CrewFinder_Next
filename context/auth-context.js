@@ -64,25 +64,37 @@ const AuthContextProvider = (props) => {
 	const loginHandler = async (UserForm) => {
 		setAuthLoading(true);
 
-		const graphqlQuery = userLogin(
-			UserForm.email.value,
-			UserForm.password.value
-		);
+		// const graphqlQuery = userLogin(
+		// 	UserForm.email.value,
+		// 	UserForm.password.value
+		// );
 
 		try {
-			const resData = await PostData(graphqlQuery);
-			console.log(`login`, resData.data);
+			const res = await fetch("api/Login", {
+				body: JSON.stringify({
+					email: UserForm.email.value,
+					password: UserForm.password.value,
+				}),
+				headers: {
+					"Content-Type": "application/json",
+				},
+				method: "POST",
+			});
+
+			const resData = await res.json();
+
+			// const resData = await PostData(graphqlQuery);
 			setIsAuth(true);
 			setAuthLoading(false);
-			setToken(resData.data.login.token);
-			setUserId(resData.data.login.userId);
-			setIsAdmin(resData.data.login.metaData.isAdmin);
-			setIsHOD(resData.data.login.metaData.isHOD);
-			setName(resData.data.login.userData.name);
-			setNickName(resData.data.login.userData.userData.connectInfo.nickName);
+			setToken(resData.token);
+			setUserId(resData.userId);
+			setIsAdmin(resData.metaData.isAdmin);
+			setIsHOD(resData.metaData.isHOD);
+			setName(resData.name);
+			setNickName(resData.nickName);
 
-			localStorage.setItem("token", resData.data.login.token);
-			localStorage.setItem("userId", resData.data.login.userId);
+			localStorage.setItem("token", resData.token);
+			localStorage.setItem("userId", resData.userId);
 
 			const remainingMilliseconds = 60 * 60 * 1000;
 			const expiryDate = new Date(new Date().getTime() + remainingMilliseconds);
