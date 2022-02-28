@@ -417,25 +417,7 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 							</span>
 						))}
 					</div>
-				</div>
 
-				<div className={classes.EventModal_Calendar}>
-					<SmallCalendar
-						filteredEvents={[
-							{
-								label: inputData.label,
-								startDate: +dayjs(inputData.startDate),
-								endDate: +dayjs(inputData.endDate),
-								dates: inputData.dates,
-								selectedEventDates: [],
-							},
-						]}
-						setClickedDate={setClickedDate}
-						setIsClicked={setIsClicked}
-					/>
-				</div>
-
-				<div className={classes.EventModal_Input2}>
 					<div className={classes.Icon}>
 						<MdOutlineDescription />
 					</div>
@@ -468,6 +450,23 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 						</select>
 					</div>
 				</div>
+
+				<div className={classes.EventModal_Calendar}>
+					<SmallCalendar
+						filteredEvents={[
+							{
+								label: inputData.label,
+								startDate: +dayjs(inputData.startDate),
+								endDate: +dayjs(inputData.endDate),
+								dates: inputData.dates,
+								selectedEventDates: [],
+							},
+						]}
+						setClickedDate={setClickedDate}
+						setIsClicked={setIsClicked}
+					/>
+				</div>
+
 				<EventInvition
 					crewMembers={inputData.baseCrew}
 					addPosHandel={addPosHandel}

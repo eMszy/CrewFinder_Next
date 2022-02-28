@@ -1,17 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
-import {
-	// IoAmericanFootballOutline,
-	IoCalendarOutline,
-	IoCloseCircleOutline,
-} from "react-icons/io5";
+import { IoCalendarOutline, IoCloseCircleOutline } from "react-icons/io5";
 
 import { StateContext } from "../../../context/state-context";
 import SmallCalendar from "../../Calendar/CalendarElements/SmallCalendar";
 import Button from "../../UI/Button/Button";
 import { onChangeHandle, uniqueArray } from "./utility";
 
-// import control from "../../../control2.json";
+import control from "../../../control2.json";
 
 import classes from "./../EventModal.module.scss";
 import EventInvition from "./EventInvition";
@@ -32,11 +28,7 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 		setIsCreatroPage(true);
 	};
 
-	console.log("pd", clickedDate, pickedDays, selectedEvent.dates);
-
-	const selectAllHandler = () => {
-		setPickedDays(selectedEvent.dates);
-	};
+	// console.log("first", pickedDays);
 
 	const saveHandle = () => {
 		const datesArray = uniqueArray(selectedEvent.dates, pickedDays);
@@ -82,8 +74,10 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 
 		const updatedPickedDays = [...pickedDays];
 		updatedPickedDays.forEach((day) => {
-			const filteredCrew = day.crew.filter((crew) => crew.id !== id);
-			day.crew = filteredCrew;
+			if ((days && day.id === days) || !days) {
+				const filteredCrew = day.crew.filter((crew) => crew.id !== id);
+				day.crew = filteredCrew;
+			}
 		});
 		setPickedDays(updatedPickedDays);
 	};
@@ -119,8 +113,6 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 		}
 	}, [isClicked]);
 
-	// console.log("pickedDay", pickedDays);
-
 	return (
 		<div>
 			<form>
@@ -132,118 +124,142 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 						<div className={classes.datesCrew_div}>
 							{pickedDays
 								.sort((a, b) => a.id - b.id)
-								.map((p, _idx) => {
-									console.log(
-										"Start:",
-										dayjs(p.startTime).format("MM. DD. HH:mm"),
-										" - End:",
-										dayjs(p.endTime).format("MM. DD. HH:mm")
-									);
-									return (
-										<div key={_idx}>
-											<div className={classes.datesCrew}>
-												<div className={classes.DateAndLoc}>
-													<div>
-														{dayjs(p.startTime).format("YYYY. MMMM. DD.")}
-													</div>
-													<input
-														type="time"
-														name="startTime"
-														value={dayjs(p.startTime).format("HH:mm")}
-														required
-														onChange={(e) => {
-															const dateAndTime = dayjs(p.startTime).format(
-																`YYYY-MM-DDT${e.target.value}`
-															);
-															setPickedDays(
-																onChangeHandle(
-																	+dayjs(dateAndTime),
-																	_idx,
-																	e.target.name,
-																	pickedDays
-																)
-															);
-														}}
-													/>
-													<input
-														type="time"
-														name="endTime"
-														value={dayjs(p.endTime).format("HH:mm")}
-														min={p.startDate}
-														required
-														onChange={(e) => {
-															const dateAndTime = dayjs(p.startTime).format(
-																`YYYY-MM-DDT${e.target.value}`
-															);
-															setPickedDays(
-																onChangeHandle(
-																	+dayjs(dateAndTime),
-																	_idx,
-																	e.target.name,
-																	pickedDays
-																)
-															);
-														}}
-													/>
-													<input
-														type="text"
-														name="location"
-														placeholder="Helyszín"
-														value={p.location}
-														required
-														onChange={(e) => {
-															setPickedDays(
-																onChangeHandle(
-																	e.target.value,
-																	_idx,
-																	e.target.name,
-																	pickedDays
-																)
-															);
-														}}
-													/>
-												</div>
+								.map((p, _idx) => (
+									<div key={_idx}>
+										<div className={classes.datesCrew}>
+											<div className={classes.DateAndLoc}>
 												<div>
-													{p?.crew
-														.sort((a, b) => a.id - b.id)
-														.map(({ id, name, pos, invitionType }, idx) => (
-															<div key={idx} className={classes.CrewPosName}>
-																<div>{pos}</div>
-																<div>{name}</div>
-																<div
-																	className={classes.Icon}
-																	onClick={() => {
-																		deletPosHandel(id, p.id);
-																	}}
-																>
-																	<IoCloseCircleOutline />
-																</div>
-																{invitionType?.name && (
-																	<div
-																		className={classes.CrewPosName_Attribute}
-																	>
-																		<div className={classes.CrewPosName_Text}>
-																			{invitionType.name}
-																		</div>
-																		{invitionType.language && (
-																			<div className={classes.CrewPosName_Text}>
-																				language: {invitionType.language}
-																			</div>
-																		)}
-																		{invitionType.aptitude && (
-																			<div className={classes.CrewPosName_Text}>
-																				aptitude: {invitionType.aptitude}
-																			</div>
-																		)}
-																	</div>
-																)}
-															</div>
-														))}
+													{dayjs(p.startTime).format("YYYY. MMMM. DD.")}
 												</div>
+												<div>{dayjs(p.startTime).format("dddd")}</div>
+
+												<input
+													type="time"
+													name="startTime"
+													value={dayjs(p.startTime).format("HH:mm")}
+													required
+													onChange={(e) => {
+														const dateAndTime = dayjs(p.startTime).format(
+															`YYYY-MM-DDT${e.target.value}`
+														);
+														setPickedDays(
+															onChangeHandle(
+																+dayjs(dateAndTime),
+																_idx,
+																e.target.name,
+																pickedDays
+															)
+														);
+													}}
+												/>
+												<input
+													type="time"
+													name="endTime"
+													value={dayjs(p.endTime).format("HH:mm")}
+													min={p.startDate}
+													required
+													onChange={(e) => {
+														const dateAndTime = dayjs(p.startTime).format(
+															`YYYY-MM-DDT${e.target.value}`
+														);
+														setPickedDays(
+															onChangeHandle(
+																+dayjs(dateAndTime),
+																_idx,
+																e.target.name,
+																pickedDays
+															)
+														);
+													}}
+												/>
+												<input
+													type="text"
+													name="location"
+													placeholder="Helyszín"
+													value={p.location}
+													required
+													onChange={(e) => {
+														setPickedDays(
+															onChangeHandle(
+																e.target.value,
+																_idx,
+																e.target.name,
+																pickedDays
+															)
+														);
+													}}
+												/>
+											</div>
+											<div>
+												{p?.crew
+													.sort((a, b) => a.id - b.id)
+													.map((c, idx) => (
+														<div key={idx} className={classes.CrewPosName}>
+															<select
+																name="pos"
+																value={c.pos}
+																onChange={(e) => {}}
+															>
+																{control.departments[department] &&
+																	Object.keys(
+																		control.departments[department].positions
+																	).map((pos, id) => (
+																		<option key={id}>{pos}</option>
+																	))}
+															</select>
+															{c.invitionType ? (
+																<select
+																	name="invitionType"
+																	value={c.invitionType?.name}
+																	onChange={(e) => {}}
+																>
+																	{control.invitionType.map((t) => (
+																		<option key={t.type} value={t.type}>
+																			{t.name}
+																		</option>
+																	))}
+																</select>
+															) : (
+																<div className={classes.Text400}>Saját</div>
+															)}
+															{c.invitionType?.name === "direct" ? (
+																<input
+																	type="text"
+																	name="name"
+																	value={c.name}
+																	required
+																	onChange={() => {}}
+																/>
+															) : (
+																<div></div>
+															)}
+															<div
+																className={classes.Icon}
+																onClick={() => deletPosHandel(c.id, p.id)}
+															>
+																<IoCloseCircleOutline />
+															</div>
+
+															{c.invitionType?.name === "attribute" && (
+																<div className={classes.CrewPosName_Attribute}>
+																	{control.departments[
+																		department
+																	].attribute.map((att, id) => (
+																		<div key={id}>
+																			<label htmlFor={att.type}>
+																				{att.name} -{" "}
+																				{att.range[c.invitionType[att.type]]}
+																			</label>
+																		</div>
+																	))}
+																</div>
+															)}
+														</div>
+													))}
 											</div>
 										</div>
-									);
-								})}
+									</div>
+								))}
 						</div>
 					</div>
 					<div className={classes.EventModal_Calendar}>
