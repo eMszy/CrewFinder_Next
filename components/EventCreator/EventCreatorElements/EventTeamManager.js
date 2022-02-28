@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import {
-	IoAmericanFootballOutline,
+	// IoAmericanFootballOutline,
 	IoCalendarOutline,
 	IoCloseCircleOutline,
 } from "react-icons/io5";
@@ -9,11 +9,12 @@ import {
 import { StateContext } from "../../../context/state-context";
 import SmallCalendar from "../../Calendar/CalendarElements/SmallCalendar";
 import Button from "../../UI/Button/Button";
-import { uniqueArray } from "./utility";
+import { onChangeHandle, uniqueArray } from "./utility";
 
-import control from "../../../control.json";
+// import control from "../../../control2.json";
 
 import classes from "./../EventModal.module.scss";
+import EventInvition from "./EventInvition";
 
 const EventTeamManager = ({ department, setIsCreatroPage }) => {
 	const { setShowEventModal, selectedEvent, dispatchCallEvent } =
@@ -31,8 +32,10 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 		setIsCreatroPage(true);
 	};
 
+	// console.log("crewMembers", crewMembers);
+
 	const saveHandle = () => {
-		const datesArray = uniqueArray(selectedEvent.dates, pickedDays)
+		const datesArray = uniqueArray(selectedEvent.dates, pickedDays);
 		const calendarEvent = {
 			...selectedEvent,
 			dates: datesArray,
@@ -47,29 +50,26 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 		setCrewMembers([]);
 	};
 
-	const onChangeHandle = (e, pos, id) => {
-		const inputedMember = { id, pos, name: e.target.value };
-		let updatedCrew = crewMembers.filter((crewMember) => crewMember.id !== id);
-		updatedCrew.push(inputedMember);
-		setCrewMembers(updatedCrew);
-	};
-
-	useEffect(() => {
-		let updatedPickedDates = [...pickedDays];
-		updatedPickedDates.forEach((pday) => {
-			pday?.crew = uniqueArray(pday?.crew, crewMembers);
-		});
-		setPickedDays(updatedPickedDates);
-	}, [isClicked, crewMembers]);
-
-	const addPosHandel = (pos, id, name = "") => {
+	const addPosHandel = (
+		pos,
+		id,
+		name = "",
+		invitionType = { name: "open" }
+	) => {
 		if (pos && pos !== "") {
 			const updatedPos = [
 				...crewMembers,
-				{ id: id + Math.random(), pos, name },
+				{ id: id + Math.random(), pos, name, invitionType },
 			];
 			setCrewMembers(updatedPos);
 		}
+	};
+
+	const changeHandle = (updatedCrewMember) => {
+		const updatedBaseCrew = crewMembers.filter(
+			(b) => b.id !== updatedCrewMember.id
+		);
+		setCrewMembers([...updatedBaseCrew, updatedCrewMember]);
 	};
 
 	const deletPosHandel = (id, days = undefined) => {
@@ -85,6 +85,14 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 	};
 
 	useEffect(() => {
+		let updatedPickedDates = [...pickedDays];
+		updatedPickedDates.forEach((pday) => {
+			pday.crew = uniqueArray(pday?.crew, crewMembers);
+		});
+		setPickedDays(updatedPickedDates);
+	}, [isClicked, crewMembers]);
+
+	useEffect(() => {
 		if (clickedDate) {
 			let updatedpickedDays = pickedDays;
 
@@ -94,18 +102,20 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 
 			if (pickedDay) {
 				let isExist = updatedpickedDays.find((d) => d.id === pickedDay.id);
-				
+
 				if (!isExist) {
 					updatedpickedDays.push(pickedDay);
 				} else {
 					updatedpickedDays = pickedDays.filter((d) => d.id !== pickedDay.id);
 				}
-				
+
 				setClickedDate();
 				setPickedDays(updatedpickedDays);
 			}
 		}
 	}, [isClicked]);
+
+	// console.log("pickedDay", pickedDays);
 
 	return (
 		<div>
@@ -118,41 +128,118 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 						<div className={classes.datesCrew_div}>
 							{pickedDays
 								.sort((a, b) => a.id - b.id)
-								.map((p, _idx) => (
-									<div key={_idx}>
-										<div className={classes.datesCrew}>
-											<div>
-												<div>
-													{dayjs(p?.startTime).format("YYYY. MMMM. DD.")}
+								.map((p, _idx) => {
+									console.log(
+										"Start:",
+										dayjs(p.startTime).format("MM. DD. HH:mm"),
+										" - End:",
+										dayjs(p.endTime).format("MM. DD. HH:mm")
+									);
+									return (
+										<div key={_idx}>
+											<div className={classes.datesCrew}>
+												<div className={classes.DateAndLoc}>
+													<div>
+														{dayjs(p.startTime).format("YYYY. MMMM. DD.")}
+													</div>
+													<input
+														type="time"
+														name="startTime"
+														value={dayjs(p.startTime).format("HH:mm")}
+														required
+														onChange={(e) => {
+															const dateAndTime = dayjs(p.startTime).format(
+																`YYYY-MM-DDT${e.target.value}`
+															);
+															setPickedDays(
+																onChangeHandle(
+																	+dayjs(dateAndTime),
+																	_idx,
+																	e.target.name,
+																	pickedDays
+																)
+															);
+														}}
+													/>
+													<input
+														type="time"
+														name="endTime"
+														value={dayjs(p.endTime).format("HH:mm")}
+														min={p.startDate}
+														required
+														onChange={(e) => {
+															const dateAndTime = dayjs(p.startTime).format(
+																`YYYY-MM-DDT${e.target.value}`
+															);
+															setPickedDays(
+																onChangeHandle(
+																	+dayjs(dateAndTime),
+																	_idx,
+																	e.target.name,
+																	pickedDays
+																)
+															);
+														}}
+													/>
+													<input
+														type="text"
+														name="location"
+														placeholder="Helyszín"
+														value={p.location}
+														required
+														onChange={(e) => {
+															setPickedDays(
+																onChangeHandle(
+																	e.target.value,
+																	_idx,
+																	e.target.name,
+																	pickedDays
+																)
+															);
+														}}
+													/>
 												</div>
 												<div>
-													{dayjs(p?.startTime).format("HH:mm")} - {dayjs(p?.endTime).format("HH:mm")}
-												</div>
-												<div>
-													helyszín
-												</div>
-											</div>
-											<div>
-												{p?.crew
-													.sort((a, b) => a.id - b.id)
-													.map(({ id, name, pos }, idx) => (
-														<div key={idx} className={classes.CrewPosName}>
-															<div>{pos}</div>
-															<div>{name}</div>
-															<div
-																className={classes.Icon}
-																onClick={() => {
-																	deletPosHandel(id, p.id);
-																}}
-															>
-																<IoCloseCircleOutline />
+													{p?.crew
+														.sort((a, b) => a.id - b.id)
+														.map(({ id, name, pos, invitionType }, idx) => (
+															<div key={idx} className={classes.CrewPosName}>
+																<div>{pos}</div>
+																<div>{name}</div>
+																<div
+																	className={classes.Icon}
+																	onClick={() => {
+																		deletPosHandel(id, p.id);
+																	}}
+																>
+																	<IoCloseCircleOutline />
+																</div>
+																{invitionType?.name && (
+																	<div
+																		className={classes.CrewPosName_Attribute}
+																	>
+																		<div className={classes.CrewPosName_Text}>
+																			{invitionType.name}
+																		</div>
+																		{invitionType.language && (
+																			<div className={classes.CrewPosName_Text}>
+																				language: {invitionType.language}
+																			</div>
+																		)}
+																		{invitionType.aptitude && (
+																			<div className={classes.CrewPosName_Text}>
+																				aptitude: {invitionType.aptitude}
+																			</div>
+																		)}
+																	</div>
+																)}
 															</div>
-														</div>
-													))}
+														))}
+												</div>
 											</div>
 										</div>
-									</div>
-								))}
+									);
+								})}
 						</div>
 					</div>
 					<div className={classes.EventModal_Calendar}>
@@ -170,72 +257,26 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 							setIsClicked={setIsClicked}
 						/>
 					</div>
+					<EventInvition
+						crewMembers={crewMembers}
+						addPosHandel={addPosHandel}
+						department={department}
+						changeHandle={(e) => changeHandle(e)}
+						deletPosHandel={deletPosHandel}
+					/>
 
-					<div className={classes.EventModal_Input2}>
-						<div className={classes.Icon}>
-							<IoAmericanFootballOutline />
-						</div>
-						<div>
-							<div>
-								<p>Az csapatod:</p>
-							</div>
-							<div className={classes.BaseTeam}>
-								<div className={classes.BaseTeam_PosDiv}>
-									<div>
-										<p>Poziciók</p>
-									</div>
-									{crewMembers
-										.sort((a, b) => a.id - b.id)
-										.map(({ pos, name, id }, idx) => {
-											return (
-												<div key={idx} className={classes.BaseTeam_Pos}>
-													<div className={classes.BaseTeam_PosTitle}>{pos}</div>
-													<input
-														type="text"
-														name="name"
-														placeholder="Név"
-														value={name}
-														required
-														onChange={(e) => onChangeHandle(e, pos, id)}
-													/>
-													<div
-														className={classes.Icon}
-														onClick={() => deletPosHandel(id)}
-													>
-														<IoCloseCircleOutline />
-													</div>
-												</div>
-											);
-										})}
-								</div>
-								<div className={classes.BaseTeam_Choice}>
-									<p>Hozzáadása</p>
-									{control.departments[department] &&
-										Object.keys(control.departments[department]).map(
-											(pos, id) => (
-												<Button
-													clicked={() => addPosHandel(pos, id)}
-													type="button"
-													key={id}
-												>
-													{pos}
-												</Button>
-											)
-										)}
-								</div>
-							</div>
-							<div className={classes.SaveBtn}>
-								<Button
-									clicked={() => {
-										saveHandle();
-										resetHandle();
-									}}
-									type="button"
-								>
-									Változások mentése
-								</Button>
-							</div>
-						</div>
+					<div></div>
+					<div className={classes.SaveBtn}>
+						<Button
+							type="submit"
+							clicked={() => {
+								saveHandle();
+								resetHandle();
+							}}
+							type="button"
+						>
+							Változások mentése
+						</Button>
 					</div>
 				</div>
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
 import dayjs from "dayjs";
-import control from "../control.json";
+import control from "../control2.json";
 
 export const StateContext = React.createContext({
 	daySelected: null,
@@ -41,8 +41,6 @@ const StateContextProvider = (props) => {
 	const [labels, setLabels] = useState(control.labels);
 
 	const [savedEvents, dispatchCallEvent] = useReducer(savedEventsReducer, []);
-
-	console.log("daySelected", daySelected);
 
 	useEffect(() => {
 		if (JSON.parse(localStorage.getItem("savedEvents"))) {

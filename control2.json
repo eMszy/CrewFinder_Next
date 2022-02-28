@@ -1,0 +1,137 @@
+{
+  "test": "valami",
+  "labels": [
+    {
+      "id": 1,
+      "label": "hsl(300, 100%, 30%)",
+      "title": "Privát esemény",
+      "checked": true
+    },
+    {
+      "id": 2,
+      "label": "hsl(120, 100%, 30%)",
+      "title": "Visszaigazolt",
+      "checked": true
+    },
+    {
+      "id": 3,
+      "label": "hsl(240, 100%, 60%)",
+      "title": "Jelentkeztél",
+      "checked": true
+    },
+    {
+      "id": 4,
+      "label": "hsl(39, 100%, 50%)",
+      "title": "Célzott megkeresés",
+      "checked": true
+    },
+    {
+      "id": 5,
+      "label": "hsl(60, 100%, 50%)",
+      "title": "Nyitott pozicíó",
+      "checked": true
+    }
+  ],
+  "firstDayofTheWeek": 1,
+  "departments": {
+    "AD's": {
+      "positions": {
+        "1st AD": {
+          "name": "1st AD",
+          "weight": 10
+        },
+        "2nd AD": {
+          "name": "2nd AD",
+          "weight": 5
+        },
+        "3rd AD": {
+          "name": "3rd AD",
+          "weight": 3
+        },
+        "Key SetPA": {
+          "name": "Key SetPa",
+          "weight": 2
+        },
+        "SetPA": {
+          "name": "SetPa",
+          "weight": 1
+        }
+      },
+      "attribute": [
+        {
+          "type": "language",
+          "name": "Nyelv",
+          "range": [
+            "nem",
+            "alapfok",
+            "középfok",
+            "felsőfok",
+            "Anyanyelvi"
+          ]
+        },
+        {
+          "type": "aptitude",
+          "name": "Rátermettség",
+          "range": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      ]
+    },
+    "Valami_más": {
+      "positions": {
+        "Más": {
+          "name": "Más",
+          "weight": 10
+        }
+      },
+      "attribute": [
+        {
+          "type": "language",
+          "name": "Nyelv",
+          "range": [
+            "Nem tud",
+            "Alapfok",
+            "Középfok",
+            "Felsőfok",
+            "Anyanyelvi"
+          ]
+        },
+        {
+          "type": "aptitude",
+          "name": "Rátermettség",
+          "range": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ]
+        }
+      ]
+    }
+  },
+  "invitionType": [
+    {
+      "type": "direct",
+      "name": "Direkt"
+    },
+    {
+      "type": "open",
+      "name": "Nyílt"
+    },
+    {
+      "type": "attribute",
+      "name": "Paraméteres"
+    }
+  ]
+}
