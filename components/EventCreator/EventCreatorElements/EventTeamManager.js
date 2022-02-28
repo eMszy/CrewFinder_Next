@@ -32,7 +32,11 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 		setIsCreatroPage(true);
 	};
 
-	// console.log("crewMembers", crewMembers);
+	console.log("pd", clickedDate, pickedDays, selectedEvent.dates);
+
+	const selectAllHandler = () => {
+		setPickedDays(selectedEvent.dates);
+	};
 
 	const saveHandle = () => {
 		const datesArray = uniqueArray(selectedEvent.dates, pickedDays);
@@ -256,6 +260,17 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 							setClickedDate={setClickedDate}
 							setIsClicked={setIsClicked}
 						/>
+						<div className={classes.EventModal_Calendar__ControlBtns}>
+							<Button
+								type="button"
+								clicked={() => setPickedDays(selectedEvent.dates)}
+							>
+								Mind
+							</Button>
+							<Button type="button" clicked={() => setPickedDays([])}>
+								Töröl
+							</Button>
+						</div>
 					</div>
 					<EventInvition
 						crewMembers={crewMembers}
