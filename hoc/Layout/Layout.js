@@ -6,7 +6,7 @@ import classes from "./Layout.module.scss";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../context/auth-context";
 import { StatusContext } from "../../context/status-context";
-import ErrorMsg from "../Message/Message";
+import Message from "../Message/Message";
 
 const Layout = (props) => {
 	const [sideDrawerIsVisible, setSideDrawerIsVisible] = useState(false);
@@ -38,7 +38,7 @@ const Layout = (props) => {
 				/>
 			</header>
 			<main className={classes.Main}>
-				{statusContext.isStatusMsg && <ErrorMsg />}
+				{statusContext.isStatusMsg && <Message />}
 				{props.children}
 				<footer>
 					<Footer />

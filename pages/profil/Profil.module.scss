@@ -13,12 +13,12 @@
 		flex-direction: row;
 	}
 	@include media-min-width(1200px) {
-		padding: 2rem;
+		// padding: 2rem;
 	}
 
 	.Profil_Panels {
 		min-width: 30%;
-		margin: 3rem auto;
+		margin: 1rem auto;
 		padding: 2rem;
 		background-color: rgb(255, 255, 255, 1);
 		border-radius: 15px;

@@ -69,9 +69,16 @@ export const resolvers = {
 				process.env.SECRET_WORD,
 				{ expiresIn: "1h" }
 			);
+			console.log("user", user.userData.connectInfo);
 			return {
 				token: token,
 				userId: user._id.toString(),
+				userData: {
+					name: user.name,
+					userData: {
+						connectInfo: { nickName: user.userData.connectInfo.nickName },
+					},
+				},
 				metaData: user.metaData,
 			};
 		},

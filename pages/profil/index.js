@@ -57,6 +57,12 @@ const Profil = () => {
 		fetchData();
 	}, []);
 
+	useEffect(() => {
+		if (DataForm && DataForm.nickName && DataForm.nickName.value) {
+			authContext.setNickName(DataForm.nickName.value);
+		}
+	}, [DataForm?.nickName.value]);
+
 	const editModeHandler = async () => {
 		if (!IsEdit) {
 			setIsEdit(true);

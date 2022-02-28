@@ -1,15 +1,23 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { AuthContext } from "../../../context/auth-context";
-import Button from "../../UI/Button/Button";
 
 import classes from "./NavigationItem.module.scss";
 
 const NavigationItems = () => {
 	const authContext = useContext(AuthContext);
 	const router = useRouter();
+	const [userName, setUserName] = useState("Profil");
+
+	useEffect(() => {
+		if (authContext.userNickName) {
+			setUserName(authContext.userNickName);
+		} else if (authContext.userName) {
+			setUserName(authContext.userName);
+		}
+	}, [authContext.userNickName, authContext.userName]);
 
 	let navMenu = (
 		<ul className={classes.NaviItems}>
@@ -35,7 +43,7 @@ const NavigationItems = () => {
 			<ul className={classes.NaviItems}>
 				<li>
 					<Link href="/profil" activeClassName={classes.active}>
-						Profil
+						{userName}
 					</Link>
 				</li>
 				<li>

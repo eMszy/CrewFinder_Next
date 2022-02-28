@@ -9,6 +9,14 @@ export const userLogin = (email, password) => {
 						isAdmin
 						isHOD
 					}
+					userData {
+						name
+						userData {
+							connectInfo {
+								nickName
+							}
+						}
+					}
 				}
 			}
 		`,

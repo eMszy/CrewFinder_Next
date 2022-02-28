@@ -12,6 +12,9 @@ export const AuthContext = React.createContext({
 	userId: null,
 	isAdmin: false,
 	isHOD: false,
+	userName: null,
+	userNickName: null,
+	setNickName: () => {},
 	reg: () => {},
 	login: () => {},
 	googleLoginHandler: () => {},
@@ -28,6 +31,8 @@ const AuthContextProvider = (props) => {
 	const [AuthLoading, setAuthLoading] = useState(false);
 	const [Token, setToken] = useState(null);
 	const [UserId, setUserId] = useState(null);
+	const [name, setName] = useState(null);
+	const [nickName, setNickName] = useState(null);
 
 	const router = useRouter();
 
@@ -73,6 +78,8 @@ const AuthContextProvider = (props) => {
 			setUserId(resData.data.login.userId);
 			setIsAdmin(resData.data.login.metaData.isAdmin);
 			setIsHOD(resData.data.login.metaData.isHOD);
+			setName(resData.data.login.userData.name);
+			setNickName(resData.data.login.userData.userData.connectInfo.nickName);
 
 			localStorage.setItem("token", resData.data.login.token);
 			localStorage.setItem("userId", resData.data.login.userId);
@@ -158,6 +165,9 @@ const AuthContextProvider = (props) => {
 				userId: UserId,
 				isAuth: IsAuth,
 				loading: AuthLoading,
+				userName: name,
+				userNickName: nickName,
+				setNickName: setNickName,
 			}}
 		>
 			{props.children}

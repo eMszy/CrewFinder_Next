@@ -43,6 +43,7 @@ export const typeDefs = gql`
 		token: String!
 		userId: String!
 		metaData: MetaD!
+		userData: User!
 	}
 
 	# Event types
@@ -94,11 +95,15 @@ export const typeDefs = gql`
 
 	#Event inputs
 	input eventInputData {
+		description: String
+		endDate: Int!
+		id: Int!
+		label: Int!
+		location: String
+		shortTitle: String!
+		startDate: Int!
 		title: String!
-		shortName: String!
-		startDate: String!
-		endDate: String!
-		eventType: String!
+		yourPosition: String!
 	}
 
 	type Query {
