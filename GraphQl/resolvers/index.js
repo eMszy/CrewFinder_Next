@@ -152,44 +152,44 @@ export const resolvers = {
 	},
 
 	Mutation: {
-		createUser: async (req, { userInput }) => {
-			// console.log(`req`, userInput);
+		// createUser: async (req, { userInput }) => {
+		// 	// console.log(`req`, userInput);
 
-			const errors = [];
-			if (!validator.isEmail(userInput.email)) {
-				errors.push({ message: "Érvénytelen e-mail" });
-			}
-			if (
-				validator.isEmpty(userInput.password) ||
-				!validator.isLength(userInput.password, { min: 8 })
-			) {
-				errors.push({ message: "A jelszó túl rövid" });
-			}
-			if (errors.length > 0) {
-				const error = new Error("Érvénytelen bevitel");
-				error.data = errors;
-				error.code = 422;
-				throw error;
-			}
-			const existingUser = await User.findOne({ email: userInput.email });
-			if (existingUser) {
-				const error = new Error("Ezzel az email címmel már regisztráltak");
-				throw error;
-			}
-			const hashedPw = await bcrypt.hash(userInput.password, 12);
-			const user = new User({
-				email: userInput.email,
-				password: hashedPw,
-				name: userInput.name,
-				imageUrl: userInput.imageUrl || "",
-				metaData: {
-					isAdmin: false,
-					isHOD: false,
-				},
-			});
-			const createdUser = await user.save();
-			return returnObject(createdUser);
-		},
+		// 	const errors = [];
+		// 	if (!validator.isEmail(userInput.email)) {
+		// 		errors.push({ message: "Érvénytelen e-mail" });
+		// 	}
+		// 	if (
+		// 		validator.isEmpty(userInput.password) ||
+		// 		!validator.isLength(userInput.password, { min: 8 })
+		// 	) {
+		// 		errors.push({ message: "A jelszó túl rövid" });
+		// 	}
+		// 	if (errors.length > 0) {
+		// 		const error = new Error("Érvénytelen bevitel");
+		// 		error.data = errors;
+		// 		error.code = 422;
+		// 		throw error;
+		// 	}
+		// 	const existingUser = await User.findOne({ email: userInput.email });
+		// 	if (existingUser) {
+		// 		const error = new Error("Ezzel az email címmel már regisztráltak");
+		// 		throw error;
+		// 	}
+		// 	const hashedPw = await bcrypt.hash(userInput.password, 12);
+		// 	const user = new User({
+		// 		email: userInput.email,
+		// 		password: hashedPw,
+		// 		name: userInput.name,
+		// 		imageUrl: userInput.imageUrl || "",
+		// 		metaData: {
+		// 			isAdmin: false,
+		// 			isHOD: false,
+		// 		},
+		// 	});
+		// 	const createdUser = await user.save();
+		// 	return returnObject(createdUser);
+		// },
 
 		updateUser: async (req, { id, Data }, { isAuth, err, userId }) => {
 			// console.log(`req`, isAuth, id, err, Data);

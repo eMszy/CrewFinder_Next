@@ -40,15 +40,28 @@ const AuthContextProvider = (props) => {
 		const imgUrl = UserForm?.imageUrl?.value || "";
 		setAuthLoading(true);
 
-		const graphqlQuery = createNewUser(
-			UserForm.email.value,
-			UserForm.name.value,
-			UserForm.password.value,
-			imgUrl
-		);
+		// const graphqlQuery = createNewUser(
+		// 	UserForm.email.value,
+		// 	UserForm.name.value,
+		// 	UserForm.password.value,
+		// 	imgUrl
+		// );
 
 		try {
-			await PostData(graphqlQuery);
+			await fetch("api/Signin", {
+				body: JSON.stringify({
+					email: UserForm.email.value,
+					password: UserForm.password.value,
+					name: UserForm.name.value,
+					imgUrl,
+				}),
+				headers: {
+					"Content-Type": "application/json",
+				},
+				method: "POST",
+			});
+
+			// await PostData(graphqlQuery);
 			setAuthLoading(false);
 			console.log("Creating a new User: ", UserForm);
 			statusContext.setStatus({ message: "Sikeres regisztráció" });

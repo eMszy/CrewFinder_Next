@@ -1,10 +1,14 @@
 import bcrypt from "bcryptjs/dist/bcrypt";
 import jwt from "jsonwebtoken";
+
 import dbConnect from "../../shared/dbConnect";
 import User from "../../models/user";
 
 const handler = async (req, res) => {
+	if (req.method !== "POST") return;
+
 	res.setHeader("Content-Type", "application/json");
+
 	const { email, password } = req.body;
 	dbConnect();
 
