@@ -4,7 +4,7 @@ import {
 	IoCloseCircleOutline,
 } from "react-icons/io5";
 
-import control from "../../../control2.json";
+import control from "../../../control.json";
 
 import Button from "../../UI/Button/Button";
 import classes from "./../EventModal.module.scss";

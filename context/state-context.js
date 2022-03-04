@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
 import dayjs from "dayjs";
-import control from "../control2.json";
+import control from "../control.json";
 
 export const StateContext = React.createContext({
 	daySelected: null,

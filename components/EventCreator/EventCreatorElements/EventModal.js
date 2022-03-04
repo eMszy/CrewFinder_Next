@@ -14,7 +14,7 @@ import SmallCalendar from "../../Calendar/CalendarElements/SmallCalendar";
 import { findColor } from "../../../shared/utility";
 import Button from "../../UI/Button/Button";
 
-import control from "../../../control2.json";
+import control from "../../../control.json";
 
 import classes from "./../EventModal.module.scss";
 import { uniqueArray } from "./utility";

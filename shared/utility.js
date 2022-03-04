@@ -1,4 +1,4 @@
-import control from "../control2.json";
+import control from "../control.json";
 import dayjs from "dayjs";
 
 const updateObject = (oldObject, updatedProperties) => {

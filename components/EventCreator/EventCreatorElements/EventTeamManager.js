@@ -7,7 +7,7 @@ import SmallCalendar from "../../Calendar/CalendarElements/SmallCalendar";
 import Button from "../../UI/Button/Button";
 import { onChangeHandle, uniqueArray } from "./utility";
 
-import control from "../../../control2.json";
+import control from "../../../control.json";
 
 import classes from "./../EventModal.module.scss";
 import EventInvition from "./EventInvition";

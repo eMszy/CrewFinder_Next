@@ -6,7 +6,7 @@ import { StateContext } from "../../context/state-context";
 import EventModal from "./EventCreatorElements/EventModal";
 import EventTeamManager from "./EventCreatorElements/EventTeamManager";
 
-import control from "../../control2.json";
+import control from "../../control.json";
 
 import classes from "./EventModal.module.scss";
 
