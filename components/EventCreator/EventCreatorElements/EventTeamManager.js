@@ -304,7 +304,6 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 								saveHandle();
 								resetHandle();
 							}}
-							type="button"
 						>
 							Változások mentése
 						</Button>
