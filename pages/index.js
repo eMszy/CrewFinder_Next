@@ -3,7 +3,7 @@ import Head from "next/head";
 import { AuthContext } from "../context/auth-context";
 import { autoLogin } from "../shared/autoLogin";
 
-import Login from "../components/login/login";
+import Login from "../components/login/Login";
 import { Calendar } from "../components/Calendar/Calendar";
 import Sidebar from "../components/Sidebar/Sidebar";
 
