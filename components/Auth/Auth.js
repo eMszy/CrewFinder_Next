@@ -10,8 +10,6 @@ import Button from "../../components/UI/Button/Button";
 import crewfinderLogoWhite from "../../public/icons/crewfinderLogoWhite.svg";
 import Spinner from "../../components/UI/Spinner/Spinner.js";
 import classes from "./Auth.module.scss";
-import GoogleLoginButton from "./GoogleLogin";
-import FacebookLoginButton from "./FacebookLogin";
 
 const AuthForm = () => {
 	const authContext = useContext(AuthContext);

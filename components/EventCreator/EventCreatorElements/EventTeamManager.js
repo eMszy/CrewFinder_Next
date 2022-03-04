@@ -5,7 +5,7 @@ import { IoCalendarOutline, IoCloseCircleOutline } from "react-icons/io5";
 import { StateContext } from "../../../context/state-context";
 import SmallCalendar from "../../Calendar/CalendarElements/SmallCalendar";
 import Button from "../../UI/Button/Button";
-import { onChangeHandle, uniqueArray } from "./utility";
+import { uniqueArray } from "./utility";
 
 import control from "../../../control.json";
 
