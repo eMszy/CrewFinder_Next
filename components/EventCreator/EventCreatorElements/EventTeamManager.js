@@ -302,7 +302,8 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 					<div className={classes.SaveBtn}>
 						<Button
 							type="button"
-							clicked={() => {
+							clicked={(e) => {
+								e.preventDefault();
 								saveHandle();
 								resetHandle();
 							}}
