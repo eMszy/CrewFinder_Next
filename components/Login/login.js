@@ -2,7 +2,7 @@ import Image from "next/image";
 
 import AuthForm from "../Auth/Auth";
 
-import classes from "./Login.module.scss";
+import classes from "./login.module.scss";
 
 const icons_01 = "/icons/icons-01.png";
 const icons_02 = "/icons/icons-02.png";

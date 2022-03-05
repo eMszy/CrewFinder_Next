@@ -55,12 +55,14 @@ const Profil = () => {
 			authContext.autoLogin();
 		}
 		fetchData();
+		// eslint-disable-next-line
 	}, []);
 
 	useEffect(() => {
 		if (DataForm && DataForm.nickName && DataForm.nickName.value) {
 			authContext.setNickName(DataForm.nickName.value);
 		}
+		// eslint-disable-next-line
 	}, [DataForm?.nickName.value]);
 
 	const editModeHandler = async () => {

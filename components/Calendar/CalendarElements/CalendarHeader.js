@@ -36,6 +36,7 @@ const CalendarHeader = ({
 			default:
 				break;
 		}
+		// eslint-disable-next-line
 	}, [monthIndex, viewMode]);
 
 	const { setShowEventModal } = useContext(StateContext);

@@ -88,6 +88,7 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 			pday.crew = uniqueArray(pday?.crew, crewMembers);
 		});
 		setPickedDays(updatedPickedDates);
+		// eslint-disable-next-line
 	}, [isClicked, crewMembers]);
 
 	useEffect(() => {
@@ -111,6 +112,7 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 				setPickedDays(updatedpickedDays);
 			}
 		}
+		// eslint-disable-next-line
 	}, [isClicked]);
 
 	return (

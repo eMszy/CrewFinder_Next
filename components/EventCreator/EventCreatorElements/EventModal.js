@@ -222,6 +222,7 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 			...inputData,
 			yourPosition: Object.keys(control.departments[department])[0],
 		});
+		// eslint-disable-next-line
 	}, [department]);
 
 	// useEffect(() => {
@@ -270,6 +271,7 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 			});
 		}
 		setClickedDate();
+		// eslint-disable-next-line
 	}, [isClicked]);
 
 	useEffect(() => {
@@ -288,11 +290,13 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 		const endDay = dayjs(eDate).format(`YYYY-MM-DD${eTime}`);
 
 		setInputData({ ...inputData, startDate: startDay, endDate: endDay });
+		// eslint-disable-next-line
 	}, [inputData.dates]);
 
 	useEffect(() => {
 		let updatedCrew = uniqueArray(inputData.baseCrew, baseCrew);
 		setInputData({ ...inputData, baseCrew: updatedCrew });
+		// eslint-disable-next-line
 	}, [baseCrew]);
 
 	return (
