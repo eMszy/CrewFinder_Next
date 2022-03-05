@@ -301,7 +301,7 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 					<div></div>
 					<div className={classes.SaveBtn}>
 						<Button
-							type="submit"
+							type="button"
 							clicked={() => {
 								saveHandle();
 								resetHandle();
