@@ -97,3 +97,20 @@ export const findColor = (id) => {
 	const color = control.labels.find((l) => l.id === id);
 	return color.label;
 };
+
+export const IsExist = (element, msg) => {
+	if (!element) {
+		const error = new Error(`Nincs ilyen ${msg}`);
+		error.code = 404;
+		throw error;
+	}
+};
+
+export const returnObject = (data) => {
+	return {
+		...data._doc,
+		_id: data._id.toString(),
+		createdAt: +dayjs(data.createdAt),
+		updatedAt: +dayjs(data.updatedAt),
+	};
+};
