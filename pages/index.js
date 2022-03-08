@@ -16,13 +16,18 @@ const Home = () => {
 	const authContext = useContext(AuthContext);
 	autoLogin();
 
-	const { data: session, status } = useSession();
+	const session = useSession({
+		required: true,
+		onUnauthenticated() {
+			console.log("nem vagy bejelentkezve");
+		},
+	});
 
-	console.log("data", session, status);
+	console.log("data", session);
 
 	let content = <Login />;
 
-	if (authContext.isAuth || status === "authenticated") {
+	if (authContext.isAuth) {
 		content = (
 			<div className={classes.Main}>
 				<Sidebar />

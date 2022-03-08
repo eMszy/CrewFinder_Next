@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { signIn } from "next-auth/react";
+import { getProviders, signIn } from "next-auth/react";
 
 import { AuthContext } from "../../context/auth-context";
 import { inputChangedHandler, isAllInputVaild } from "../../shared/utility.js";
@@ -127,21 +127,23 @@ const AuthForm = () => {
 
 				<div className={classes.LoginMain__LoginForm__GoogleBtn}>
 					<Button
-						clicked={() => signIn("CredentialsProvider", { callbackUrl: "/" })}
+						clicked={() =>
+							signIn("Credentials", {
+								email: LoginRegForm.email.value,
+								password: LoginRegForm.password.value,
+								callbackUrl: "/",
+							})
+						}
 					>
 						Bejelentkezés
 					</Button>
 					<Button clicked={() => signIn("google", { callbackUrl: "/" })}>
 						Google
 					</Button>
+					<Button clicked={() => signIn("facebook", { callbackUrl: "/" })}>
+						Facebook
+					</Button>
 				</div>
-
-				{/* <div className={classes.LoginMain__LoginForm__GoogleBtn}>
-					<GoogleLoginButton />
-				</div>
-				<div className={classes.LoginMain__LoginForm__FacebookBtn}>
-					<FacebookLoginButton />
-				</div> */}
 			</div>
 		</React.Fragment>
 	);
