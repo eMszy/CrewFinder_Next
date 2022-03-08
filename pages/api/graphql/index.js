@@ -26,7 +26,7 @@ const apolloServer = new ApolloServer({
 		const token = authHeader.split(" ")[1];
 
 		try {
-			const decodedToken = jwt.verify(token, process.env.SECRET_WORD);
+			const decodedToken = jwt.verify(token, process.env.SECRET);
 			if (!decodedToken) {
 				const error = new Error("Not authenticated!");
 				err.statusCode = 401;

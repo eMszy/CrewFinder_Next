@@ -1,9 +1,13 @@
-import User from "../../../models/user";
-import { IsExist, returnObject } from "../../../shared/utility";
+import { getSession } from "next-auth/react";
+import User from "../../models/user";
+import { IsExist, returnObject } from "../../shared/utility";
 
 const handler = async (req, res) => {
-	//AUTH middelware
+	const session = await getSession({ req });
+	console.log("first", session);
+
 	const userId = req.body.userId;
+	// res.send(JSON.stringify(session, null, 2));
 
 	try {
 		const user = await User.findById(userId);

@@ -1,8 +1,10 @@
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 
 import { AuthContext } from "../../../context/auth-context";
+import Button from "../../UI/Button/Button";
 
 import classes from "./NavigationItem.module.scss";
 
@@ -49,6 +51,9 @@ const NavigationItems = () => {
 				<li>
 					<p onClick={authContext.logout}>Kijelentkezés</p>
 				</li>
+				{/* <li>
+					<Button clicked={signOut}>Ki</Button>
+				</li> */}
 			</ul>
 		);
 	}

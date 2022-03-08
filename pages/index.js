@@ -1,5 +1,7 @@
 import { useContext } from "react";
 import Head from "next/head";
+import { useSession } from "next-auth/react";
+
 import { AuthContext } from "../context/auth-context";
 import { autoLogin } from "../shared/autoLogin";
 
@@ -11,13 +13,16 @@ import classes from "./index.module.scss";
 
 const Home = () => {
 	Home.title = "CrewFinder";
-
 	const authContext = useContext(AuthContext);
 	autoLogin();
 
+	const { data: session, status } = useSession();
+
+	console.log("data", session, status);
+
 	let content = <Login />;
 
-	if (authContext.isAuth) {
+	if (authContext.isAuth || status === "authenticated") {
 		content = (
 			<div className={classes.Main}>
 				<Sidebar />

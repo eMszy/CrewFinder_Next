@@ -10,7 +10,7 @@ const handler = async (req, res) => {
 	res.setHeader("Content-Type", "application/json");
 
 	const { email, password } = req.body;
-	dbConnect();
+	// dbConnect();
 
 	const user = await User.findOne({ email: email });
 	if (!user) {
@@ -31,7 +31,7 @@ const handler = async (req, res) => {
 			userId: user._id.toString(),
 			email: user.email,
 		},
-		process.env.SECRET_WORD,
+		process.env.SECRET,
 		{ expiresIn: "1h" }
 	);
 

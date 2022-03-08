@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { signIn } from "next-auth/react";
 
 import { AuthContext } from "../../context/auth-context";
 import { inputChangedHandler, isAllInputVaild } from "../../shared/utility.js";
@@ -123,6 +124,18 @@ const AuthForm = () => {
 						disabled={!isAllInputVaild(LoginRegForm)}
 					/>
 				</form>
+
+				<div className={classes.LoginMain__LoginForm__GoogleBtn}>
+					<Button
+						clicked={() => signIn("CredentialsProvider", { callbackUrl: "/" })}
+					>
+						Bejelentkezés
+					</Button>
+					<Button clicked={() => signIn("google", { callbackUrl: "/" })}>
+						Google
+					</Button>
+				</div>
+
 				{/* <div className={classes.LoginMain__LoginForm__GoogleBtn}>
 					<GoogleLoginButton />
 				</div>
