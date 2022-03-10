@@ -125,8 +125,6 @@ export default NextAuth({
 			) {
 				dbConnect();
 				const user = await User.findOne({ email: profile.email });
-				user.metaData.isAdmin = false;
-				user.metaData.isHOD = false;
 				await user.save();
 			}
 		},

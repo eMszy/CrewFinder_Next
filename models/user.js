@@ -19,7 +19,8 @@ const userSchema = new Schema(
 		},
 		image: {
 			type: String,
-			required: false,
+			required: true,
+			default: "",
 		},
 		userData: {
 			connectInfo: {
@@ -67,10 +68,12 @@ const userSchema = new Schema(
 			isAdmin: {
 				type: Boolean,
 				required: true,
+				default: false,
 			},
 			isHOD: {
 				type: Boolean,
 				required: true,
+				default: false,
 			},
 		},
 		event: [
