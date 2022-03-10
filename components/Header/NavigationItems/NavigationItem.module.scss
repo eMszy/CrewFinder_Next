@@ -13,10 +13,7 @@
 	flex-flow: column;
 	justify-content: flex-end;
 	height: 100%;
-
-	li {
-		margin: 1rem 0;
-	}
+	align-items: center;
 
 	a,
 	p {
@@ -30,10 +27,38 @@
 		}
 	}
 
+	.Image {
+		margin-top: 4px;
+		border-radius: 15rem;
+		border: 3px transparent solid;
+
+		span {
+			border-radius: 15rem;
+		}
+		&:hover {
+			border-color: #afd7f8;
+			cursor: pointer;
+		}
+	}
+
+	.Name {
+		display: flex;
+		flex-direction: column;
+		.singOut {
+			color: #afd7f8;
+			font-weight: 400;
+			opacity: 0.5;
+			&:hover {
+				opacity: 1;
+				cursor: pointer;
+			}
+		}
+	}
+
 	@include media-min-width(800px) {
 		flex-flow: row;
-		li {
-			margin: 1rem;
+		div {
+			margin: 0 1rem;
 		}
 		a {
 			font-weight: 400;

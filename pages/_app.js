@@ -1,6 +1,5 @@
 import { SessionProvider } from "next-auth/react";
 
-import AuthContextProvider from "../context/auth-context";
 import StateContextProvider from "../context/state-context";
 import StatusContextProvider from "../context/status-context";
 import Layout from "../hoc/Layout/Layout";
@@ -11,15 +10,13 @@ const App = ({ Component, pageProps: { session, ...pageProps } }) => {
 
 	return (
 		<StatusContextProvider>
-			<AuthContextProvider>
-				<SessionProvider session={session}>
-					<StateContextProvider>
-						<Layout>
-							<Component {...pageProps} />
-						</Layout>
-					</StateContextProvider>
-				</SessionProvider>
-			</AuthContextProvider>
+			<SessionProvider session={session}>
+				<StateContextProvider>
+					<Layout>
+						<Component {...pageProps} />
+					</Layout>
+				</StateContextProvider>
+			</SessionProvider>
 		</StatusContextProvider>
 	);
 };

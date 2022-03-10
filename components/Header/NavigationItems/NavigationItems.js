@@ -1,60 +1,61 @@
-import { signOut } from "next-auth/react";
+import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useContext, useEffect, useState } from "react";
-
-import { AuthContext } from "../../../context/auth-context";
-import Button from "../../UI/Button/Button";
+import { getSession, signOut, useSession } from "next-auth/react";
 
 import classes from "./NavigationItem.module.scss";
+import Image from "next/image";
+
+const userIcon = "/icons/user.png";
 
 const NavigationItems = () => {
-	const authContext = useContext(AuthContext);
-	const router = useRouter();
-	const [userName, setUserName] = useState("Profil");
+	const { data: session, status } = useSession();
 
-	useEffect(() => {
-		if (authContext.userNickName) {
-			setUserName(authContext.userNickName);
-		} else if (authContext.userName) {
-			setUserName(authContext.userName);
-		}
-	}, [authContext.userNickName, authContext.userName]);
+	const router = useRouter();
 
 	let navMenu = (
-		<ul className={classes.NaviItems}>
-			<li>
+		<div className={classes.NaviItems}>
+			<div>
 				<Link href="/ismerteto">
 					<a className={router.pathname === "/ismerteto" ? classes.Active : ""}>
 						Így működik a Crew Finder
 					</a>
 				</Link>
-			</li>
-			<li>
+			</div>
+			<div>
 				<Link href="/rolunk">
 					<a className={router.pathname === "/rolunk" ? classes.Active : ""}>
 						Rólunk
 					</a>
 				</Link>
-			</li>
-		</ul>
+			</div>
+		</div>
 	);
 
-	if (authContext.isAuth) {
+	if (status === "authenticated") {
 		navMenu = (
-			<ul className={classes.NaviItems}>
-				<li>
-					<Link href="/profil" activeClassName={classes.active}>
-						{userName}
+			<div className={classes.NaviItems}>
+				<div className={classes.Image}>
+					<Link href="/home/profil" activeClassName={classes.active} passHref>
+						<a>
+							<Image
+								src={session.user.image || userIcon}
+								width={50}
+								height={50}
+								alt={session.user.name}
+							/>
+						</a>
 					</Link>
-				</li>
-				<li>
-					<p onClick={authContext.logout}>Kijelentkezés</p>
-				</li>
-				{/* <li>
-					<Button clicked={signOut}>Ki</Button>
-				</li> */}
-			</ul>
+				</div>
+				<div className={classes.Name}>
+					<Link href="/home/profil" activeClassName={classes.active}>
+						{session.user.name}
+					</Link>
+					<div onClick={signOut} className={classes.singOut}>
+						Kijelentkezés
+					</div>
+				</div>
+			</div>
 		);
 	}
 
@@ -62,3 +63,22 @@ const NavigationItems = () => {
 };
 
 export default NavigationItems;
+
+export async function getServerSideProps(context) {
+	const session = await getSession(context);
+
+	if (!session) {
+		return {
+			redirect: {
+				permanent: false,
+				destination: "/",
+			},
+		};
+	}
+
+	return {
+		props: {
+			session,
+		},
+	};
+}

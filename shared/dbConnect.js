@@ -4,10 +4,11 @@ const connection = {};
 
 const dbConnect = async () => {
 	if (connection.isConected) {
+		console.log(`MongoDB: Already connected`);
 		return;
 	}
 
-	const db = await mongoose.connect(process.env.MONGO_URI, {
+	const db = await mongoose.connect(process.env.MONGODB_URI, {
 		useUnifiedTopology: true,
 		useNewUrlParser: true,
 	});

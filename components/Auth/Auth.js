@@ -1,9 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useState, useContext } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { getProviders, signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { FcGoogle } from "react-icons/fc";
+import { BsFacebook } from "react-icons/bs";
 
-import { AuthContext } from "../../context/auth-context";
+import { StatusContext } from "../../context/status-context";
 import { inputChangedHandler, isAllInputVaild } from "../../shared/utility.js";
 import * as InputTemplates from "../../components/UI/Input/InputTemplates/InputTemplates.js";
 import InputElement from "../../components/UI/Input/InputElement";
@@ -13,7 +16,10 @@ import Spinner from "../../components/UI/Spinner/Spinner.js";
 import classes from "./Auth.module.scss";
 
 const AuthForm = () => {
-	const authContext = useContext(AuthContext);
+	const { status } = useSession();
+	const router = useRouter();
+
+	const { setStatus } = useContext(StatusContext);
 
 	const formElmentTemplates = {
 		login: {
@@ -31,15 +37,35 @@ const AuthForm = () => {
 	const [LoginRegForm, setLoginRegForm] = useState(formElmentTemplates.login);
 	const [IsSignup, setIsSignup] = useState(false);
 
-	const signupHandler = (event) => {
+	const signupHandler = async (event) => {
 		event.preventDefault();
-		console.log(`event`, LoginRegForm);
-		authContext.reg(LoginRegForm);
+		const res = await signIn("SingIn", {
+			name: LoginRegForm.name.value,
+			email: LoginRegForm.email.value,
+			password: LoginRegForm.password.value,
+			redirect: false,
+		});
+		console.log("res", res);
+		if (res?.error) {
+			setStatus({ message: res.error, error: true });
+			return;
+		}
+		router.push("/home");
 	};
 
 	const loginHandler = async (event) => {
 		event.preventDefault();
-		authContext.login(LoginRegForm);
+		const res = await signIn("LogIn", {
+			email: LoginRegForm.email.value,
+			password: LoginRegForm.password.value,
+			redirect: false,
+		});
+		console.log("res", res);
+		if (res?.error) {
+			setStatus({ message: res.error, error: true });
+			return;
+		}
+		router.push("/home");
 	};
 
 	const switchAuthModeHandler = (email) => {
@@ -105,7 +131,7 @@ const AuthForm = () => {
 					className={classes.LoginMain__LoginForm}
 				>
 					<h2>{IsSignup ? "Regisztráció" : "Belépés"}</h2>
-					{authContext.loading ? (
+					{status === "loading" || status === "authenticated" ? (
 						<div className={classes.Spinner}>
 							<Spinner />
 						</div>
@@ -125,23 +151,18 @@ const AuthForm = () => {
 					/>
 				</form>
 
-				<div className={classes.LoginMain__LoginForm__GoogleBtn}>
-					<Button
-						clicked={() =>
-							signIn("Credentials", {
-								email: LoginRegForm.email.value,
-								password: LoginRegForm.password.value,
-								callbackUrl: "/",
-							})
-						}
-					>
-						Bejelentkezés
+				<div className={classes.LoginMain__LoginForm__LoginBtn}>
+					<Button clicked={() => signIn("google")}>
+						<div className={classes.LoginIcons}>
+							<FcGoogle />
+							GOOGLE
+						</div>
 					</Button>
-					<Button clicked={() => signIn("google", { callbackUrl: "/" })}>
-						Google
-					</Button>
-					<Button clicked={() => signIn("facebook", { callbackUrl: "/" })}>
-						Facebook
+					<Button clicked={() => signIn("facebook")}>
+						<div className={classes.LoginIcons}>
+							<BsFacebook />
+							FACEBOOK
+						</div>
 					</Button>
 				</div>
 			</div>

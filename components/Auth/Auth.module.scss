@@ -137,48 +137,22 @@
 		}
 	}
 
-	.LoginMain__LoginForm__GoogleBtn {
-		margin: 1rem 0;
+	.LoginMain__LoginForm__LoginBtn {
+		display: flex;
+		justify-content: flex-end;
+		margin: 2rem 0;
 		text-align: center;
 
-		@include media-min-width(800px) {
-			grid-column: span 2;
-		}
-
-		div {
-			display: flex;
-			padding: 6px 15px;
-			align-items: center;
-			height: 3rem;
-
-			svg {
-				margin: 0 1rem 0 0;
-				padding: 6px;
-				border-radius: 15px;
-				background-color: rgba(255, 255, 255, 1);
+		button {
+			width: 12rem;
+			height: 2.5rem;
+			border-width: 2px;
+			margin-left: 2rem;
+			.LoginIcons {
+				display: flex;
+				justify-content: space-evenly;
+				align-items: center;
 			}
-		}
-	}
-
-	.LoginMain__LoginForm__FacebookBtn {
-		text-align: center;
-
-		@include media-min-width(800px) {
-			grid-column: span 2;
-		}
-
-		div {
-			display: flex;
-			padding: 6px 15px;
-			align-items: center;
-			height: 3rem;
-
-			// svg {
-			// margin: 0 1rem 0 0;
-			// padding: 6px;
-			// border-radius: 15px;
-			// background-color: #1977f3;
-			// }
 		}
 	}
 }

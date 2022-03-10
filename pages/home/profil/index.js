@@ -1,25 +1,20 @@
-import { useRouter } from "next/router";
 import Head from "next/head";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 
-import { AuthContext } from "../../context/auth-context";
-import { StatusContext } from "../../context/status-context";
-import { DeleteHandel, EditForm, SavingHandel } from "../../GraphQl/utility";
-import InputElement from "../../components/UI/Input/InputElement";
-import { formTemplate } from "../../components/UI/Input/InputTemplates/InputTemplates";
-import { inputChangedHandler, isAllInputVaild } from "../../shared/utility";
-import Button from "../../components/UI/Button/Button";
+import { StatusContext } from "../../../context/status-context";
+import { DeleteHandel, EditForm, SavingHandel } from "../../../GraphQl/utility";
+import InputElement from "../../../components/UI/Input/InputElement";
+import { formTemplate } from "../../../components/UI/Input/InputTemplates/InputTemplates";
+import { inputChangedHandler, isAllInputVaild } from "../../../shared/utility";
+import Button from "../../../components/UI/Button/Button";
 
 import classes from "./Profil.module.scss";
-import { List } from "../../components/Calendar/CalendarElements/List";
+import { List } from "../../../components/Calendar/CalendarElements/List";
 
 const Profil = () => {
 	Profil.title = "CrewFinder - Profil";
 
-	const authContext = useContext(AuthContext);
 	const statusContext = useContext(StatusContext);
-
-	const router = useRouter();
 
 	let Id;
 
@@ -44,26 +39,6 @@ const Profil = () => {
 			statusContext.setStatus(err);
 		}
 	};
-
-	useEffect(() => {
-		if (!localStorage.getItem("token")) {
-			router.push("/");
-			authContext.logout();
-			return;
-		}
-		if (!authContext.isAuth) {
-			authContext.autoLogin();
-		}
-		fetchData();
-		// eslint-disable-next-line
-	}, []);
-
-	useEffect(() => {
-		if (DataForm && DataForm.nickName && DataForm.nickName.value) {
-			authContext.setNickName(DataForm.nickName.value);
-		}
-		// eslint-disable-next-line
-	}, [DataForm?.nickName.value]);
 
 	const editModeHandler = async () => {
 		if (!IsEdit) {
@@ -91,7 +66,7 @@ const Profil = () => {
 				message: "Sikeresen törölted a regisztrációdat",
 				error: true,
 			});
-			authContext.logout();
+			// logout
 		} else {
 			setIsDelete(true);
 			statusContext.setStatus({
