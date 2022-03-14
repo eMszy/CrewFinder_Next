@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import NextAuth from "next-auth/next";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import GoogleProvider from "next-auth/providers/google";
@@ -8,7 +7,7 @@ import bcrypt from "bcryptjs/dist/bcrypt";
 import validator from "validator";
 
 import User from "../../../models/user";
-import clientPromise from "../../../lib/mongodb";
+import clientPromise from "../../../shared/mongodb";
 import dbConnect from "../../../shared/dbConnect";
 import { StateContext } from "../../../context/state-context";
 

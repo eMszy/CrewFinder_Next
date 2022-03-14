@@ -16,7 +16,6 @@ import { List } from "../../../components/Calendar/CalendarElements/List";
 import { server } from "../../../config";
 
 import classes from "./Profil.module.scss";
-import dayjs from "dayjs";
 
 const Profil = ({ formedUser, err }) => {
 	Profil.title = "CrewFinder - Profil";
@@ -52,8 +51,6 @@ const Profil = ({ formedUser, err }) => {
 			setIsEdit(true);
 		} else {
 			setIsEdit(false);
-
-			// console.log("DataForm", +dayjs(DataForm.dob.value));
 
 			let subPlusData = {};
 			if (DataForm) {
