@@ -1,6 +1,6 @@
 module.exports = {
 	env: {
-		MONGO_URI: "mongodb://localhost/CrewFinderDev",
+		// MONGO_URI: "mongodb://localhost/CrewFinderDev",
 		// SECRET_WORD: "nSrPUXnvo2o6nVILb7UBtrjNSWjyrvs8",
 		// NEXTAUTH_URL: "http://localhost:3000",
 		GRAPHQL: "http://localhost:3000/api/graphql",
