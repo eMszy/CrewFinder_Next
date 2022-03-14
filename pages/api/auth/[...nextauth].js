@@ -5,7 +5,7 @@ import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs/dist/bcrypt";
-// import validator from "validator";
+import validator from "validator";
 
 import clientPromise from "../../../lib/mongodb";
 import dbConnect from "../../../shared/dbConnect";
