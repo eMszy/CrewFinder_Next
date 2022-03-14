@@ -18,11 +18,19 @@ export const StateContext = React.createContext({
 });
 
 const savedEventsReducer = (state, { type, payload }) => {
-	console.log("type", type, payload);
 	switch (type) {
 		case "init":
 			return payload;
 		case "push":
+			{
+				const res = fetch("/api/event/" + 0, {
+					method: "POST",
+					body: JSON.stringify(payload),
+					headers: {
+						"Content-Type": "application/json",
+					},
+				});
+			}
 			return [...state, payload];
 		case "update": {
 			return state.map((evt) => (evt.id === payload.id ? payload : evt));

@@ -9,7 +9,7 @@ import classes from "../index.module.scss";
 const Home = () => {
 	Home.title = "CrewFinder - Home";
 	const { data: session, status } = useSession();
-	console.log("session", session?.user, status);
+	// console.log("session", session?.user, status);
 
 	return (
 		<>

@@ -20,7 +20,7 @@ const userSchema = new Schema(
 		image: {
 			type: String,
 			required: true,
-			default: "",
+			default: "/icons/user.png",
 		},
 		userData: {
 			connectInfo: {

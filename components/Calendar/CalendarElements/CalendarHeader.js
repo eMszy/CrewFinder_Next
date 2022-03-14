@@ -22,7 +22,7 @@ const CalendarHeader = ({
 	setCurrentWeek,
 	setCurrentMonth,
 }) => {
-	const [monthIndex, setMonthIndex] = useState();
+	const [monthIndex, setMonthIndex] = useState(dayjs().month());
 	const [weekIndex, setWeekIndex] = useState();
 
 	useEffect(() => {

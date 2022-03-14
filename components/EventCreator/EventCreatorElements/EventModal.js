@@ -20,6 +20,8 @@ import classes from "./../EventModal.module.scss";
 import { uniqueArray } from "./utility";
 import EventInvition from "./EventInvition";
 
+import { useSession } from "next-auth/react";
+
 const weekdaysSet = [1, 2, 3, 4, 5, 6, 0];
 
 const dayFormating = (day) => dayjs(day).format("YYYY-MM-DDTHH:mm");
@@ -34,6 +36,9 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 		setSelectedEvent,
 		labels,
 	} = useContext(StateContext);
+
+	const { data: session, status } = useSession();
+	console.log("session", session);
 
 	const [inputData, setInputData] = useState({
 		title: selectedEvent ? selectedEvent.title : "",
@@ -144,7 +149,7 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 		setWeekdays(updatedDaySelection);
 	};
 
-	const submitHandel = (e) => {
+	const submitHandel = async (e) => {
 		e.preventDefault();
 		let updatedDates = [];
 		inputData.dates.forEach((d) => {
@@ -165,6 +170,7 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 			baseCrew: inputData.baseCrew,
 			dates: updatedDates,
 			id: selectedEvent ? selectedEvent.id : inputData.label + Math.random(),
+			creator: session.id,
 		};
 
 		setSelectedEvent(calendarEvent);

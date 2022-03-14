@@ -70,7 +70,6 @@ export default NextAuth({
 				if (!isEqual) {
 					throw new Error("Helytelen jelszó");
 				}
-				console.log("user", user);
 				return user;
 			},
 		}),
