@@ -21,7 +21,7 @@ const handler = async (req, res) => {
 			return;
 		}
 
-		if (req.method === "POST") {
+		if (req.method === "PUT") {
 			const data = req.body;
 
 			const updateAnObjectHandler = (updateData) => {

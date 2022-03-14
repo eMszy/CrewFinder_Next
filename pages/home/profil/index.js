@@ -72,7 +72,7 @@ const Profil = ({ formedUser, err }) => {
 			try {
 				if (Object.keys(subPlusData).length !== 0) {
 					const res = await fetch("/api/user/" + session.id, {
-						method: "POST",
+						method: "PUT",
 						body: JSON.stringify(subPlusData),
 						headers: {
 							"Content-Type": "application/json",
