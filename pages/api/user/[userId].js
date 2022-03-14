@@ -14,8 +14,7 @@ const handler = async (req, res) => {
 		}
 
 		if (req.method === "GET") {
-			let returnObj = returnObject(user);
-
+			const returnObj = returnObject(user);
 			res.statusCode = 200;
 			res.json(returnObj);
 			return;

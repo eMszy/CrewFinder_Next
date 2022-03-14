@@ -38,7 +38,7 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 	} = useContext(StateContext);
 
 	const { data: session, status } = useSession();
-	console.log("session", session);
+	// console.log("session", session);
 
 	const [inputData, setInputData] = useState({
 		title: selectedEvent ? selectedEvent.title : "",
@@ -100,7 +100,7 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 
 				const endTime = dayjs(startDate).add(j, "d").format(`YYYYMMDD${eTime}`);
 
-				console.log("first", dayFormating(startTime), dayFormating(endTime));
+				// console.log("first", dayFormating(startTime), dayFormating(endTime));
 
 				updatedDates.push({
 					id: +dayjs(startDate).add(i, "d").format(`YYYYMMDD`),

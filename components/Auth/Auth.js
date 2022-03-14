@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { FcGoogle } from "react-icons/fc";
 import { BsFacebook } from "react-icons/bs";
 
-import { StatusContext } from "../../context/status-context";
+import { StateContext } from "../../context/state-context";
 import { inputChangedHandler, isAllInputVaild } from "../../shared/utility.js";
 import * as InputTemplates from "../../components/UI/Input/InputTemplates/InputTemplates.js";
 import InputElement from "../../components/UI/Input/InputElement";
@@ -19,7 +19,7 @@ const AuthForm = () => {
 	const { status } = useSession();
 	const router = useRouter();
 
-	const { setStatus } = useContext(StatusContext);
+	const { setStatus } = useContext(StateContext);
 
 	const formElmentTemplates = {
 		login: {
@@ -55,16 +55,19 @@ const AuthForm = () => {
 
 	const loginHandler = async (event) => {
 		event.preventDefault();
-		const res = await signIn("LogIn", {
-			email: LoginRegForm.email.value,
-			password: LoginRegForm.password.value,
-			redirect: false,
-		});
-		console.log("res", res);
-		if (res?.error) {
-			setStatus({ message: res.error, error: true });
-			return;
+		try {
+			const res = await signIn("LogIn", {
+				email: LoginRegForm.email.value,
+				password: LoginRegForm.password.value,
+				redirect: false,
+			});
+			if (res.ok) {
+				setStatus({ message: "Sikeresen beléptél" });
+			}
+		} catch (err) {
+			setStatus({ message: err.message, error: true });
 		}
+
 		router.push("/home");
 	};
 

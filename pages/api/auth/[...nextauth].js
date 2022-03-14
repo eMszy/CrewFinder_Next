@@ -109,9 +109,9 @@ export default NextAuth({
 	debug: false,
 	events: {
 		async signIn({ profile, account, isNewUser }) {
-			// const statusContext = useContext(StateContext);
+			// const StateContext = useContext(StateContext);
 
-			// statusContext.setStatus({ message: "Sikeres Bejelentkezés" });
+			// StateContext.setStatus({ message: "Sikeres Bejelentkezés" });
 
 			if (
 				isNewUser &&

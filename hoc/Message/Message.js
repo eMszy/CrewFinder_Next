@@ -1,28 +1,28 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StatusContext } from "../../context/status-context";
+import { StateContext } from "../../context/state-context";
 
 import classes from "./Message.module.scss";
 
 const Message = () => {
-	const statusContext = useContext(StatusContext);
+	const stateContext = useContext(StateContext);
 
 	const [messages, setMessages] = useState([]);
 
 	useEffect(() => {
-		if (statusContext === null) {
+		if (stateContext === null) {
 			return;
 		}
 		setMessages([
 			{
-				msg: statusContext.isStatusMsg.message,
-				isError: statusContext.isStatusMsg.error || null,
+				msg: stateContext.isStatusMsg.message,
+				isError: stateContext.isStatusMsg.error || null,
 			},
 		]);
 		const timer = setTimeout(() => {
-			statusContext.setStatus(null);
+			stateContext.setStatus(null);
 		}, 5000);
 		return () => clearTimeout(timer);
-	}, [statusContext]);
+	}, [stateContext]);
 
 	const items = (
 		<h3>
@@ -35,13 +35,13 @@ const Message = () => {
 	return (
 		<div
 			className={classes.MessageMain}
-			onClick={() => statusContext.setStatus(null)}
+			onClick={() => stateContext.setStatus(null)}
 		>
 			{messages !== [] && (
 				<div
 					className={[
 						classes.MessageDiv,
-						statusContext.isStatusMsg.error && classes.Error,
+						stateContext.isStatusMsg.error && classes.Error,
 					].join(" ")}
 				>
 					{items}

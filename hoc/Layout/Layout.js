@@ -6,13 +6,13 @@ import SideDrawer from "../../components/Header/SideDrawer/SideDrawer";
 
 import classes from "./Layout.module.scss";
 import { useContext, useState } from "react";
-import { StatusContext } from "../../context/status-context";
+import { StateContext } from "../../context/state-context";
 import Message from "../Message/Message";
 
 const Layout = (props) => {
 	const [sideDrawerIsVisible, setSideDrawerIsVisible] = useState(false);
 
-	const { isStatusMsg } = useContext(StatusContext);
+	const { isStatusMsg } = useContext(StateContext);
 	const { status } = useSession();
 
 	const sideDrawerClosedHandler = () => {

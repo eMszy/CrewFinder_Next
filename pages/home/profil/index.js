@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useEffect } from "react";
 import { getSession, signOut, useSession } from "next-auth/react";
 
-import { StatusContext } from "../../../context/status-context";
+import { StateContext } from "../../../context/state-context";
 import InputElement from "../../../components/UI/Input/InputElement";
 import { formTemplate } from "../../../components/UI/Input/InputTemplates/InputTemplates";
 import {
@@ -21,7 +21,7 @@ const Profil = ({ formedUser, err }) => {
 	Profil.title = "CrewFinder - Profil";
 	const { data: session, status } = useSession();
 
-	const statusContext = useContext(StatusContext);
+	const stateContext = useContext(StateContext);
 
 	const [DataForm, setDataForm] = useState(formedUser);
 	const [IsEdit, setIsEdit] = useState(false);
@@ -29,7 +29,7 @@ const Profil = ({ formedUser, err }) => {
 
 	useEffect(() => {
 		if (err) {
-			statusContext.setStatus({
+			stateContext.setStatus({
 				message: err,
 				error: true,
 			});
@@ -42,7 +42,7 @@ const Profil = ({ formedUser, err }) => {
 	// 		setDataForm(fData);
 	// 		console.log("fData", fData);
 	// 	} catch (err) {
-	// 		statusContext.setStatus(err);
+	// 		stateContext.setStatus(err);
 	// 	}
 	// };
 
@@ -79,11 +79,11 @@ const Profil = ({ formedUser, err }) => {
 						},
 					});
 					if (res.ok) {
-						statusContext.setStatus(await res.json());
+						stateContext.setStatus(await res.json());
 					}
 				}
 			} catch (err) {
-				statusContext.setStatus(await res.json());
+				stateContext.setStatus(await res.json());
 			}
 			// 	fetchData();
 		}
@@ -99,12 +99,12 @@ const Profil = ({ formedUser, err }) => {
 				method: "DELETE",
 			});
 			if (res.ok) {
-				statusContext.setStatus(await res.json());
+				stateContext.setStatus(await res.json());
 				signOut();
 			}
 		} else {
 			setIsDelete(true);
-			statusContext.setStatus({
+			stateContext.setStatus({
 				message:
 					"Biztos hogy törlöd a Profilodat? Így az általad létrehozott eseményeid is törlésre kerülnek!",
 				error: true,
