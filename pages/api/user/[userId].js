@@ -1,20 +1,15 @@
-import { getSession } from "next-auth/react";
-import User from "../../models/user";
-import { IsExist, returnObject } from "../../shared/utility";
+import User from "../../../models/user";
+import { returnObject } from "../../../shared/utility";
 
 const handler = async (req, res) => {
-	const session = await getSession({ req });
-	console.log("first", session);
-
-	const userId = req.body.userId;
-	// res.send(JSON.stringify(session, null, 2));
+	const userId = req.query.userId;
 
 	try {
 		const user = await User.findById(userId);
 
 		if (!user) {
 			res.statusCode = 404;
-			res.json(`Nincs ilyen felhasználó.`);
+			res.json({ message: `Nincs ilyen felhasználó.`, error: true });
 			return;
 		}
 
@@ -27,21 +22,18 @@ const handler = async (req, res) => {
 		}
 
 		if (req.method === "POST") {
-			const Data = req.body.Data;
+			const data = req.body;
 
 			const updateAnObjectHandler = (updateData) => {
 				for (const [key] of Object.entries(updateData)) {
-					user.userData[key] = { ...user.userData[key], ...Data[key] };
+					user.userData[key] = { ...user.userData[key], ...data[key] };
 				}
 			};
 
-			updateAnObjectHandler(Data);
-
-			const updatedUser = await user.save();
-			console.log("updatedUser", updatedUser);
-
+			updateAnObjectHandler(data);
+			await user.save();
 			res.statusCode = 202;
-			res.json("Felhasználó frissítve");
+			res.json({ message: "Sikeresen frissítve" });
 			return;
 		}
 
@@ -51,14 +43,23 @@ const handler = async (req, res) => {
 			// 	res.json("Nem engedélyezett művelet!");
 			// 	return;
 			// }
+
+			// const event = await.findById(eventId);
+			// event.user.pull(id);
+			// await event.save();
+
 			await User.findByIdAndRemove(userId);
 			res.statusCode = 202;
-			res.json("Felhasználó törölve");
-			return;
+			res.json({
+				message: "Sikeresen törölted a regisztrációdat",
+				error: true,
+			});
+
+			return true;
 		}
 	} catch (err) {
 		res.statusCode = 400;
-		res.json(err.message);
+		res.json({ message: err.message, error: true });
 		return;
 	}
 };

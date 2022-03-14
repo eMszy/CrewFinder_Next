@@ -1,57 +1,94 @@
-import Head from "next/head";
 import React, { useContext, useState } from "react";
+import Head from "next/head";
+import { useEffect } from "react";
+import { getSession, signOut, useSession } from "next-auth/react";
 
 import { StatusContext } from "../../../context/status-context";
-import { DeleteHandel, EditForm, SavingHandel } from "../../../GraphQl/utility";
 import InputElement from "../../../components/UI/Input/InputElement";
 import { formTemplate } from "../../../components/UI/Input/InputTemplates/InputTemplates";
-import { inputChangedHandler, isAllInputVaild } from "../../../shared/utility";
+import {
+	formingData,
+	inputChangedHandler,
+	isAllInputVaild,
+} from "../../../shared/utility";
 import Button from "../../../components/UI/Button/Button";
+import { List } from "../../../components/Calendar/CalendarElements/List";
+import { server } from "../../../config";
 
 import classes from "./Profil.module.scss";
-import { List } from "../../../components/Calendar/CalendarElements/List";
+import dayjs from "dayjs";
 
-const Profil = () => {
+const Profil = ({ formedUser, err }) => {
 	Profil.title = "CrewFinder - Profil";
+	const { data: session, status } = useSession();
 
 	const statusContext = useContext(StatusContext);
 
-	let Id;
-
-	if (typeof window !== "undefined") {
-		Id = localStorage.getItem("userId");
-	}
-
-	const Collection = "user";
-	const OutputData =
-		"name email userData {address {postCode city street} connectInfo {nickName tel facebook	imdb dob gender}} createdAt updatedAt ";
-
-	const [DataForm, setDataForm] = useState();
+	const [DataForm, setDataForm] = useState(formedUser);
 	const [IsEdit, setIsEdit] = useState(false);
 	const [isDelete, setIsDelete] = useState(false);
 
-	const fetchData = async () => {
-		try {
-			const fData = await EditForm(formTemplate, Id, Collection, OutputData);
-			setDataForm(fData);
-			console.log("fData", fData);
-		} catch (err) {
-			statusContext.setStatus(err);
+	useEffect(() => {
+		if (err) {
+			statusContext.setStatus({
+				message: err,
+				error: true,
+			});
 		}
-	};
+	}, [err]);
+
+	// const fetchData = async () => {
+	// 	try {
+	// const fData = await EditForm(formTemplate, Id, Collection);
+	// 		setDataForm(fData);
+	// 		console.log("fData", fData);
+	// 	} catch (err) {
+	// 		statusContext.setStatus(err);
+	// 	}
+	// };
 
 	const editModeHandler = async () => {
 		if (!IsEdit) {
 			setIsEdit(true);
 		} else {
 			setIsEdit(false);
-			try {
-				await SavingHandel(Id, DataForm, Collection);
-				statusContext.setStatus({ message: "Sikeres mentés" });
-			} catch (err) {
-				statusContext.setStatus({ message: err, error: true });
+
+			// console.log("DataForm", +dayjs(DataForm.dob.value));
+
+			let subPlusData = {};
+			if (DataForm) {
+				for (const [key] of Object.entries(DataForm)) {
+					if (
+						DataForm[key].elementConfig.editable &&
+						DataForm[key].touched &&
+						DataForm[key].valid
+					) {
+						let subfolder = DataForm[key].elementConfig.subfolder;
+						subPlusData[subfolder] = {
+							...subPlusData[subfolder],
+							[key]: DataForm[key].value,
+						};
+					}
+				}
 			}
-			fetchData();
+
+			try {
+				if (Object.keys(subPlusData).length !== 0) {
+					const res = await fetch("/api/user/" + session.id, {
+						method: "POST",
+						body: JSON.stringify(subPlusData),
+						headers: {
+							"Content-Type": "application/json",
+						},
+					});
+					if (res.ok) {
+						statusContext.setStatus(await res.json());
+					}
+				}
+			} catch (err) {
+				statusContext.setStatus(await res.json());
+			}
+			// 	fetchData();
 		}
 	};
 
@@ -59,14 +96,15 @@ const Profil = () => {
 		setDataForm(inputChangedHandler(event, DataForm));
 	};
 
-	const deletBtnHendle = () => {
+	const deletBtnHendle = async () => {
 		if (isDelete) {
-			DeleteHandel(Id);
-			statusContext.setStatus({
-				message: "Sikeresen törölted a regisztrációdat",
-				error: true,
+			const res = await fetch("/api/user/" + session.id, {
+				method: "DELETE",
 			});
-			// logout
+			if (res.ok) {
+				statusContext.setStatus(await res.json());
+				signOut();
+			}
 		} else {
 			setIsDelete(true);
 			statusContext.setStatus({
@@ -95,7 +133,9 @@ const Profil = () => {
 							IsDisabled={IsEdit}
 						/>
 					</form>
-					<div className={classes.SubmitBtn}>
+					<div
+						className={!IsEdit ? classes.SubmitBtn : classes.SubmitBtn_EditMode}
+					>
 						<Button
 							clicked={editModeHandler}
 							disabled={!isAllInputVaild(DataForm)}
@@ -112,6 +152,19 @@ const Profil = () => {
 			</div>
 		</>
 	);
+};
+
+export const getServerSideProps = async (context) => {
+	try {
+		const session = await getSession(context);
+		const res = await fetch(`${server}/api/user/` + session.id);
+		const user = await res.json();
+		const formedUser = formingData(user, formTemplate);
+		return { props: { formedUser } };
+	} catch (err) {
+		console.log("err", err.message);
+		return { props: { err: err.message } };
+	}
 };
 
 export default Profil;

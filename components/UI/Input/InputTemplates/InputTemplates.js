@@ -80,25 +80,43 @@ export const confirm_password = {
 	disabled: true,
 };
 
-export const eventType = {
-	elementType: "select",
+export const date_of_bith = {
+	elementType: "date",
 	elementConfig: {
-		options: [
-			{ value: "Private", displayValue: "Privát" },
-			{ value: "Open", displayValue: "Nyílt" },
-			{ value: "Parameter", displayValue: "Szűrő" },
-			{ value: "Direct", displayValue: "Direkt" },
-		],
-		title: "Típus",
+		title: "Születési dátum",
+		type: "date",
+		placeholder: "",
+		editable: true,
+		subfolder: "connectInfo",
 	},
-	value: "Private",
+	value: "",
 	validation: {
-		required: false,
+		required: true,
 	},
-	valid: true,
+	valid: false,
 	touched: false,
 	disabled: true,
 };
+
+// export const eventType = {
+// 	elementType: "select",
+// 	elementConfig: {
+// 		options: [
+// 			{ value: "Private", displayValue: "Privát" },
+// 			{ value: "Open", displayValue: "Nyílt" },
+// 			{ value: "Parameter", displayValue: "Szűrő" },
+// 			{ value: "Direct", displayValue: "Direkt" },
+// 		],
+// 		title: "Típus",
+// 	},
+// 	value: "Private",
+// 	validation: {
+// 		required: false,
+// 	},
+// 	valid: true,
+// 	touched: false,
+// 	disabled: true,
+// };
 
 export const formTemplate = {
 	name: name,
@@ -121,13 +139,7 @@ export const formTemplate = {
 		},
 	},
 	dob: {
-		...text,
-		elementConfig: {
-			title: "Születési dátum",
-			placeholder: "",
-			editable: true,
-			subfolder: "connectInfo",
-		},
+		...date_of_bith,
 	},
 	gender: {
 		...text,

@@ -110,7 +110,37 @@ export const returnObject = (data) => {
 	return {
 		...data._doc,
 		_id: data._id.toString(),
-		createdAt: +dayjs(data.createdAt),
-		updatedAt: +dayjs(data.updatedAt),
+		createdAt: dayjs(data.createdAt).format("YYYY. MMMM DD. HH:mm."),
+		updatedAt: dayjs(data.updatedAt).format("YYYY. MMMM DD. HH:mm."),
 	};
+};
+
+export const formingData = (resivedUserData, formTemplate) => {
+	let formedResivedData = {};
+
+	const dismantling = (obj, fn) => {
+		for (const [key, val] of Object.entries(obj)) {
+			val && typeof val === "object" ? dismantling(val, fn) : fn(key, val);
+		}
+	};
+	const dismantlingData = (key, val) =>
+		(formedResivedData = { ...formedResivedData, [key]: val });
+
+	dismantling(resivedUserData, dismantlingData);
+
+	if (formedResivedData?.dob)
+		formedResivedData.dob = dayjs(formedResivedData.dob).format("YYYY-MM-DD");
+
+	let updatedObject = formTemplate;
+	for (const [key] of Object.entries(formTemplate)) {
+		updatedObject[key] = {
+			...updatedObject[key],
+			value: formedResivedData[key]
+				? formedResivedData[key]
+				: updatedObject[key].value,
+			valid: true,
+		};
+	}
+
+	return updatedObject;
 };

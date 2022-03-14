@@ -1,5 +1,5 @@
+import { useContext } from "react";
 import NextAuth from "next-auth/next";
-import User from "../../../models/user";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
@@ -7,8 +7,10 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs/dist/bcrypt";
 import validator from "validator";
 
+import User from "../../../models/user";
 import clientPromise from "../../../lib/mongodb";
 import dbConnect from "../../../shared/dbConnect";
+import { StateContext } from "../../../context/state-context";
 
 export default NextAuth({
 	adapter: MongoDBAdapter(clientPromise),
@@ -109,12 +111,18 @@ export default NextAuth({
 	debug: false,
 	events: {
 		async signIn({ profile, account, isNewUser }) {
+			// const statusContext = useContext(StateContext);
+
+			// statusContext.setStatus({ message: "Sikeres Bejelentkezés" });
+
 			if (
 				isNewUser &&
 				(account.provider !== "SingIn" || account.provider !== "LogIn")
 			) {
 				dbConnect();
 				const user = await User.findOne({ email: profile.email });
+				user.set("timestamps");
+				console.log("user", user);
 				await user.save();
 			}
 		},

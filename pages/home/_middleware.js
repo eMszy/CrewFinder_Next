@@ -13,6 +13,7 @@ const middleware = async (req) => {
 		url.pathname = "/api/auth/signin";
 		return NextResponse.redirect(url);
 	}
+	return NextResponse.next();
 };
 
 export default middleware;

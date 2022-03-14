@@ -13,7 +13,6 @@ const Message = () => {
 			return;
 		}
 		setMessages([
-			// ...messages,
 			{
 				msg: statusContext.isStatusMsg.message,
 				isError: statusContext.isStatusMsg.error || null,
@@ -24,8 +23,6 @@ const Message = () => {
 		}, 5000);
 		return () => clearTimeout(timer);
 	}, [statusContext]);
-
-	// console.log(`statusContext`, statusContext);
 
 	const items = (
 		<h3>
