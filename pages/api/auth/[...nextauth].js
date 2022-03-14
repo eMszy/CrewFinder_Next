@@ -16,16 +16,6 @@ export default NextAuth({
 		GoogleProvider({
 			clientId: process.env.GOOGLE_ID,
 			clientSecret: process.env.GOOGLE_SECRET,
-			// profile(profile) {
-			// 	console.log("PROFILE", profile);
-
-			// 	return {
-			// 		id: profile.sub,
-			// 		name: profile.name,
-			// 		email: profile.email,
-			// 		image: profile.picture,
-			// 	};
-			// },
 		}),
 		FacebookProvider({
 			clientId: process.env.FACEBOOK_ID,
@@ -49,7 +39,7 @@ export default NextAuth({
 					name: credentials.name,
 					email: credentials.email,
 					password: hashedPw,
-					image: "",
+					image: "/icons/user.png",
 				});
 				const createdUser = await user.save();
 
@@ -87,7 +77,7 @@ export default NextAuth({
 	callbacks: {
 		// signIn: async (data) => {
 		// 	console.log("signIn - DATA:", data);
-		// return true
+		// 	return true;
 		// },
 		jwt: async ({ token, user }) => {
 			if (user) {

@@ -39,7 +39,7 @@ const NavigationItems = () => {
 					<Link href="/home/profil" activeClassName={classes.active} passHref>
 						<a>
 							<Image
-								src={session.user.image || userIcon}
+								src={session.user.image}
 								width={50}
 								height={50}
 								alt={session.user.name}
