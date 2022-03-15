@@ -37,8 +37,7 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 		labels,
 	} = useContext(StateContext);
 
-	const { data: session, status } = useSession();
-	// console.log("session", session);
+	const { data: session } = useSession();
 
 	const [inputData, setInputData] = useState({
 		title: selectedEvent ? selectedEvent.title : "",
@@ -172,6 +171,11 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 			id: selectedEvent ? selectedEvent.id : inputData.label + Math.random(),
 			creator: session.id,
 		};
+
+		if (selectedEvent) {
+			calendarEvent._id = selectedEvent._id;
+			calendarEvent.creator = selectedEvent.creator;
+		}
 
 		setSelectedEvent(calendarEvent);
 

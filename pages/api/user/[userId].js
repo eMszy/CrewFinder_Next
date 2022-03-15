@@ -1,7 +1,8 @@
 import { getToken } from "next-auth/jwt";
-import { getSession } from "next-auth/react";
+import mongoose from "mongoose";
 
 import User from "../../../models/user";
+import Event from "../../../models/event";
 import { returnObject } from "../../../shared/utility";
 
 const handler = async (req, res) => {
@@ -10,10 +11,6 @@ const handler = async (req, res) => {
 		secret: process.env.SECRET,
 		secureCookie: process.env.NODE_ENV === "production",
 	});
-	const session = await getSession({ req });
-
-	console.log("session", session);
-	console.log("token", token);
 
 	const userId = req.query.userId;
 
@@ -50,15 +47,10 @@ const handler = async (req, res) => {
 		}
 
 		if (req.method === "DELETE") {
-			// if (("user._id", user._id.toString() !== userId.toString())) {
-			// 	res.statusCode = 403;
-			// 	res.json("Nem engedélyezett művelet!");
-			// 	return;
-			// }
-
-			// const event = await.findById(eventId);
-			// event.user.pull(id);
-			// await event.save();
+			const eventId = mongoose.Types.ObjectId(token.id);
+			await Event.deleteMany({
+				creator: eventId,
+			});
 
 			await User.findByIdAndRemove(userId);
 			res.statusCode = 202;
@@ -70,8 +62,9 @@ const handler = async (req, res) => {
 			return true;
 		}
 	} catch (err) {
+		console.log("err", err);
 		res.statusCode = 400;
-		res.json({ message: err.message, error: true });
+		res.json({ mesage: err.message });
 		return;
 	}
 };

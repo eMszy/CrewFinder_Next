@@ -28,23 +28,26 @@ export default NextAuth({
 
 			async authorize(credentials, req) {
 				dbConnect();
-				const existingUser = await User.findOne({ email: credentials.email });
+				try {
+					const existingUser = await User.findOne({ email: credentials.email });
 
-				if (existingUser) {
-					const error = new Error("Ezzel az email címmel már regisztráltak");
-					throw error;
+					if (existingUser) {
+						const error = new Error("Ezzel az email címmel már regisztráltak");
+						throw error;
+					}
+
+					const hashedPw = await bcrypt.hash(credentials.password, 12);
+					const user = new User({
+						name: credentials.name,
+						email: credentials.email,
+						password: hashedPw,
+						image: "/icons/user.png",
+					});
+					const createdUser = await user.save();
+					return createdUser;
+				} catch (err) {
+					console.log("err", err);
 				}
-
-				const hashedPw = await bcrypt.hash(credentials.password, 12);
-				const user = new User({
-					name: credentials.name,
-					email: credentials.email,
-					password: hashedPw,
-					image: "/icons/user.png",
-				});
-				const createdUser = await user.save();
-
-				return createdUser;
 			},
 		}),
 		CredentialsProvider({
@@ -53,24 +56,28 @@ export default NextAuth({
 
 			async authorize(credentials, req) {
 				dbConnect();
-				const user = await User.findOne({ email: credentials.email });
+				try {
+					const user = await User.findOne({ email: credentials.email });
 
-				if (!user) {
-					throw new Error("Nem regisztrált e-mail cím");
-				}
+					if (!user) {
+						throw new Error("Nem regisztrált e-mail cím");
+					}
 
-				if (!user.password) {
-					throw new Error("Eddig nem léptél be így");
-				}
+					if (!user.password) {
+						throw new Error("Eddig nem léptél be így");
+					}
 
-				const isEqual = await bcrypt.compare(
-					credentials.password,
-					user.password
-				);
-				if (!isEqual) {
-					throw new Error("Helytelen jelszó");
+					const isEqual = await bcrypt.compare(
+						credentials.password,
+						user.password
+					);
+					if (!isEqual) {
+						throw new Error("Helytelen jelszó");
+					}
+					return user;
+				} catch (err) {
+					console.log("err", err);
 				}
-				return user;
 			},
 		}),
 	],

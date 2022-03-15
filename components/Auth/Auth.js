@@ -70,7 +70,6 @@ const AuthForm = () => {
 				throw Error(res.error);
 			}
 			setStatus({ message: "Sikeres belépés" });
-			console.log("res", res);
 			return res;
 		} catch (err) {
 			setStatus({ message: err.message, error: true });

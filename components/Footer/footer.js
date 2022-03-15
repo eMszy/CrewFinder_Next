@@ -12,12 +12,13 @@ const Footer = () => {
 		<div className={classes.FooterDiv}>
 			<div className={classes.FooterDiv__Nav}>
 				<ul className={classes.NaviItems}>
-					<h3>
-						<Link href={link}>
-							<a>Crew Finder</a>
-						</Link>
-					</h3>
-
+					<li>
+						<h3>
+							<Link href={link}>
+								<a>Crew Finder</a>
+							</Link>
+						</h3>
+					</li>
 					<li>
 						<Link href="/ismerteto">
 							<a>Így működik a Crew Finder</a>

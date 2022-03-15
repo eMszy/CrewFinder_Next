@@ -48,13 +48,54 @@ const StateContextProvider = (props) => {
 				},
 			});
 
-			setStatus(await res.json());
-			if (!res.ok) {
-				return;
+			const resJson = await res.json();
+			if (!res.ok || res.error) {
+				throw Error(resJson.message);
 			}
+			setStatus(resJson);
+			return resJson;
 		} catch (err) {
-			console.log("err", err);
-			setStatus({ message: err.message, err: true });
+			setShowEventModal(false);
+			setStatus({ message: err.message, error: true });
+		}
+	};
+
+	const updateEvent = async (payload) => {
+		try {
+			const res = await fetch("/api/event/" + payload._id, {
+				method: "PUT",
+				body: JSON.stringify(payload),
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+
+			const resJson = await res.json();
+			if (!res.ok || res.error) {
+				throw Error(resJson.message);
+			}
+			setStatus(resJson);
+			return;
+		} catch (err) {
+			setShowEventModal(false);
+			setStatus({ message: err.message, error: true });
+		}
+	};
+
+	const deleteEvent = async (payload) => {
+		try {
+			const res = await fetch("/api/event/" + payload._id, {
+				method: "DELETE",
+			});
+			const resJson = await res.json();
+			if (!res.ok || res.error) {
+				throw Error(resJson.message);
+			}
+			setStatus(resJson);
+			return;
+		} catch (err) {
+			setShowEventModal(false);
+			setStatus({ message: err.message, error: true });
 		}
 	};
 
@@ -67,9 +108,11 @@ const StateContextProvider = (props) => {
 				createEvent(payload);
 				return [...state, payload];
 			case "update": {
+				updateEvent(payload);
 				return state.map((evt) => (evt.id === payload.id ? payload : evt));
 			}
 			case "delete":
+				deleteEvent(payload);
 				return state.filter((evt) => evt.id !== payload.id);
 			default:
 				throw new Error();
@@ -80,8 +123,13 @@ const StateContextProvider = (props) => {
 
 	useEffect(() => {
 		const loadAllEvents = async () => {
-			const events = await fetch("/api/event/all");
-			setEvents(await events.json());
+			try {
+				const events = await fetch("/api/event/all");
+				const eventsJson = await events.json();
+				setEvents(eventsJson);
+			} catch (err) {
+				console.log("err", err);
+			}
 		};
 		loadAllEvents();
 	}, []);

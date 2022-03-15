@@ -19,6 +19,7 @@ import classes from "./Profil.module.scss";
 
 const Profil = ({ formedUser, err }) => {
 	Profil.title = "CrewFinder - Profil";
+
 	const { data: session, status } = useSession();
 
 	const stateContext = useContext(StateContext);
@@ -78,12 +79,18 @@ const Profil = ({ formedUser, err }) => {
 							"Content-Type": "application/json",
 						},
 					});
-					if (res.ok) {
-						stateContext.setStatus(await res.json());
+
+					const resJson = await res.json();
+
+					if (!res.ok || res.error) {
+						throw Error(resJson.message);
 					}
+					stateContext.setStatus(resJson);
+					console.log("resJson", resJson);
+					return resJson;
 				}
 			} catch (err) {
-				stateContext.setStatus(await res.json());
+				setStatus({ message: err.message, error: true });
 			}
 			// 	fetchData();
 		}
@@ -111,7 +118,7 @@ const Profil = ({ formedUser, err }) => {
 				signOut();
 				return res;
 			} catch (err) {
-				setStatus({ message: err.message, error: true });
+				stateContext.setStatus({ message: err.message, error: true });
 			}
 		} else {
 			setIsDelete(true);

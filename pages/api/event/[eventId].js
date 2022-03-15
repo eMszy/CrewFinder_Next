@@ -1,5 +1,4 @@
 import { getToken } from "next-auth/jwt";
-import { getSession } from "next-auth/react";
 
 import Event from "../../../models/event";
 import User from "../../../models/user";
@@ -10,17 +9,17 @@ const handler = async (req, res) => {
 		secret: process.env.SECRET,
 		secureCookie: process.env.NODE_ENV === "production",
 	});
-	const session = await getSession({ req });
-
-	console.log("session", session);
-	console.log("token", token);
 
 	try {
 		const eventId = req.query.eventId;
-		console.log("first", eventId);
 
 		if (req.method === "GET") {
-			const event = await Event.find();
+			let event;
+			if (eventId === "all") {
+				event = await Event.find();
+			} else {
+				event = await Event.findById(eventId);
+			}
 
 			if (!event) {
 				res.statusCode = 404;
@@ -40,14 +39,47 @@ const handler = async (req, res) => {
 			const user = await User.findById(token.id);
 			user.ownEvents.push(event._id);
 
-			event.save();
-			user.save();
+			await event.save();
+			await user.save();
 
 			res.statusCode = 201;
 			res.json({ message: "Sikeresen létrehoztál egy eseményt" });
 			return;
 		}
+
+		if (req.method === "PUT") {
+			const data = req.body;
+
+			if (data.creator !== token.id) {
+				throw Error("Nem általad létrehozott esemény");
+			}
+
+			await Event.findByIdAndUpdate(eventId, data);
+			res.statusCode = 202;
+			res.json({ message: "Sikeresen modósítottad az eseményt" });
+			return;
+		}
+
+		if (req.method === "DELETE") {
+			const event = await Event.findById(eventId);
+			if (!event) {
+				throw Error("Nincs ilyen esemény");
+			}
+
+			if (event.creator.toString() !== token.id) {
+				throw Error("Nem általad létrehozott esemény");
+			}
+			await event.deleteOne();
+			const user = await User.findById(token.id);
+			user.ownEvents.pull(eventId);
+			await user.save();
+
+			res.statusCode = 202;
+			res.json({ message: "Sikeresen törölted az eseményt" });
+			return;
+		}
 	} catch (err) {
+		console.log("err", err);
 		res.statusCode = 404;
 		res.json({ message: err.message, error: true });
 		return;
