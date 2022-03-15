@@ -1,7 +1,20 @@
+import { getToken } from "next-auth/jwt";
+import { getSession } from "next-auth/react";
+
 import User from "../../../models/user";
 import { returnObject } from "../../../shared/utility";
 
 const handler = async (req, res) => {
+	const token = await getToken({
+		req,
+		secret: process.env.SECRET,
+		secureCookie: process.env.NODE_ENV === "production",
+	});
+	const session = await getSession({ req });
+
+	console.log("session", session);
+	console.log("token", token);
+
 	const userId = req.query.userId;
 
 	try {

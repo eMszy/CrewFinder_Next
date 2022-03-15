@@ -39,18 +39,23 @@ const AuthForm = () => {
 
 	const signupHandler = async (event) => {
 		event.preventDefault();
-		const res = await signIn("SingIn", {
-			name: LoginRegForm.name.value,
-			email: LoginRegForm.email.value,
-			password: LoginRegForm.password.value,
-			redirect: false,
-		});
-		console.log("res", res);
-		if (res?.error) {
-			setStatus({ message: res.error, error: true });
-			return;
+		try {
+			const res = await signIn("SingIn", {
+				name: LoginRegForm.name.value,
+				email: LoginRegForm.email.value,
+				password: LoginRegForm.password.value,
+				redirect: false,
+			});
+
+			if (!res.ok || res.error) {
+				throw Error(res.error);
+			}
+
+			setStatus({ message: "Sikeres regisztráció" });
+			return res;
+		} catch (err) {
+			setStatus({ message: err.message, error: true });
 		}
-		router.push("/home");
 	};
 
 	const loginHandler = async (event) => {
@@ -61,14 +66,15 @@ const AuthForm = () => {
 				password: LoginRegForm.password.value,
 				redirect: false,
 			});
-			if (res.ok) {
-				setStatus({ message: "Sikeresen beléptél" });
+			if (!res.ok || res.error) {
+				throw Error(res.error);
 			}
+			setStatus({ message: "Sikeres belépés" });
+			console.log("res", res);
+			return res;
 		} catch (err) {
 			setStatus({ message: err.message, error: true });
 		}
-
-		router.push("/home");
 	};
 
 	const switchAuthModeHandler = (email) => {

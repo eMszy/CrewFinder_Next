@@ -15,6 +15,11 @@ const crewSchema = new Schema({
 		type: String,
 		required: true,
 	},
+	userId: {
+		type: Schema.Types.ObjectId,
+		ref: "user",
+		required: false,
+	},
 	invitionType: Schema.Types.Mixed,
 });
 

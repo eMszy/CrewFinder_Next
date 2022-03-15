@@ -95,12 +95,23 @@ const Profil = ({ formedUser, err }) => {
 
 	const deletBtnHendle = async () => {
 		if (isDelete) {
-			const res = await fetch("/api/user/" + session.id, {
-				method: "DELETE",
-			});
-			if (res.ok) {
-				stateContext.setStatus(await res.json());
+			try {
+				const res = await fetch("/api/user/" + session.id, {
+					method: "DELETE",
+				});
+
+				if (!res.ok || res.error) {
+					throw Error(res.error);
+				}
+
+				stateContext.setStatus({
+					message: "Sikeres törölted a regisztrációdat",
+					err: true,
+				});
 				signOut();
+				return res;
+			} catch (err) {
+				setStatus({ message: err.message, error: true });
 			}
 		} else {
 			setIsDelete(true);

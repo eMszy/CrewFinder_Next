@@ -6,8 +6,6 @@ import { getSession, signOut, useSession } from "next-auth/react";
 import classes from "./NavigationItem.module.scss";
 import Image from "next/image";
 
-const userIcon = "/icons/user.png";
-
 const NavigationItems = () => {
 	const { data: session, status } = useSession();
 

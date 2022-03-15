@@ -79,13 +79,11 @@ const StateContextProvider = (props) => {
 	const [savedEvents, dispatchCallEvent] = useReducer(savedEventsReducer, []);
 
 	useEffect(() => {
-		if (JSON.parse(localStorage.getItem("savedEvents"))) {
-			const loadAllEvents = async () => {
-				const events = await fetch("/api/event/all");
-				setEvents(await events.json());
-			};
-			loadAllEvents();
-		}
+		const loadAllEvents = async () => {
+			const events = await fetch("/api/event/all");
+			setEvents(await events.json());
+		};
+		loadAllEvents();
 	}, []);
 
 	useEffect(() => {

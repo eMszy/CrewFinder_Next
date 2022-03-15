@@ -1,4 +1,6 @@
 import { getToken } from "next-auth/jwt";
+import { getSession } from "next-auth/react";
+
 import Event from "../../../models/event";
 import User from "../../../models/user";
 
@@ -8,6 +10,10 @@ const handler = async (req, res) => {
 		secret: process.env.SECRET,
 		secureCookie: process.env.NODE_ENV === "production",
 	});
+	const session = await getSession({ req });
+
+	console.log("session", session);
+	console.log("token", token);
 
 	try {
 		const eventId = req.query.eventId;
@@ -32,7 +38,7 @@ const handler = async (req, res) => {
 			const event = new Event(data);
 
 			const user = await User.findById(token.id);
-			user.event.push(event._id);
+			user.ownEvents.push(event._id);
 
 			event.save();
 			user.save();
