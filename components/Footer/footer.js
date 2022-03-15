@@ -1,15 +1,19 @@
 import React from "react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 import classes from "./footer.module.scss";
 
 const Footer = () => {
+	const { status } = useSession();
+	const link = status === "authenticated" ? "/home" : "/";
+
 	return (
 		<div className={classes.FooterDiv}>
 			<div className={classes.FooterDiv__Nav}>
 				<ul className={classes.NaviItems}>
 					<h3>
-						<Link href="/">
+						<Link href={link}>
 							<a>Crew Finder</a>
 						</Link>
 					</h3>

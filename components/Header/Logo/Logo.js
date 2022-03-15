@@ -7,10 +7,9 @@ import classes from "./Logo.module.scss";
 
 const Logo = () => {
 	const { status } = useSession();
+	const link = status === "authenticated" ? "/home" : "/";
 
 	const crewfinderLogoWhite = "/icons/crewfinderLogoWhite.svg";
-
-	const link = status === "authenticated" ? "/home" : "/";
 
 	return (
 		<div className={classes.Logo}>
