@@ -10,10 +10,10 @@ export const uniqueArray = (array1 = [], array2 = []) => {
 };
 
 // export const onChangeHandle = (value, name, updatingArray) => {
-//ha csak mentem nem rendereli újra és a régi adat marad benne
+// 	//ha csak mentem nem rendereli újra és a régi adat marad benne
 
 // 	const changedData = [{ ...updatingArray[id], [name]: value }];
-// console.log("UA", value, name, updatingArray);
+// 	console.log("UA", value, name, updatingArray);
 // 	const updatedArray = uniqueArray(updatingArray, changedData);
 // 	return updatedArray;
 // };

@@ -43,7 +43,7 @@ const handler = async (req, res) => {
 			await user.save();
 
 			res.statusCode = 201;
-			res.json({ message: "Sikeresen létrehoztál egy eseményt" });
+			res.json({ message: "Sikeresen létrehoztál egy eseményt", event });
 			return;
 		}
 

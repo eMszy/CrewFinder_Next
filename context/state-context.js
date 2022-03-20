@@ -52,6 +52,7 @@ const StateContextProvider = (props) => {
 			if (!res.ok || res.error) {
 				throw Error(resJson.message);
 			}
+			await setSelectedEvent(resJson.event);
 			setStatus(resJson);
 			return resJson;
 		} catch (err) {
@@ -92,7 +93,8 @@ const StateContextProvider = (props) => {
 				throw Error(resJson.message);
 			}
 			setStatus(resJson);
-			return;
+			setSelectedEvent(resJson.event);
+			return resJson;
 		} catch (err) {
 			setShowEventModal(false);
 			setStatus({ message: err.message, error: true });
@@ -104,16 +106,18 @@ const StateContextProvider = (props) => {
 			case "init": {
 				return payload;
 			}
-			case "push":
+			case "push": {
 				createEvent(payload);
 				return [...state, payload];
+			}
 			case "update": {
 				updateEvent(payload);
 				return state.map((evt) => (evt.id === payload.id ? payload : evt));
 			}
-			case "delete":
+			case "delete": {
 				deleteEvent(payload);
 				return state.filter((evt) => evt.id !== payload.id);
+			}
 			default:
 				throw new Error();
 		}

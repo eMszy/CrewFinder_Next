@@ -28,8 +28,6 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 		setIsCreatroPage(true);
 	};
 
-	// console.log("first", pickedDays);
-
 	const saveHandle = () => {
 		const datesArray = uniqueArray(selectedEvent.dates, pickedDays);
 		const calendarEvent = {
@@ -114,6 +112,11 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 		}
 		// eslint-disable-next-line
 	}, [isClicked]);
+
+	const onChangeHandle = (value, id, name, day) => {
+		const filteredDay = day.filter((elem) => elem.id !== day[id].id);
+		return [...filteredDay, { ...day[id], [name]: value }];
+	};
 
 	return (
 		<div>
