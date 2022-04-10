@@ -40,19 +40,20 @@ const EventInvition = ({
 	};
 
 	const directInputHandler = (e, crewMember = crewMemberTarget) => {
-		if (e.target.type === "text") {
+		const target = e.currentTarget;
+		if (target.type === "text") {
 			changeHandle({
 				...crewMember,
-				[e.target.name]: e.target.value,
+				[target.name]: target.value,
 			});
-			if (e.target.value.length !== 0) {
+			if (target.value.length !== 0) {
 				fetchUser(e);
 			}
 		} else {
 			changeHandle({
 				...crewMember,
-				name: e.target.value,
-				_id: e.target.id,
+				name: target.value,
+				_id: target.id,
 				label: 4,
 			});
 			setCrewMemberTarget([]);

@@ -211,7 +211,6 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 		const updatedBaseCrew = baseCrew.filter(
 			(b) => b.id !== updatedCrewMember.id
 		);
-		console.log("updatedBaseCrew", updatedCrewMember);
 		setBaseCrew([...updatedBaseCrew, updatedCrewMember]);
 	};
 
