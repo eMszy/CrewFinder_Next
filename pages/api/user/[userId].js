@@ -33,15 +33,19 @@ const handler = async (req, res) => {
 		}
 
 		if (req.method === "PUT") {
-			const data = req.body;
+			const { subPlusData, type, positions } = req.body;
 
-			const updateAnObjectHandler = (updateData) => {
-				for (const [key] of Object.entries(updateData)) {
-					user.userData[key] = { ...user.userData[key], ...data[key] };
-				}
-			};
+			if (type === "userData") {
+				const updateAnObjectHandler = (updateData) => {
+					for (const [key] of Object.entries(updateData)) {
+						user.userData[key] = { ...user.userData[key], ...subPlusData[key] };
+					}
+				};
 
-			updateAnObjectHandler(data);
+				updateAnObjectHandler(subPlusData);
+			} else {
+				user.metaData.positions = positions;
+			}
 			await user.save();
 			res.statusCode = 202;
 			res.json({ message: "Sikeresen frissítve" });

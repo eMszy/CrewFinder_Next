@@ -14,10 +14,11 @@ import {
 import Button from "../../../components/UI/Button/Button";
 import { List } from "../../../components/Calendar/CalendarElements/List";
 import { server } from "../../../config";
+import control from "../../../control.json";
 
 import classes from "./Profil.module.scss";
 
-const Profil = ({ formedUser, err }) => {
+const Profil = ({ formedUser, user, err }) => {
 	Profil.title = "CrewFinder - Profil";
 
 	const { data: session, status } = useSession();
@@ -27,6 +28,14 @@ const Profil = ({ formedUser, err }) => {
 	const [DataForm, setDataForm] = useState(formedUser);
 	const [IsEdit, setIsEdit] = useState(false);
 	const [isDelete, setIsDelete] = useState(false);
+	const [departments, setDepartments] = useState([]);
+	const [positions, setPositions] = useState(user.metaData.positions);
+	const [filteredDepts, setFilteredDepts] = useState(
+		Object.keys(control.departments).filter((dep) => dep !== "Privát")
+	);
+
+	//sorbarendezni a pozikat
+	// useEffect(()=>{},[positions])
 
 	useEffect(() => {
 		if (err) {
@@ -64,7 +73,7 @@ const Profil = ({ formedUser, err }) => {
 				if (Object.keys(subPlusData).length !== 0) {
 					const res = await fetch("/api/user/" + session.id, {
 						method: "PUT",
-						body: JSON.stringify(subPlusData),
+						body: JSON.stringify({ subPlusData, type: "userData" }),
 						headers: {
 							"Content-Type": "application/json",
 						},
@@ -76,7 +85,6 @@ const Profil = ({ formedUser, err }) => {
 						throw Error(resJson.message);
 					}
 					stateContext.setStatus(resJson);
-					console.log("resJson", resJson);
 					return resJson;
 				}
 			} catch (err) {
@@ -118,6 +126,48 @@ const Profil = ({ formedUser, err }) => {
 			});
 		}
 	};
+	const addRemoveDep = (dep) => {
+		let updatedDep = [];
+		if (departments.includes(dep)) {
+			updatedDep = departments.filter((d) => d !== dep);
+		} else {
+			updatedDep = [...departments, dep];
+		}
+		setDepartments(updatedDep);
+	};
+
+	const addPositions = (pos) => {
+		if (!positions.includes(pos)) {
+			setPositions([...positions, pos]);
+		}
+	};
+
+	const removePositions = (pos) => {
+		const updatedPos = positions.filter((p) => p !== pos);
+		setPositions(updatedPos);
+	};
+
+	const submitHandler = async () => {
+		try {
+			const res = await fetch("/api/user/" + session.id, {
+				method: "PUT",
+				body: JSON.stringify({ positions, type: "positions" }),
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+			const resJson = await res.json();
+			console.log("res", resJson);
+
+			if (!res.ok || res.error) {
+				throw Error(resJson.message);
+			}
+			stateContext.setStatus(resJson);
+			return resJson;
+		} catch (err) {
+			setStatus({ message: err.message, error: true });
+		}
+	};
 
 	return (
 		<>
@@ -125,9 +175,9 @@ const Profil = ({ formedUser, err }) => {
 				<title>{Profil.title}</title>
 			</Head>
 			<div className={classes.Profil}>
-				<div className={classes.Profil_Panels}>
+				{/* <div className={classes.Profil_Panels}>
 					<List />
-				</div>
+				</div> */}
 				<div className={classes.Profil_Panels}>
 					<form className={classes.Profil_Form}>
 						<h2>A Profilod</h2>
@@ -153,6 +203,66 @@ const Profil = ({ formedUser, err }) => {
 						</Button>
 					</div>
 				</div>
+				<div className={classes.Profil_Panels}>
+					<h2>Pozicióid</h2>
+					<div className={classes.Profile_PosPanel}>
+						<div className={classes.Profil_Panels__Departments}>
+							<div>Részlegek</div>
+							<div>Pozicíók</div>
+							<div>Te pozicióid</div>
+						</div>
+						<div className={classes.Profil_Panels__Departments}>
+							{filteredDepts.map((dep) => (
+								<>
+									<div className={classes.Profil_Panels__Department}>
+										<Button
+											clicked={() => {
+												addRemoveDep(dep);
+											}}
+											value={dep}
+										>
+											{dep}
+										</Button>
+									</div>
+									{departments.includes(dep) &&
+										Object.keys(control.departments[dep].positions).map(
+											(pos) => (
+												<div
+													key={pos}
+													className={classes.Profil_Panels__Positions}
+												>
+													<Button
+														clicked={() => {
+															addPositions(pos);
+														}}
+														value={pos}
+													>
+														{pos}
+													</Button>
+												</div>
+											)
+										)}
+								</>
+							))}
+
+							{positions.map((pos) => (
+								<div key={pos} className={classes.Profil_Panels__YourPositions}>
+									<Button
+										clicked={() => {
+											removePositions(pos);
+										}}
+										value={pos}
+									>
+										{pos}
+									</Button>
+								</div>
+							))}
+						</div>
+					</div>
+					<div className={classes.SubmitBtn_EditMode}>
+						<Button clicked={submitHandler}>Mentés</Button>
+					</div>
+				</div>
 			</div>
 		</>
 	);
@@ -164,7 +274,7 @@ export const getServerSideProps = async (context) => {
 		const res = await fetch(`${server}/api/user/` + session.id);
 		const user = await res.json();
 		const formedUser = formingData(user, formTemplate);
-		return { props: { formedUser } };
+		return { props: { formedUser, user } };
 	} catch (err) {
 		console.log("err", err.message);
 		return { props: { err: err.message } };

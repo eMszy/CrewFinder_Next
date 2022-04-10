@@ -4,6 +4,7 @@ import dbConnect from "../../../shared/dbConnect";
 
 const handler = async (req, res) => {
 	try {
+		const { input, pos } = req.query;
 		dbConnect();
 		// const token = await getToken({
 		// 	req,
@@ -13,16 +14,23 @@ const handler = async (req, res) => {
 
 		// console.log("token", token);
 
+		console.log("first", input, pos);
+
 		const result = await User.aggregate([
 			{
 				$search: {
 					autocomplete: {
-						query: `${req.query.input}`,
+						query: input,
 						path: "name",
 						fuzzy: {
 							maxEdits: 1,
 						},
 					},
+				},
+			},
+			{
+				$match: {
+					"metaData.positions": { $in: [pos] },
 				},
 			},
 			{ $project: { name: 1, image: 1 } },

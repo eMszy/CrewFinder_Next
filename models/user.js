@@ -87,6 +87,11 @@ const userSchema = new Schema(
 				required: true,
 				default: [],
 			},
+			positions: {
+				type: Array,
+				required: true,
+				default: [],
+			},
 		},
 		ownEvents: [userEventSchema],
 		events: [userEventSchema],

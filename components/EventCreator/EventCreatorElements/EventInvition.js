@@ -23,9 +23,11 @@ const EventInvition = ({
 	const [fetchedUsers, setFetchedUsers] = useState([]);
 	const [crewMemberTarget, setCrewMemberTarget] = useState([]);
 
-	const fetchUser = async (e) => {
+	const fetchUser = async (e, pos) => {
 		try {
-			const data = await fetch(`/api/user/search?input=${e.target.value}`);
+			const data = await fetch(
+				`/api/user/search?input=${e.target.value}&pos=${pos}`
+			);
 			const dataJson = await data.json();
 			if (data.ok) {
 				const filteredData = dataJson.filter(
@@ -47,7 +49,7 @@ const EventInvition = ({
 				[target.name]: target.value,
 			});
 			if (target.value.length !== 0) {
-				fetchUser(e);
+				fetchUser(e, crewMember.pos);
 			}
 		} else {
 			changeHandle({

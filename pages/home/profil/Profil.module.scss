@@ -31,6 +31,29 @@
 			width: auto;
 			padding: 2rem;
 		}
+
+		.Profil_Panels__Departments {
+			display: grid;
+			grid-template-columns: 1fr 1fr 1fr;
+			// grid-template-rows: auto;
+			// grid-template-areas: "header header yourPos";
+
+			.Profil_Panels__Department {
+				grid-column: 1;
+				font-weight: 400;
+			}
+			.Profil_Panels__Positions {
+				grid-column: 2;
+				font-weight: 400;
+			}
+			.Profil_Panels__YourPositions {
+				grid-column: 3;
+				// grid-auto-flow: column;
+				// grid-row: 1 / last-line;
+				// grid-row-end: 7;
+				font-weight: 400;
+			}
+		}
 	}
 
 	h2 {

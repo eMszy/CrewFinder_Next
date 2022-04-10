@@ -106,10 +106,47 @@
         }
       ]
     },
-    "Valami_más": {
+    "Valami más": {
       "positions": {
         "Más": {
           "name": "Más",
+          "weight": 10
+        }
+      },
+      "attribute": [
+        {
+          "type": "language",
+          "name": "Nyelv",
+          "range": [
+            "Nem tud",
+            "Alapfok",
+            "Középfok",
+            "Felsőfok",
+            "Anyanyelvi"
+          ]
+        },
+        {
+          "type": "aptitude",
+          "name": "Rátermettség",
+          "range": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ]
+        }
+      ]
+    },
+    "Valami teljesen más": {
+      "positions": {
+        "Ez is egy teszt": {
+          "name": "Ez is egy teszt",
           "weight": 10
         }
       },
