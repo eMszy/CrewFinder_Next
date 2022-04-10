@@ -3,7 +3,6 @@ import dayjs from "dayjs";
 import { MdOutlineDescription, MdTitle } from "react-icons/md";
 import {
 	IoBookmarkOutline,
-	IoCheckmark,
 	IoCalendarOutline,
 	IoLocationOutline,
 } from "react-icons/io5";
@@ -11,7 +10,6 @@ import {
 import { StateContext } from "../../../context/state-context";
 
 import SmallCalendar from "../../Calendar/CalendarElements/SmallCalendar";
-import { findColor } from "../../../shared/utility";
 import Button from "../../UI/Button/Button";
 
 import control from "../../../control.json";
@@ -29,13 +27,8 @@ const dayFormating = (day) => dayjs(day).format("YYYY-MM-DDTHH:mm");
 //Egyenlőre mindenki csak egy DEPT BaseCrew-t tud kezelni
 
 const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
-	const {
-		daySelected,
-		dispatchCallEvent,
-		selectedEvent,
-		setSelectedEvent,
-		labels,
-	} = useContext(StateContext);
+	const { daySelected, dispatchCallEvent, selectedEvent, setSelectedEvent } =
+		useContext(StateContext);
 
 	const { data: session } = useSession();
 
@@ -44,7 +37,6 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 		shortTitle: selectedEvent ? selectedEvent.shortTitle : "",
 		description: selectedEvent ? selectedEvent.description : "",
 		location: selectedEvent ? selectedEvent.location : "",
-		label: selectedEvent ? selectedEvent.label : labels[0].id,
 		dates: selectedEvent ? selectedEvent.dates : [],
 		yourPosition: selectedEvent
 			? selectedEvent.yourPosition
@@ -59,6 +51,12 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 			? dayFormating(selectedEvent.endDate)
 			: dayFormating(daySelected.hour(18)),
 		id: selectedEvent ? selectedEvent.id : Math.random(),
+		department: selectedEvent ? selectedEvent.department : department,
+		label: selectedEvent
+			? selectedEvent.label
+			: department === "Privát"
+			? 6
+			: 1,
 	});
 
 	const [baseCrew, setBaseCrew] = useState([]);
@@ -170,11 +168,16 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 			dates: updatedDates,
 			id: selectedEvent ? selectedEvent.id : inputData.label + Math.random(),
 			creator: session.id,
+			creatorName: selectedEvent
+				? selectedEvent.creatorName
+				: session.user.name,
+			department: department,
 		};
 
 		if (selectedEvent) {
 			calendarEvent._id = selectedEvent._id;
 			calendarEvent.creator = selectedEvent.creator;
+			calendarEvent.department = selectedEvent.department;
 		}
 
 		setSelectedEvent(calendarEvent);
@@ -202,10 +205,13 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 		}
 	};
 
+	// console.log("selectedEvent", selectedEvent._id);
+
 	const changeHandle = (updatedCrewMember) => {
 		const updatedBaseCrew = baseCrew.filter(
 			(b) => b.id !== updatedCrewMember.id
 		);
+		console.log("updatedBaseCrew", updatedCrewMember);
 		setBaseCrew([...updatedBaseCrew, updatedCrewMember]);
 	};
 
@@ -228,10 +234,16 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 	};
 
 	useEffect(() => {
-		setInputData({
+		let updateData = {
 			...inputData,
 			yourPosition: Object.keys(control.departments[department])[0],
-		});
+		};
+
+		department === "Privát"
+			? (updateData = { ...updateData, label: 6 })
+			: (updateData = { ...updateData, label: 1 });
+
+		setInputData(updateData);
 		// eslint-disable-next-line
 	}, [department]);
 
@@ -314,6 +326,26 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 			<div className={classes.EventModal_MainBody}>
 				<div className={classes.EventModal_Input}>
 					<div className={classes.Icon}>
+						<IoBookmarkOutline />
+					</div>
+					<div className={classes.YourPosition}>
+						<p>Esemény:</p>
+						{selectedEvent?.department ? (
+							<p>{selectedEvent.department}</p>
+						) : (
+							<select
+								value={department.positions}
+								onChange={(e) => setDepartment(e.target.value)}
+							>
+								{[...session.metaData.isHOD, "Privát"].map((dep, id) => (
+									<option key={id} value={dep}>
+										{dep}
+									</option>
+								))}
+							</select>
+						)}
+					</div>
+					<div className={classes.Icon}>
 						<MdTitle />
 					</div>
 					<div className={classes.EventModal_TwoInputs}>
@@ -394,13 +426,14 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 							setInputData({ ...inputData, location: e.target.value })
 						}
 					/>
-					<div></div>
+					<div className={classes.Icon}>
+						<IoBookmarkOutline />
+					</div>
 					<div className={classes.weekDayClass}>
 						{weekdaysSet.map((dayNum, i) => {
 							const day = dayjs().day(dayNum).format("dd");
 							let style = {};
-							weekdays.includes(dayNum) ||
-								(style = { backgroundColor: "#ff000080" });
+							weekdays.includes(dayNum) || (style = { backgroundColor: "red" });
 							return (
 								<span
 									key={i}
@@ -415,79 +448,66 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 							Összes nap
 						</div>
 					</div>
-					<div className={classes.Icon}>
-						<IoBookmarkOutline />
-					</div>
-					<div className={classes.labelsClass}>
-						{labels.map((lblClass, i) => (
-							<span
-								key={i}
-								onClick={() =>
-									setInputData({ ...inputData, label: lblClass.id })
-								}
-								style={{ backgroundColor: findColor(lblClass.id) }}
-							>
-								{inputData.label === lblClass.id && <IoCheckmark />}
-							</span>
-						))}
-					</div>
-
-					<div className={classes.Icon}>
-						<MdOutlineDescription />
-					</div>
-					<div className={classes.YourPosition}>
-						<p>Saját pozicíód: </p>
-						<select
-							value={department.positions}
-							onChange={(e) => setDepartment(e.target.value)}
-						>
-							{Object.keys(control.departments).map((dep, id) => (
-								<option key={id} value={dep}>
-									{dep}
-								</option>
-							))}
-						</select>
-						<select
-							value={inputData.yourPosition}
-							onChange={(e) =>
-								setInputData({ ...inputData, yourPosition: e.target.value })
-							}
-						>
-							{control.departments[department] &&
-								Object.keys(control.departments[department].positions).map(
-									(pos, id) => (
-										<option key={id} value={pos}>
-											{pos}
-										</option>
-									)
-								)}
-						</select>
-					</div>
+					{department !== "Privát" && (
+						<>
+							<div className={classes.Icon}>
+								<MdOutlineDescription />
+							</div>
+							<div className={classes.YourPosition}>
+								<p>Saját pozicíód: </p>
+								<select
+									value={inputData.yourPosition}
+									onChange={(e) =>
+										setInputData({ ...inputData, yourPosition: e.target.value })
+									}
+								>
+									{control.departments[department] &&
+										Object.keys(
+											control.departments[inputData.department].positions
+										).map((pos, id) => (
+											<option key={id} value={pos}>
+												{pos}
+											</option>
+										))}
+								</select>
+							</div>
+						</>
+					)}
 				</div>
 
-				<div className={classes.EventModal_Calendar}>
-					<SmallCalendar
-						filteredEvents={[
-							{
-								label: inputData.label,
-								startDate: +dayjs(inputData.startDate),
-								endDate: +dayjs(inputData.endDate),
-								dates: inputData.dates,
-								selectedEventDates: [],
-							},
-						]}
-						setClickedDate={setClickedDate}
-						setIsClicked={setIsClicked}
+				<div className={classes.EventModal_CalendarDiv}>
+					<div className={classes.EventModal_Calendar}>
+						<SmallCalendar
+							filteredEvents={[
+								{
+									label: inputData.label,
+									startDate: +dayjs(inputData.startDate),
+									endDate: +dayjs(inputData.endDate),
+									dates: inputData.dates,
+									selectedEventDates: [],
+								},
+							]}
+							setClickedDate={setClickedDate}
+							setIsClicked={setIsClicked}
+						/>
+					</div>
+					{selectedEvent && (
+						<div>
+							<p className={classes.CreatorName}>Létrehozta:</p>
+							<p>{selectedEvent.creatorName}</p>
+						</div>
+					)}
+				</div>
+
+				{department !== "Privát" && selectedEvent?.department !== "Privát" && (
+					<EventInvition
+						crewMembers={inputData.baseCrew}
+						addPosHandel={addPosHandel}
+						department={department}
+						changeHandle={changeHandle}
+						deletPosHandel={deletPosHandel}
 					/>
-				</div>
-
-				<EventInvition
-					crewMembers={inputData.baseCrew}
-					addPosHandel={addPosHandel}
-					department={department}
-					changeHandle={changeHandle}
-					deletPosHandel={deletPosHandel}
-				/>
+				)}
 			</div>
 			<footer className={classes.EventModal_Footer}>
 				<Button type="submit" clicked={submitHandel}>

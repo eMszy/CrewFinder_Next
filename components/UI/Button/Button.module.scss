@@ -23,10 +23,25 @@
 	}
 }
 
-// .Success {
-// 	color: #5c9210;
-// }
+.Success {
+	color: green;
+	background-color: white;
+	border-color: green;
 
-// .Danger {
-// 	color: #944317;
-// }
+	&:hover {
+		color: white;
+		background-color: green;
+		border-color: white;
+	}
+}
+
+.Danger {
+	color: red;
+	background-color: white;
+	border-color: red;
+	&:hover {
+		color: white;
+		background-color: red;
+		border-color: white;
+	}
+}

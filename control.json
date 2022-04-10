@@ -1,10 +1,15 @@
 {
-  "test": "valami",
   "labels": [
     {
-      "id": 1,
+      "id": 6,
       "label": "hsl(300, 100%, 30%)",
       "title": "Privát esemény",
+      "checked": true
+    },
+    {
+      "id": 1,
+      "label": "hsl(240, 100%, 60%)",
+      "title": "Saját esemény",
       "checked": true
     },
     {
@@ -15,7 +20,7 @@
     },
     {
       "id": 3,
-      "label": "hsl(240, 100%, 60%)",
+      "label": "hsl(60, 100%, 50%)",
       "title": "Jelentkeztél",
       "checked": true
     },
@@ -27,13 +32,27 @@
     },
     {
       "id": 5,
-      "label": "hsl(60, 100%, 50%)",
+      "label": "hsl(0, 100%, 55%)",
       "title": "Nyitott pozicíó",
       "checked": true
+    },
+    {
+      "id": 7,
+      "label": "hsl(0, 0%, 80%)",
+      "title": "Lemodott",
+      "checked": false
     }
   ],
   "firstDayofTheWeek": 1,
   "departments": {
+    "Privát": {
+      "positions": {
+        "Privát": {
+          "name": "Privát",
+          "weight": 0
+        }
+      }
+    },
     "AD's": {
       "positions": {
         "1st AD": {

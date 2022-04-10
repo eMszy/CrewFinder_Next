@@ -15,11 +15,17 @@ const crewSchema = new Schema({
 		type: String,
 		required: true,
 	},
-	userId: {
+	_id: {
 		type: Schema.Types.ObjectId,
 		ref: "user",
 		required: false,
 	},
+	status: {
+		type: String,
+		required: true,
+		default: "new",
+	},
+	label: { type: Number, required: true },
 	invitionType: Schema.Types.Mixed,
 });
 
@@ -63,9 +69,17 @@ const eventSchema = new Schema(
 			type: String,
 			required: true,
 		},
+		creatorName: {
+			type: String,
+			required: true,
+		},
 		creator: {
 			type: Schema.Types.ObjectId,
 			ref: "user",
+			required: true,
+		},
+		department: {
+			type: String,
 			required: true,
 		},
 	},

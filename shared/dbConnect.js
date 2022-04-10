@@ -15,7 +15,7 @@ const dbConnect = async () => {
 
 	connection.isConected = db.connections[0].readyState;
 	console.log(
-		`MongoDB: `,
+		`MongoDB:`,
 		connection.isConected === 1 ? "MongoDB conected!" : "Fail to connect!"
 	);
 };

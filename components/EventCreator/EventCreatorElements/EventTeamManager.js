@@ -203,11 +203,17 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 															<select
 																name="pos"
 																value={c.pos}
-																onChange={(e) => {}}
+																onChange={(e) => {
+																	//ezt majd meg kell írni
+																}}
 															>
-																{control.departments[department] &&
+																{control.departments[
+																	selectedEvent.department
+																] &&
 																	Object.keys(
-																		control.departments[department].positions
+																		control.departments[
+																			selectedEvent.department
+																		].positions
 																	).map((pos, id) => (
 																		<option key={id}>{pos}</option>
 																	))}
@@ -216,7 +222,9 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 																<select
 																	name="invitionType"
 																	value={c.invitionType?.name}
-																	onChange={(e) => {}}
+																	onChange={(e) => {
+																		//ezt majd meg kell írni
+																	}}
 																>
 																	{control.invitionType.map((t) => (
 																		<option key={t.type} value={t.type}>
@@ -233,7 +241,9 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 																	name="name"
 																	value={c.name}
 																	required
-																	onChange={() => {}}
+																	onChange={() => {
+																		//ezt majd meg kell írni
+																	}}
 																/>
 															) : (
 																<div></div>
@@ -293,13 +303,15 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 							</Button>
 						</div>
 					</div>
-					<EventInvition
-						crewMembers={crewMembers}
-						addPosHandel={addPosHandel}
-						department={department}
-						changeHandle={(e) => changeHandle(e)}
-						deletPosHandel={deletPosHandel}
-					/>
+					{selectedEvent.department !== "Privát" && (
+						<EventInvition
+							crewMembers={crewMembers}
+							addPosHandel={addPosHandel}
+							department={department}
+							changeHandle={(e) => changeHandle(e)}
+							deletPosHandel={deletPosHandel}
+						/>
+					)}
 
 					<div></div>
 					<div className={classes.SaveBtn}>

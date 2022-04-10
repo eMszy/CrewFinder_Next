@@ -37,16 +37,6 @@ const Profil = ({ formedUser, err }) => {
 		}
 	}, [err]);
 
-	// const fetchData = async () => {
-	// 	try {
-	// const fData = await EditForm(formTemplate, Id, Collection);
-	// 		setDataForm(fData);
-	// 		console.log("fData", fData);
-	// 	} catch (err) {
-	// 		stateContext.setStatus(err);
-	// 	}
-	// };
-
 	const editModeHandler = async () => {
 		if (!IsEdit) {
 			setIsEdit(true);
@@ -92,7 +82,6 @@ const Profil = ({ formedUser, err }) => {
 			} catch (err) {
 				setStatus({ message: err.message, error: true });
 			}
-			// 	fetchData();
 		}
 	};
 

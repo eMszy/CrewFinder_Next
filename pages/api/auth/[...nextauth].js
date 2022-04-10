@@ -89,12 +89,14 @@ export default NextAuth({
 		jwt: async ({ token, user }) => {
 			if (user) {
 				token.id = user.id;
+				token.metaData = user.metaData;
 			}
 			return token;
 		},
 		session: async ({ session, token }) => {
 			if (token) {
 				session.id = token.id;
+				session.metaData = token.metaData;
 			}
 			return session;
 		},
@@ -127,7 +129,6 @@ export default NextAuth({
 				dbConnect();
 				const user = await User.findOne({ email: profile.email });
 				user.set("timestamps");
-				console.log("user", user);
 				await user.save();
 			}
 		},

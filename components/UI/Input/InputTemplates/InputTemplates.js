@@ -98,26 +98,6 @@ export const date_of_bith = {
 	disabled: true,
 };
 
-// export const eventType = {
-// 	elementType: "select",
-// 	elementConfig: {
-// 		options: [
-// 			{ value: "Private", displayValue: "Privát" },
-// 			{ value: "Open", displayValue: "Nyílt" },
-// 			{ value: "Parameter", displayValue: "Szűrő" },
-// 			{ value: "Direct", displayValue: "Direkt" },
-// 		],
-// 		title: "Típus",
-// 	},
-// 	value: "Private",
-// 	validation: {
-// 		required: false,
-// 	},
-// 	valid: true,
-// 	touched: false,
-// 	disabled: true,
-// };
-
 export const formTemplate = {
 	name: name,
 	email: email,

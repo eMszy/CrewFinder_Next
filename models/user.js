@@ -2,6 +2,18 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
+const userEventSchema = new Schema({
+	_id: {
+		type: Schema.Types.ObjectId,
+		ref: "event",
+		required: true,
+	},
+	label: {
+		type: Number,
+		required: false,
+	},
+});
+
 const userSchema = new Schema(
 	{
 		email: {
@@ -71,23 +83,13 @@ const userSchema = new Schema(
 				default: false,
 			},
 			isHOD: {
-				type: Boolean,
+				type: Array,
 				required: true,
-				default: false,
+				default: [],
 			},
 		},
-		ownEvents: [
-			{
-				type: Schema.Types.ObjectId,
-				ref: "Event",
-			},
-		],
-		events: [
-			{
-				type: Schema.Types.ObjectId,
-				ref: "Event",
-			},
-		],
+		ownEvents: [userEventSchema],
+		events: [userEventSchema],
 	},
 	{ timestamps: true }
 );

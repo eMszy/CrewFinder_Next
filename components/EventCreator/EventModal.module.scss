@@ -22,8 +22,9 @@
 		z-index: -1;
 	}
 	.EventModal_Main_Div {
-		margin: 1rem;
+		margin: 2rem;
 		min-width: 70rem;
+		height: 100vh;
 	}
 
 	form {
@@ -50,9 +51,8 @@
 	}
 
 	.YourPosition {
-		display: grid;
-		gap: 0.5rem;
-		grid-template-columns: 8rem 8rem 8rem;
+		display: flex;
+		gap: 1rem;
 		align-items: center;
 	}
 
@@ -85,15 +85,12 @@
 			display: grid;
 			padding: 0.75rem;
 			grid-template-columns: 2rem auto;
-			align-items: flex-end;
+			align-items: center;
 			gap: 1rem 1rem;
 
 			input {
 				font-weight: 600;
 				font-size: 1rem;
-				// line-height: 1.75rem;
-				// padding: 0.5rem;
-				// width: 100%;
 				--tw-border-opacity: 1;
 				border: 0 solid rgba(229, 231, 235, var(--tw-border-opacity));
 				border-bottom-width: 2px;
@@ -103,6 +100,7 @@
 			.EventModal_TwoInputs {
 				display: flex;
 				column-gap: 1rem;
+				align-items: center;
 				// justify-content: space-between;
 				// flex-direction: column;
 			}
@@ -124,10 +122,43 @@
 				gap: 0.5rem;
 
 				.BaseTeam_PosDiv {
+					position: relative;
+
 					flex: 1;
 					border: 2px solid #afd7f8;
 					border-radius: 1rem;
 					padding: 0.5rem;
+
+					.BaseTeam_SearchBox {
+						position: absolute;
+						top: 0.5rem;
+						right: 9.5rem;
+						border: 2px solid #afd7f8;
+						border-radius: 1rem;
+						padding: 0.5rem;
+						z-index: 50;
+						background-color: white;
+						--tw-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+						box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+							var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+						--tw-bg-opacity: 1;
+
+						.SearchDiv {
+							button {
+								// padding: 0.5rem;
+								border-color: transparent;
+								width: 100%;
+								display: flex;
+								align-items: center;
+								justify-content: space-between;
+								gap: 0.5rem;
+
+								&:hover {
+									border-color: #afd7f8;
+								}
+							}
+						}
+					}
 
 					.BaseTeam_Pos {
 						display: grid;
@@ -137,7 +168,7 @@
 						width: auto;
 						height: 3rem;
 						text-align: start;
-						padding: 0 0.3rem;
+						// padding: 0 0.3rem;
 						border-radius: 1rem;
 
 						.BaseTeam_Pos_Attribute {
@@ -162,11 +193,11 @@
 
 						svg {
 							border-radius: 1rem;
-							color: #ff000080;
+							color: red;
 							cursor: pointer;
 							&:hover {
 								color: black;
-								background-color: #ff000080;
+								background-color: red;
 							}
 						}
 						input {
@@ -194,6 +225,12 @@
 			}
 		}
 
+		.EventModal_CalendarDiv {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-evenly;
+		}
+
 		.EventModal_Calendar {
 			// flex: 1;
 			margin: 0.75rem;
@@ -216,6 +253,10 @@
 				margin-top: 1rem;
 			}
 		}
+
+		.CreatorName {
+			font-weight: 400;
+		}
 	}
 
 	.EventModal_Footer {
@@ -226,7 +267,7 @@
 		--tw-border-opacity: 0.6;
 		background-color: rgb(175, 215, 248, var(--tw-bg-opacity));
 		border-top: 1px solid rgba(229, 231, 235, var(--tw-border-opacity));
-
+		gap: 1rem;
 		button {
 			padding: 0.5rem 1.5rem;
 		}
@@ -257,7 +298,7 @@
 	margin-left: 1rem;
 	&:hover {
 		cursor: pointer;
-		background-color: #ff000080;
+		background-color: red;
 	}
 }
 
@@ -360,11 +401,11 @@
 			border-bottom: 2px solid rgba(229, 231, 235, 100);
 			svg {
 				border-radius: 1rem;
-				color: #ff000080;
+				color: red;
 				cursor: pointer;
 				&:hover {
 					color: black;
-					background-color: #ff000080;
+					background-color: red;
 				}
 			}
 
@@ -383,6 +424,10 @@
 						font-weight: 400;
 					}
 				}
+			}
+
+			.Span2 {
+				grid-column: span 2;
 			}
 		}
 	}

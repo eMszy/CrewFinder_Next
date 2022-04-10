@@ -1,4 +1,6 @@
-import React from "react";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import React, { useState } from "react";
 import {
 	IoAmericanFootballOutline,
 	IoCloseCircleOutline,
@@ -16,6 +18,48 @@ const EventInvition = ({
 	changeHandle,
 	deletPosHandel,
 }) => {
+	const { data: session } = useSession();
+
+	const [fetchedUsers, setFetchedUsers] = useState([]);
+	const [crewMemberTarget, setCrewMemberTarget] = useState([]);
+
+	const fetchUser = async (e) => {
+		try {
+			const data = await fetch(`/api/user/search?input=${e.target.value}`);
+			const dataJson = await data.json();
+			if (data.ok) {
+				const filteredData = dataJson.filter(
+					(d) => d._id.toString() !== session.id
+				);
+				setFetchedUsers(filteredData);
+			}
+		} catch (err) {
+			console.error("Error", err);
+			throw new Error({ message: err.message });
+		}
+	};
+
+	const directInputHandler = (e, crewMember = crewMemberTarget) => {
+		if (e.target.type === "text") {
+			changeHandle({
+				...crewMember,
+				[e.target.name]: e.target.value,
+			});
+			if (e.target.value.length !== 0) {
+				fetchUser(e);
+			}
+		} else {
+			changeHandle({
+				...crewMember,
+				name: e.target.value,
+				_id: e.target.id,
+				label: 4,
+			});
+			setCrewMemberTarget([]);
+			setFetchedUsers([]);
+		}
+	};
+
 	return (
 		<div className={classes.EventModal_Input2}>
 			<div className={classes.Icon}>
@@ -38,7 +82,6 @@ const EventInvition = ({
 										<div className={classes.BaseTeam_PosTitle}>
 											{crewMember.pos}
 										</div>
-
 										{crewMember.invitionType?.name === "direct" ? (
 											<input
 												type="text"
@@ -47,10 +90,8 @@ const EventInvition = ({
 												value={crewMember.name}
 												required
 												onChange={(e) => {
-													changeHandle({
-														...crewMember,
-														[e.target.name]: e.target.value,
-													});
+													setCrewMemberTarget(crewMember);
+													directInputHandler(e, crewMember);
 												}}
 											/>
 										) : crewMember.invitionType?.name === "attribute" ? (
@@ -113,6 +154,30 @@ const EventInvition = ({
 									</div>
 								);
 							})}
+						{fetchedUsers.length !== 0 && (
+							<div className={classes.BaseTeam_SearchBox}>
+								{fetchedUsers.map((f) => (
+									<div key={f._id} className={classes.SearchDiv}>
+										<Button
+											type="button"
+											id={f._id}
+											value={f.name}
+											clicked={(e) => {
+												directInputHandler(e);
+											}}
+										>
+											<Image
+												src={f.image}
+												width={35}
+												height={35}
+												alt={f.name}
+											/>
+											<div>{f.name}</div>
+										</Button>
+									</div>
+								))}
+							</div>
+						)}
 					</div>
 					<div className={classes.BaseTeam_Choice}>
 						<p>Hozzáadása</p>

@@ -6,17 +6,21 @@ import { StateContext } from "../../context/state-context";
 import EventModal from "./EventCreatorElements/EventModal";
 import EventTeamManager from "./EventCreatorElements/EventTeamManager";
 
-import control from "../../control.json";
+// import control from "../../control.json";
 
 import classes from "./EventModal.module.scss";
+import { useSession } from "next-auth/react";
+import EventAccepter from "./EventCreatorElements/EventAccepter";
 
 const EventCreaterModal = () => {
 	const { setShowEventModal, selectedEvent, dispatchCallEvent } =
 		useContext(StateContext);
 
+	const { data: session, status } = useSession();
+
 	const [isCreatroPage, setIsCreatroPage] = useState(true);
 	const [department, setDepartment] = useState(
-		Object.keys(control.departments)[0]
+		session?.metaData?.isHOD[0] || "Privát"
 	);
 
 	const deletHandel = (e) => {
@@ -62,17 +66,23 @@ const EventCreaterModal = () => {
 						</div>
 					</div>
 				</header>
-				{isCreatroPage ? (
-					<EventModal
-						setIsCreatroPage={setIsCreatroPage}
-						department={department}
-						setDepartment={setDepartment}
-					/>
+				{selectedEvent?.creator === session?.id ? (
+					isCreatroPage ? (
+						<EventModal
+							setIsCreatroPage={setIsCreatroPage}
+							department={department}
+							setDepartment={setDepartment}
+						/>
+					) : (
+						<EventTeamManager
+							setIsCreatroPage={setIsCreatroPage}
+							department={department}
+						/>
+					)
 				) : (
-					<EventTeamManager
+					<EventAccepter
 						setIsCreatroPage={setIsCreatroPage}
 						department={department}
-						setDepartment={setDepartment}
 					/>
 				)}
 			</div>

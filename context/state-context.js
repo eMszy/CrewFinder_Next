@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
+import { getSession } from "next-auth/react";
 import dayjs from "dayjs";
 import control from "../control.json";
 
@@ -128,9 +129,16 @@ const StateContextProvider = (props) => {
 	useEffect(() => {
 		const loadAllEvents = async () => {
 			try {
-				const events = await fetch("/api/event/all");
-				const eventsJson = await events.json();
-				setEvents(eventsJson);
+				const session = await getSession();
+				if (session) {
+					const events = await fetch("/api/event/all");
+					const eventsJson = await events.json();
+					if (events.ok) {
+						setEvents(eventsJson);
+					} else {
+						setStatus(eventsJson);
+					}
+				}
 			} catch (err) {
 				console.log("err", err);
 			}
@@ -146,14 +154,13 @@ const StateContextProvider = (props) => {
 	}, [events]);
 
 	const filteredEvents = useMemo(() => {
-		return savedEvents
-			.filter((evt) =>
-				labels
-					.filter((lbl) => lbl.checked)
-					.map((lbl) => lbl.id)
-					.includes(evt.label)
-			)
-			.sort((a, b) => b.id - a.id);
+		return savedEvents.filter((evt) =>
+			labels
+				.filter((lbl) => lbl.checked)
+				.map((lbl) => lbl.id)
+				.includes(evt.label)
+		);
+		// .sort((a, b) => b.id - a.id);
 	}, [savedEvents, labels]);
 
 	useEffect(() => {

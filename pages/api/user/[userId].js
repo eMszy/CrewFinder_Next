@@ -4,17 +4,19 @@ import mongoose from "mongoose";
 import User from "../../../models/user";
 import Event from "../../../models/event";
 import { returnObject } from "../../../shared/utility";
+import dbConnect from "../../../shared/dbConnect";
 
 const handler = async (req, res) => {
-	const token = await getToken({
-		req,
-		secret: process.env.SECRET,
-		secureCookie: process.env.NODE_ENV === "production",
-	});
-
-	const userId = req.query.userId;
-
 	try {
+		dbConnect();
+		const token = await getToken({
+			req,
+			secret: process.env.SECRET,
+			secureCookie: process.env.NODE_ENV === "production",
+		});
+
+		const userId = req.query.userId;
+
 		const user = await User.findById(userId);
 
 		if (!user) {
