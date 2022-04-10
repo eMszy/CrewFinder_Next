@@ -125,17 +125,20 @@ const handler = async (req, res) => {
 				if (event.creator.toString() !== token.id) {
 					throw Error("Nem általad létrehozott esemény");
 				}
-				await event.deleteOne();
 
 				const user = await User.findById(token.id);
 				user.ownEvents.pull(eventId);
-				await user.save();
 
-				const users = await User.find({ events: eventId });
+				//Esetleg hogy az eseményből vegye ki a userId-kat, lehet úgy gyorsabb lenne
+
+				const users = await User.find({ "events._id": eventId });
 				users.forEach(async (u) => {
 					u.events.pull(eventId);
 					await u.save();
 				});
+
+				await user.save();
+				await event.deleteOne();
 
 				res.statusCode = 202;
 				res.json({ message: "Sikeresen törölted az eseményt" });

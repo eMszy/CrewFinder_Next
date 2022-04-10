@@ -66,7 +66,7 @@ const EventCreaterModal = () => {
 						</div>
 					</div>
 				</header>
-				{selectedEvent?.creator === session?.id ? (
+				{!selectedEvent || selectedEvent?.creator === session?.id ? (
 					isCreatroPage ? (
 						<EventModal
 							setIsCreatroPage={setIsCreatroPage}
