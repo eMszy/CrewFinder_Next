@@ -11,7 +11,7 @@ const handler = async (req, res) => {
 		dbConnect();
 		const token = await getToken({
 			req,
-			secret: process.env.SECRET,
+			secret: process.env.NEXTAUTH_SECRET,
 			secureCookie: process.env.NODE_ENV === "production",
 		});
 

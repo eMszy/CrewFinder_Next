@@ -16,11 +16,11 @@ export default NextAuth({
 	providers: [
 		GoogleProvider({
 			clientId: process.env.GOOGLE_ID,
-			clientSecret: process.env.GOOGLE_SECRET,
+			clientSecret: process.env.GOOGLE_NEXTAUTH_SECRET,
 		}),
 		FacebookProvider({
 			clientId: process.env.FACEBOOK_ID,
-			clientSecret: process.env.FACEBOOK_SECRET,
+			clientSecret: process.env.FACEBOOK_NEXTAUTH_SECRET,
 		}),
 		CredentialsProvider({
 			id: "SingIn",
@@ -101,9 +101,9 @@ export default NextAuth({
 			return session;
 		},
 	},
-	secret: process.env.SECRET,
+	NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
 	jwt: {
-		secret: process.env.SECRET,
+		NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
 		encryption: true,
 	},
 	pages: {
