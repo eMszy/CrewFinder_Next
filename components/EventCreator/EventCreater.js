@@ -50,7 +50,7 @@ const EventCreaterModal = () => {
 						)}
 					</div>
 					<div className={classes.IconDiv}>
-						{selectedEvent && (
+						{selectedEvent && session.id === selectedEvent.creator && (
 							<div
 								className={`${classes.Icon}  ${classes.Buttom2}`}
 								onClick={deletHandel}

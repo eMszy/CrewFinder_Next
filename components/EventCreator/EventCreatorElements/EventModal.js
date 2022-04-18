@@ -150,7 +150,7 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 		e.preventDefault();
 		let updatedDates = [];
 		inputData.dates.forEach((d) => {
-			console.log("d", dayjs(d.startTime).format("MM. DD. HH:mm"));
+			// console.log("d", dayjs(d.startTime).format("MM. DD. HH:mm"));
 
 			const crew = uniqueArray(d.crew, [
 				...baseCrew,

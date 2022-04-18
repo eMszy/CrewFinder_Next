@@ -33,7 +33,7 @@ const handler = async (req, res) => {
 
 		const message = answer
 			? { message: "Sikeresen jelentkeztél" }
-			: { message: "Sikeresen lemondtad", error: true };
+			: { message: "Sikeresen lemondtad" };
 		res.statusCode = 200;
 		res.json(message);
 		return;
