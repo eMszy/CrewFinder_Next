@@ -18,6 +18,7 @@ const EventInvition = ({
 	changeHandle,
 	deletPosHandel,
 }) => {
+	console.log("crewMwmbers", crewMembers);
 	const { data: session } = useSession();
 
 	const [fetchedUsers, setFetchedUsers] = useState([]);
@@ -35,6 +36,20 @@ const EventInvition = ({
 				);
 				setFetchedUsers(filteredData);
 			}
+		} catch (err) {
+			console.error("Error", err);
+			throw new Error({ message: err.message });
+		}
+	};
+
+	const fetchNumberofUsers = async (pos, attribute) => {
+		// console.log("attribute", attribute);
+		try {
+			const data = await fetch(
+				`/api/user/countMatches?pos=${pos}&attribute=${attribute}`
+			);
+			const dataJson = await data.json();
+			return dataJson;
 		} catch (err) {
 			console.error("Error", err);
 			throw new Error({ message: err.message });
@@ -99,6 +114,10 @@ const EventInvition = ({
 											/>
 										) : crewMember.invitionType?.name === "attribute" ? (
 											<div className={classes.BaseTeam_Pos_Attribute}>
+												<div>
+													Találtok száma:{" "}
+													{crewMember.invitionType.result.length}
+												</div>
 												{control.departments[department].attribute.map(
 													(att, id) => (
 														<div key={id}>
@@ -112,34 +131,47 @@ const EventInvition = ({
 																name={att.type}
 																min="0"
 																max={att.range.length - 1}
-																onChange={(e) =>
+																onChange={async (e) => {
+																	const findUsers = await fetchNumberofUsers(
+																		crewMember.pos,
+																		"attribute"
+																	);
 																	changeHandle({
 																		...crewMember,
+																		label: 5,
 																		invitionType: {
 																			...crewMember.invitionType,
 																			[e.target.name]: e.target.value,
+																			result: findUsers,
 																		},
-																	})
-																}
+																	});
+																}}
 															/>
 														</div>
 													)
 												)}
 											</div>
 										) : (
-											<div></div>
+											<div className={classes.BaseTeam_Pos_Attribut}>
+												<div>
+													Találtok száma:{" "}
+													{crewMember.invitionType.result.length}
+												</div>
+											</div>
 										)}
 										<select
 											name="invitionType"
 											value={crewMember.invitionType?.name}
-											onChange={(e) =>
+											onChange={async (e) => {
 												changeHandle({
 													...crewMember,
+													label: 5,
 													[e.target.name]: {
 														name: e.target.value,
+														result: await fetchNumberofUsers(crewMember.pos),
 													},
-												})
-											}
+												});
+											}}
 										>
 											{control.invitionType.map((t) => (
 												<option key={t.type} value={t.type}>

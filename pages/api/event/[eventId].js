@@ -13,11 +13,11 @@ const handler = async (req, res) => {
 			secureCookie: process.env.NODE_ENV === "production",
 		});
 
-		if (!token) {
-			res.statusCode = 404;
-			res.json({ message: `Nincs hozzáférésed`, error: true });
-			return;
-		}
+		// if (!token) {
+		// 	res.statusCode = 404;
+		// 	res.json({ message: `Nincs hozzáférésed`, error: true });
+		// 	return;
+		// }
 		const eventId = req.query.eventId;
 
 		const updateAllNewUser = async (id, label) => {
@@ -25,6 +25,20 @@ const handler = async (req, res) => {
 			if (!user.events.includes(eventId)) {
 				user.events.push({ _id: eventId, label: label });
 				await user.save();
+			}
+		};
+
+		const invition = (user) => {
+			if (user.status === "new") {
+				user.status = "invited";
+				//invition majd ide kell
+				if (user.label === 4) {
+					updateAllNewUser(user._id, user.label);
+				} else if (user.label === 5) {
+					user.invitionType.result.forEach((u) => {
+						updateAllNewUser(u._id, user.label);
+					});
+				}
 			}
 		};
 
@@ -53,7 +67,7 @@ const handler = async (req, res) => {
 
 					allEvents = [...events, ...ownEvents];
 				} else {
-					console.log("user", user);
+					// console.log("user", user);
 					//hozzá kell adni az label-t!
 					allEvents = await Event.findById(eventId);
 				}
@@ -77,12 +91,7 @@ const handler = async (req, res) => {
 
 				//nem csak a baseCrewnal kell
 				data.baseCrew.forEach((user) => {
-					console.log("user", user);
-					if (user.status === "new") {
-						user.status = "invited";
-						//invition majd ide kell
-						updateAllNewUser(user._id, user.label);
-					}
+					invition(user);
 				});
 
 				await user.save();
@@ -98,16 +107,10 @@ const handler = async (req, res) => {
 				if (data.creator !== token.id) {
 					throw Error("Nem általad létrehozott esemény");
 				}
-				console.log("data", data);
 
 				//nem csak a baseCrewnal kell
 				data.baseCrew.forEach((user) => {
-					console.log("user", user);
-					if (user.status === "new") {
-						user.status = "invited";
-						//invition majd ide kell
-						updateAllNewUser(user._id, user.label);
-					}
+					invition(user);
 				});
 
 				await Event.findByIdAndUpdate(eventId, data);

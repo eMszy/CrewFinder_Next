@@ -173,7 +173,8 @@
 
 						.BaseTeam_Pos_Attribute {
 							display: flex;
-							justify-content: space-evenly;
+							justify-content: space-between;
+							align-items: center;
 							> div {
 								display: flex;
 								flex-direction: column;
