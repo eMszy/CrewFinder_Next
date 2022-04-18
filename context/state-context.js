@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
-import { getSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import dayjs from "dayjs";
 import control from "../control.json";
 
@@ -27,6 +27,8 @@ const StateContextProvider = (props) => {
 	const [labels, setLabels] = useState(control.labels);
 	const [isStatusMsg, setIsStatusMsg] = useState(null);
 	const [events, setEvents] = useState([]);
+
+	const { data: session, status } = useSession();
 
 	const setStatus = (message) => {
 		if (message != null) {
@@ -129,7 +131,6 @@ const StateContextProvider = (props) => {
 	useEffect(() => {
 		const loadAllEvents = async () => {
 			try {
-				const session = await getSession();
 				if (session) {
 					const events = await fetch("/api/event/all");
 					const eventsJson = await events.json();
@@ -141,10 +142,11 @@ const StateContextProvider = (props) => {
 				}
 			} catch (err) {
 				console.log("err", err);
+				setStatus({ message: err.message, error: true });
 			}
 		};
 		loadAllEvents();
-	}, []);
+	}, [session]);
 
 	useEffect(() => {
 		dispatchCallEvent({

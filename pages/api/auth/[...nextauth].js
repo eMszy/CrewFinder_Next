@@ -4,23 +4,23 @@ import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs/dist/bcrypt";
-import validator from "validator";
+// import validator from "validator";
 
 import User from "../../../models/user";
 import clientPromise from "../../../shared/mongodb";
 import dbConnect from "../../../shared/dbConnect";
-import { StateContext } from "../../../context/state-context";
+// import { StateContext } from "../../../context/state-context";
 
 export default NextAuth({
 	adapter: MongoDBAdapter(clientPromise),
 	providers: [
 		GoogleProvider({
 			clientId: process.env.GOOGLE_ID,
-			clientSecret: process.env.GOOGLE_NEXTAUTH_SECRET,
+			clientSecret: process.env.GOOGLE_SECRET,
 		}),
 		FacebookProvider({
 			clientId: process.env.FACEBOOK_ID,
-			clientSecret: process.env.FACEBOOK_NEXTAUTH_SECRET,
+			clientSecret: process.env.FACEBOOK_SECRET,
 		}),
 		CredentialsProvider({
 			id: "SingIn",
@@ -101,9 +101,9 @@ export default NextAuth({
 			return session;
 		},
 	},
-	NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+	secret: process.env.NEXTAUTH_SECRET,
 	jwt: {
-		NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+		secret: process.env.NEXTAUTH_SECRET,
 		encryption: true,
 	},
 	pages: {
