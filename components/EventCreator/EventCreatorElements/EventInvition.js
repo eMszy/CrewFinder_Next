@@ -155,7 +155,7 @@ const EventInvition = ({
 											<div className={classes.BaseTeam_Pos_Attribut}>
 												<div>
 													Találtok száma:{" "}
-													{crewMember.invitionType.result.length}
+													{crewMember.invitionType.result?.length}
 												</div>
 											</div>
 										)}
