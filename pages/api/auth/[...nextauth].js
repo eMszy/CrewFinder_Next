@@ -86,7 +86,8 @@ export default NextAuth({
 		// 	console.log("signIn - DATA:", data);
 		// 	return true;
 		// },
-		jwt: async ({ token, user }) => {
+		jwt: async ({ token, user, isNewUser }) => {
+			console.log("isNewUser", isNewUser);
 			if (user) {
 				token.id = user.id;
 				token.metaData = user.metaData;
@@ -104,7 +105,8 @@ export default NextAuth({
 	secret: process.env.NEXTAUTH_SECRET,
 	jwt: {
 		secret: process.env.NEXTAUTH_SECRET,
-		encryption: true,
+		// encryption: true,
+		maxAge: 60 * 60 * 24 * 30,
 	},
 	pages: {
 		signIn: "/",

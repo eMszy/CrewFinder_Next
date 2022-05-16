@@ -27,9 +27,10 @@ const EventAccepter = ({ department }) => {
 
 	const { data: session, status } = useSession();
 
-	const test = async (e, answer) => {
+	const respondHandler = async (e, answer) => {
 		e.preventDefault();
 		try {
+			console.log("first", selectedEvent, session);
 			const res = await fetch("/api/event/application", {
 				method: "PUT",
 				body: JSON.stringify({
@@ -208,7 +209,7 @@ const EventAccepter = ({ department }) => {
 					<Button
 						type="submit"
 						clicked={(e) => {
-							test(e, true);
+							respondHandler(e, true);
 						}}
 						btnType="Success"
 					>
@@ -217,7 +218,7 @@ const EventAccepter = ({ department }) => {
 					<Button
 						type="submit"
 						clicked={(e) => {
-							test(e, false);
+							respondHandler(e, false);
 						}}
 						btnType="Danger"
 					>

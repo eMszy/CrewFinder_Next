@@ -12,16 +12,18 @@ import {
 	isAllInputVaild,
 } from "../../../shared/utility";
 import Button from "../../../components/UI/Button/Button";
-import { List } from "../../../components/Calendar/CalendarElements/List";
+// import { List } from "../../../components/Calendar/CalendarElements/List";
 import { server } from "../../../config";
 import control from "../../../control.json";
 
 import classes from "./Profil.module.scss";
 
-const Profil = ({ formedUser, user, err }) => {
+const Profil = ({ formedUser, user, session, err }) => {
 	Profil.title = "CrewFinder - Profil";
 
-	const { data: session, status } = useSession();
+	// const { data: session, status } = useSession();
+
+	// console.log("first", session);
 
 	const stateContext = useContext(StateContext);
 
@@ -274,7 +276,7 @@ export const getServerSideProps = async (context) => {
 		const res = await fetch(`${server}/api/user/` + session.id);
 		const user = await res.json();
 		const formedUser = formingData(user, formTemplate);
-		return { props: { formedUser, user } };
+		return { props: { formedUser, user, session } };
 	} catch (err) {
 		console.log("err", err.message);
 		return { props: { err: err.message } };
