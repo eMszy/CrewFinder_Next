@@ -1,10 +1,10 @@
 .MessageMain {
 	width: 100vw;
-	position: absolute;
+	position: fixed;
 	justify-content: center;
 	display: flex;
 	top: 2%;
-	transition-property: opacity, left, top, height;
+	transition-property: all;
 	transition-duration: 3s, 5s;
 	z-index: 100;
 

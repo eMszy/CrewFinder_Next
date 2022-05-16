@@ -12,21 +12,18 @@ import {
 	isAllInputVaild,
 } from "../../../shared/utility";
 import Button from "../../../components/UI/Button/Button";
-// import { List } from "../../../components/Calendar/CalendarElements/List";
+
 import { server } from "../../../config";
 import control from "../../../control.json";
 
 import classes from "./Profil.module.scss";
 
-const Profil = ({ formedUser, user, session, err }) => {
+const Profil = ({ formedUser, user, err }) => {
 	Profil.title = "CrewFinder - Profil";
 
-	// const { data: session, status } = useSession();
-
-	// console.log("first", session);
+	const { data: session, status } = useSession();
 
 	const stateContext = useContext(StateContext);
-
 	const [DataForm, setDataForm] = useState(formedUser);
 	const [IsEdit, setIsEdit] = useState(false);
 	const [isDelete, setIsDelete] = useState(false);
@@ -150,6 +147,8 @@ const Profil = ({ formedUser, user, session, err }) => {
 	};
 
 	const submitHandler = async () => {
+		console.log("session", session);
+
 		try {
 			const res = await fetch("/api/user/" + session.id, {
 				method: "PUT",
@@ -159,7 +158,6 @@ const Profil = ({ formedUser, user, session, err }) => {
 				},
 			});
 			const resJson = await res.json();
-			console.log("res", resJson);
 
 			if (!res.ok || res.error) {
 				throw Error(resJson.message);
@@ -167,7 +165,7 @@ const Profil = ({ formedUser, user, session, err }) => {
 			stateContext.setStatus(resJson);
 			return resJson;
 		} catch (err) {
-			setStatus({ message: err.message, error: true });
+			stateContext.setStatus({ message: err.message, error: true });
 		}
 	};
 
