@@ -17,6 +17,7 @@ const Home = () => {
 		if (status === "authenticated") {
 			router.push("/home");
 		}
+		// eslint-disable-next-line
 	}, [status]);
 
 	return (

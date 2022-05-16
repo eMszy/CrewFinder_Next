@@ -1,5 +1,4 @@
 import { getToken } from "next-auth/jwt";
-import { getSession } from "next-auth/react";
 import { NextResponse } from "next/server";
 
 const middleware = async (req) => {
@@ -10,11 +9,6 @@ const middleware = async (req) => {
 		secret: process.env.NEXTAUTH_SECRET,
 		secureCookie: process.env.NODE_ENV === "production",
 	});
-
-	const session = await getSession({ req });
-
-	console.log("token1", token);
-	console.log("token2", session);
 
 	// if (!token) {
 	// 	const url = req.nextUrl.clone();
