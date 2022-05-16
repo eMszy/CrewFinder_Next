@@ -9,6 +9,8 @@ const Sidebar = () => {
 	const { filteredEvents, setSelectedEvent, setShowEventModal } =
 		useContext(StateContext);
 
+	console.log("first", filteredEvents[0].creatorName);
+
 	return (
 		<div className={classes.SidebarMain}>
 			<div className={classes.SidebarHeader}>
@@ -31,6 +33,9 @@ const Sidebar = () => {
 							<h3>
 								{event.title} - {event.yourPosition}
 							</h3>
+							<div>
+								<p>Léterhozt: {event.creatorName}</p>
+							</div>
 							<div>{dayjs(event.startDate).format("YYYY. MMMM. DD.")}</div>
 							<div>
 								{dayjs(event.startDate).format("HH:mm")} -{" "}
