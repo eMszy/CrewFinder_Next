@@ -9,8 +9,6 @@ const Sidebar = () => {
 	const { filteredEvents, setSelectedEvent, setShowEventModal } =
 		useContext(StateContext);
 
-	console.log("first", filteredEvents[0].creatorName);
-
 	return (
 		<div className={classes.SidebarMain}>
 			<div className={classes.SidebarHeader}>
