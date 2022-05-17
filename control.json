@@ -57,35 +57,58 @@
       "positions": {
         "1st AD": {
           "name": "1st AD",
-          "weight": 10
+          "weight": 20
         },
-        "2nd AD": {
-          "name": "2nd AD",
-          "weight": 5
+        "Key 2nd AD": {
+          "name": "Key 2nd AD",
+          "weight": 11
         },
-        "3rd AD": {
-          "name": "3rd AD",
+        "Floor 2nd AD": {
+          "name": "Floor 2nd AD",
+          "weight": 8
+        },
+        "Crowd 2nd AD": {
+          "name": "Crowd 2nd AD",
+          "weight": 8
+        },
+        "3rd AD Base": {
+          "name": "3rd AD Base",
           "weight": 3
         },
-        "Key SetPA": {
+        "3rd AD Set": {
+          "name": "3rd AD Set",
+          "weight": 3
+        },
+        "Key Set PA": {
           "name": "Key SetPa",
           "weight": 2
         },
-        "SetPA": {
+        "Cast PA": {
+          "name": "CastPa",
+          "weight": 1
+        },
+        "Set PA": {
           "name": "SetPa",
+          "weight": 1
+        },
+        "Base PA": {
+          "name": "Base Pa",
+          "weight": 1
+        },
+        "Trainee": {
+          "name": "Trainee",
           "weight": 1
         }
       },
       "attribute": [
         {
           "type": "language",
-          "name": "Nyelv",
+          "name": "Angol nyelvtudás",
           "range": [
             "Nem tud",
             "Alapfok",
             "Középfok",
-            "Felsőfok",
-            "Anyanyelvi"
+            "Felsőfok"
           ]
         },
         {
@@ -106,11 +129,39 @@
         }
       ]
     },
-    "Valami más": {
+    "Camera": {
       "positions": {
-        "Más": {
-          "name": "Más",
+        "A camera operator": {
+          "name": "A cam operator",
+          "weight": 20
+        },
+        "B camera operator": {
+          "name": "B cam operator",
+          "weight": 16
+        },
+        "C camera operator": {
+          "name": "C cam operator",
           "weight": 10
+        },
+        "Steadicam operator": {
+          "name": "Steadicam operator",
+          "weight": 20
+        },
+        "A cam 1st AC": {
+          "name": "A cam 1st AC",
+          "weight": 20
+        },
+        "1st AC": {
+          "name": "1st AC",
+          "weight": 16
+        },
+        "2nd AC": {
+          "name": "2nd AC",
+          "weight": 10
+        },
+        "Camera trainee": {
+          "name": "Camera trainee",
+          "weight": 4
         }
       },
       "attribute": [
@@ -143,11 +194,111 @@
         }
       ]
     },
-    "Valami teljesen más": {
+    "Electricians": {
       "positions": {
-        "Ez is egy teszt": {
-          "name": "Ez is egy teszt",
+        "Fővilágosító": {
+          "name": "Fővill",
+          "weight": 20
+        },
+        "Best boy": {
+          "name": "Best boy",
+          "weight": 11
+        },
+        "Világosító": {
+          "name": "Világosító",
+          "weight": 3
+        },
+        "Trainee": {
+          "name": "Trainee",
+          "weight": 1
+        },
+        "Rigging Fővilágosító": {
+          "name": "Rigging Fővill",
+          "weight": 16
+        },
+        "Rigging Best boy": {
+          "name": "Rigging best boy",
+          "weight": 11
+        },
+        "Rigging Világosító": {
+          "name": "Rigging Világosító",
+          "weight": 3
+        },
+        "Dimmer operator": {
+          "name": "Dimmer operator",
+          "weight": 6
+        },
+        "Genny operator": {
+          "name": "Genny operator",
+          "weight": 3
+        },
+        "Rigging dimmer operator": {
+          "name": "Rigging dimmer operator",
+          "weight": 6
+        },
+        "Rigging Genny operator": {
+          "name": "Rigging genny operator",
+          "weight": 3
+        }
+      },
+      "attribute": [
+        {
+          "type": "language",
+          "name": "Angol nyelvtudás",
+          "range": [
+            "Nem tud",
+            "Alapfok",
+            "Középfok",
+            "Felsőfok"
+          ]
+        },
+        {
+          "type": "aptitude",
+          "name": "Rátermettség",
+          "range": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ]
+        }
+      ]
+    },
+    "Grip": {
+      "positions": {
+        "Key grip": {
+          "name": "Key grip",
+          "weight": 20
+        },
+        "Best boy": {
+          "name": "Grip best boy",
+          "weight": 11
+        },
+        "Dolly grip": {
+          "name": "Dolly grip",
           "weight": 10
+        },
+        "Key dolly grip": {
+          "name": "Key dolly grip",
+          "weight": 12
+        },
+        "Grip": {
+          "name": "Grip",
+          "weight": 6
+        },
+        "Head technician": {
+          "name": "Head technician",
+          "weight": 10
+        },
+        "Crane operator": {
+          "name": "Crane operator",
+          "weight": 8
         }
       },
       "attribute": [
