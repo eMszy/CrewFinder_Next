@@ -4,49 +4,41 @@ import { StateContext } from "../../context/state-context";
 import classes from "./Message.module.scss";
 
 const Message = () => {
-	const stateContext = useContext(StateContext);
+	const { isStatusMsg } = useContext(StateContext);
+	const [isAnimation, setIsAnimation] = useState(false);
 
-	const [messages, setMessages] = useState([]);
+	const [messages, setMessages] = useState({});
 
 	useEffect(() => {
-		if (stateContext === null) {
+		if (!isStatusMsg) {
 			return;
 		}
-		setMessages([
-			{
-				msg: stateContext.isStatusMsg.message,
-				isError: stateContext.isStatusMsg.error || null,
-			},
-		]);
+		setMessages({
+			msg: isStatusMsg.message,
+			isError: isStatusMsg.error || null,
+		});
+		setIsAnimation(true);
 		const timer = setTimeout(() => {
-			stateContext.setStatus(null);
+			setIsAnimation(false);
 		}, 5000);
 		return () => clearTimeout(timer);
-	}, [stateContext]);
-
-	const items = (
-		<h3>
-			{messages.map((m) => (
-				<p key={m.msg + Math.random()}>{m.msg}</p>
-			))}
-		</h3>
-	);
+	}, [isStatusMsg]);
 
 	return (
 		<div
-			className={classes.MessageMain}
-			onClick={() => stateContext.setStatus(null)}
-		>
-			{messages !== [] && (
-				<div
-					className={[
-						classes.MessageDiv,
-						stateContext.isStatusMsg.error && classes.Error,
-					].join(" ")}
-				>
-					{items}
-				</div>
+			className={[classes.MessageMain, isAnimation && classes.Visiblity].join(
+				" "
 			)}
+		>
+			<div
+				onClick={() => setIsAnimation(false)}
+				className={[
+					classes.MessageDiv,
+					isStatusMsg.error && classes.Error,
+				].join(" ")}
+			>
+				<h3>{messages && messages.msg}</h3>
+			</div>
 		</div>
 	);
 };
