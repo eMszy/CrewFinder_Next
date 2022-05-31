@@ -9,7 +9,6 @@ import bcrypt from "bcryptjs/dist/bcrypt";
 import User from "../../../models/user";
 import clientPromise from "../../../shared/mongodb";
 import dbConnect from "../../../shared/dbConnect";
-// import { StateContext } from "../../../context/state-context";
 
 export default NextAuth({
 	adapter: MongoDBAdapter(clientPromise),
@@ -120,10 +119,6 @@ export default NextAuth({
 	debug: false,
 	events: {
 		async signIn({ profile, account, isNewUser }) {
-			// const StateContext = useContext(StateContext);
-
-			// StateContext.setStatus({ message: "Sikeres Bejelentkezés" });
-
 			if (
 				isNewUser &&
 				(account.provider !== "SingIn" || account.provider !== "LogIn")
@@ -136,6 +131,9 @@ export default NextAuth({
 		},
 		async linkAccount(message) {
 			console.log("linkAccount", message);
+		},
+		async signOut() {
+			console.log("signOut");
 		},
 	},
 });

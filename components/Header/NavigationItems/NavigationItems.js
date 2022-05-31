@@ -49,7 +49,7 @@ const NavigationItems = () => {
 					<Link href="/home/profil" activeClassName={classes.active}>
 						{session.user.name}
 					</Link>
-					<div onClick={signOut} className={classes.singOut}>
+					<div onClick={signOut} className={classes.signOut}>
 						Kijelentkezés
 					</div>
 				</div>

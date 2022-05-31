@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
+import Spinner from "../components/UI/Spinner/Spinner";
+
 import classes from "./404.module.scss";
 
 const Costume404 = () => {
@@ -24,6 +26,7 @@ const Costume404 = () => {
 			</Head>
 			<div className={classes.Main}>
 				<h1>Sajnáljuk, ez az oldal nem létezik.</h1>
+				<Spinner />
 			</div>
 		</>
 	);

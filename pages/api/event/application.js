@@ -15,6 +15,7 @@ const handler = async (req, res) => {
 		});
 
 		const event = await Event.findById(eventId);
+		console.log("event", event.baseCrew, userId);
 		const findedBaseMember = event.baseCrew.find(
 			(b) => b._id.toString() === userId
 		);

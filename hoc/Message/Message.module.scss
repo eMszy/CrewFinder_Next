@@ -21,6 +21,8 @@
 		border: 3px green solid;
 		color: green;
 		border-radius: 25px;
+		transition-property: all;
+		transition-duration: 3s, 5s;
 	}
 
 	.Error {

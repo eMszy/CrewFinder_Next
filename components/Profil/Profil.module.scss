@@ -1,0 +1,106 @@
+@mixin media-min-width($width) {
+	@media (min-width: $width) {
+		@content;
+	}
+}
+
+.Profil_Form {
+	margin: 0 auto;
+	display: grid;
+	grid-template-columns: auto;
+	padding: 1rem;
+	border: 1px black solid;
+	border-radius: 1rem;
+
+	@include media-min-width(1200px) {
+		grid-template-columns: auto auto;
+	}
+
+	label {
+		font-weight: 400;
+		padding-top: 1rem;
+		@include media-min-width(1200px) {
+			padding: 0.25rem 0.5rem;
+			margin: 0.25rem;
+			text-align: right;
+		}
+	}
+
+	input,
+	select {
+		padding: 0.25rem 0.5rem;
+		margin: 0.25rem;
+		color: black;
+		border: none;
+		text-align: center;
+		align-self: center;
+		@include media-min-width(1200px) {
+		}
+		background-color: #dbefff;
+
+		&:disabled {
+			outline: none;
+			background-color: transparent;
+		}
+
+		@include media-min-width(1200px) {
+			text-align: left;
+		}
+	}
+}
+
+.SubmitBtn {
+	margin-top: 2rem;
+	button {
+		width: 10rem;
+		padding: 0.5rem;
+	}
+}
+
+.SubmitBtn_EditMode {
+	margin-top: 2rem;
+	button {
+		border-color: green;
+		background-color: green;
+		color: white;
+		width: 10rem;
+		padding: 0.5rem;
+		&:hover {
+			border-color: green;
+			background-color: white;
+			color: green;
+		}
+	}
+}
+
+.DeleteBtn {
+	margin-top: 1rem;
+	button {
+		width: 10rem;
+		padding: 0.5rem;
+		color: red;
+		border-color: red;
+		&:hover {
+			color: black;
+			background-color: red;
+			border-color: red;
+		}
+	}
+}
+
+.DeleteAlert {
+	margin-top: 1rem;
+	button {
+		width: 10rem;
+		padding: 0.5rem;
+		color: black;
+		border-color: red;
+		background-color: red;
+
+		&:hover {
+			background-color: black;
+			color: red;
+			border-color: red;
+		}
+	}
+}
