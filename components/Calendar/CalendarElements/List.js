@@ -6,7 +6,7 @@ import Filter from "./Filter";
 
 import classes from "./List.module.scss";
 
-export const List = () => {
+const List = () => {
 	const { filteredEvents, setSelectedEvent, setShowEventModal } =
 		useContext(StateContext);
 
@@ -60,3 +60,5 @@ export const List = () => {
 		</div>
 	);
 };
+
+export default List;

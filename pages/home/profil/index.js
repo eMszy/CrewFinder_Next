@@ -46,19 +46,21 @@ const ProfilPage = ({ formedUser, user, err, title }) => {
 
 export const getServerSideProps = async (context) => {
 	const title = "CrewFinder - Profil";
+	const headers = context.req.headers;
 	try {
 		const session = await getSession(context);
-		const res = await fetch(`${server}/api/user/` + session.id);
+		const res = await fetch(`${server}/api/user/${session.id}`, {
+			headers: headers,
+		});
 		const user = await res.json();
-		const formedUser = formingData(user, formTemplate);
-		if (!formedUser) {
-			throw Error;
+		if (!user) {
+			throw Error(user.message);
 		}
+		const formedUser = formingData(user, formTemplate);
 		return { props: { formedUser, user, session, title } };
 	} catch (err) {
-		console.error("err", err.message);
 		return {
-			props: { err: "A server nem elérhető, kérlek próbáld meg később újra." },
+			props: { err: err.message, title },
 		};
 	}
 };

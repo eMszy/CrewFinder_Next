@@ -6,7 +6,7 @@ import { StateContext } from "../../../context/state-context";
 
 import classes from "./Week.module.scss";
 
-export const Week = ({ currentWeek }) => {
+const Week = ({ currentWeek }) => {
 	const { labels } = useContext(StateContext);
 
 	const getRowStyle = () => {
@@ -28,3 +28,5 @@ export const Week = ({ currentWeek }) => {
 		</div>
 	);
 };
+
+export default Week;

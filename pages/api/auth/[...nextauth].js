@@ -85,8 +85,7 @@ export default NextAuth({
 		// 	console.log("signIn - DATA:", data);
 		// 	return true;
 		// },
-		jwt: async ({ token, user, isNewUser }) => {
-			console.log("isNewUser", isNewUser);
+		jwt: async ({ token, user }) => {
 			if (user) {
 				token.id = user.id;
 				token.metaData = user.metaData;
@@ -119,6 +118,7 @@ export default NextAuth({
 	debug: false,
 	events: {
 		async signIn({ profile, account, isNewUser }) {
+			console.log("isNewUser", isNewUser);
 			if (
 				isNewUser &&
 				(account.provider !== "SingIn" || account.provider !== "LogIn")

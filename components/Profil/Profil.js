@@ -101,7 +101,7 @@ const Profil = ({ formedUser, user }) => {
 		<>
 			<div className={classes.Profil}>
 				<div className={classes.Profil_Panels}>
-					<h2>A Profilod</h2>
+					<h2>Profilod</h2>
 					<form className={classes.Profil_Form}>
 						<InputElement
 							Form={DataForm}

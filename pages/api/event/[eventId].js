@@ -12,12 +12,6 @@ const handler = async (req, res) => {
 			secret: process.env.NEXTAUTH_SECRET,
 			secureCookie: process.env.NODE_ENV === "production",
 		});
-
-		// if (!token) {
-		// 	res.statusCode = 404;
-		// 	res.json({ message: `Nincs hozzáférésed`, error: true });
-		// 	return;
-		// }
 		const eventId = req.query.eventId;
 
 		const updateAllNewUser = async (id, label) => {
@@ -45,8 +39,8 @@ const handler = async (req, res) => {
 		switch (req.method) {
 			case "GET": {
 				let allEvents = [];
-				const user = await User.findById(token.id);
 				if (eventId === "all") {
+					const user = await User.findById(token.id);
 					const events = await Event.find({ _id: user.events });
 					events.forEach((e) => {
 						user.events.forEach((u) => {
@@ -66,10 +60,11 @@ const handler = async (req, res) => {
 					});
 
 					allEvents = [...events, ...ownEvents];
-				} else {
+				} else if (eventId.length === 24 && !isNaN(Number("0x" + eventId))) {
 					// console.log("user", user);
-					//hozzá kell adni az label-t!
 					allEvents = await Event.findById(eventId);
+				} else {
+					allEvents = null;
 				}
 
 				if (!allEvents) {

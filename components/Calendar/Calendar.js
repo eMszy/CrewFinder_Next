@@ -3,15 +3,16 @@ import { StateContext } from "../../context/state-context";
 
 import CalendarHeader from "./CalendarElements/CalendarHeader";
 import Month from "./CalendarElements/Month";
-import { Week } from "./CalendarElements/Week";
-import { List } from "./CalendarElements/List";
+import Week from "./CalendarElements/Week";
+import List from "./CalendarElements/List";
+
 import EventCreaterModal from "../EventCreator/EventCreater";
 
 import { getMonth, getWeek } from "../../shared/utility";
 
 import classes from "./Calendar.module.scss";
 
-export const Calendar = () => {
+const Calendar = () => {
 	const { showEventModal } = useContext(StateContext);
 
 	const viewTypes = ["Havi", "Heti", "Lista"];
@@ -41,3 +42,5 @@ export const Calendar = () => {
 		</div>
 	);
 };
+
+export default Calendar;

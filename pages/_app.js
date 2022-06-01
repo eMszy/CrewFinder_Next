@@ -6,8 +6,6 @@ import Layout from "../hoc/Layout/Layout";
 import "../styles/globals.scss";
 
 const App = ({ Component, pageProps: { session, ...pageProps } }) => {
-	// console.log(`title`, Component.title);
-
 	return (
 		<SessionProvider session={session}>
 			<StateContextProvider>

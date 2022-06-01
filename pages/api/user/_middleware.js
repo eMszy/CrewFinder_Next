@@ -2,19 +2,17 @@ import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 
 const middleware = async (req) => {
-	// console.log("first", process.env.NODE_ENV);
-
 	const token = await getToken({
 		req,
 		secret: process.env.NEXTAUTH_SECRET,
 		secureCookie: process.env.NODE_ENV === "production",
 	});
 
-	// if (!token) {
-	// 	const url = req.nextUrl.clone();
-	// 	url.pathname = "/api/auth/signin";
-	// 	return NextResponse.redirect(url);
-	// }
+	if (!token) {
+		const url = req.nextUrl.clone();
+		url.pathname = "/api/auth/signin";
+		return NextResponse.redirect(url);
+	}
 
 	return NextResponse.next();
 };
