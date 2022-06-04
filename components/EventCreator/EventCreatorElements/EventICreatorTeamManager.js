@@ -9,9 +9,9 @@ import {
 import control from "../../../control.json";
 
 import Button from "../../UI/Button/Button";
-import classes from "./../EventModal.module.scss";
+import classes from "./../EventHandle.module.scss";
 
-const EventInvition = ({
+const EventICreatorTeamManager = ({
 	crewMembers,
 	department,
 	addPosHandel,
@@ -235,4 +235,4 @@ const EventInvition = ({
 	);
 };
 
-export default EventInvition;
+export default EventICreatorTeamManager;

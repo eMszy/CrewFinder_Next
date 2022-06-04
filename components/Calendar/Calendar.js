@@ -6,7 +6,7 @@ import Month from "./CalendarElements/Month";
 import Week from "./CalendarElements/Week";
 import List from "./CalendarElements/List";
 
-import EventCreaterModal from "../EventCreator/EventCreater";
+import EventHandle from "../EventCreator/EventHandle";
 
 import { getMonth, getWeek } from "../../shared/utility";
 
@@ -24,7 +24,7 @@ const Calendar = () => {
 
 	return (
 		<div className={classes.CalendarMain}>
-			{showEventModal && <EventCreaterModal />}
+			{showEventModal && <EventHandle />}
 			<div className={classes.CalendarMain_Header}>
 				<CalendarHeader
 					viewTypes={viewTypes}

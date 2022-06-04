@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 import { FcGoogle } from "react-icons/fc";
 import { BsFacebook } from "react-icons/bs";
 
@@ -17,7 +17,7 @@ import classes from "./Auth.module.scss";
 
 const AuthForm = () => {
 	const { status } = useSession();
-	const router = useRouter();
+	// const router = useRouter();
 
 	const { setStatus } = useContext(StateContext);
 
@@ -130,7 +130,7 @@ const AuthForm = () => {
 		</div>
 	);
 
-	let FormElementRender = (
+	return (
 		<React.Fragment>
 			{logoElement}
 			<div className={classes.LoginMain__LoginDiv}>
@@ -146,7 +146,7 @@ const AuthForm = () => {
 					) : (
 						<InputElement
 							Form={LoginRegForm}
-							IsEdit={true}
+							// IsEdit={true}
 							changed={inputChanged}
 						/>
 					)}
@@ -176,8 +176,6 @@ const AuthForm = () => {
 			</div>
 		</React.Fragment>
 	);
-
-	return FormElementRender;
 };
 
 export default AuthForm;

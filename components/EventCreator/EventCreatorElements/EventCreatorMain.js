@@ -9,16 +9,19 @@ import {
 
 import { StateContext } from "../../../context/state-context";
 
+import * as InputTemplates from "../../UI/Input/InputTemplates/InputTemplates.js";
 import SmallCalendar from "../../Calendar/CalendarElements/SmallCalendar";
 import Button from "../../UI/Button/Button";
 
 import control from "../../../control.json";
 
-import classes from "./../EventModal.module.scss";
-import { uniqueArray } from "./utility";
-import EventInvition from "./EventInvition";
+import classes from "./../EventHandle.module.scss";
+import { addPosHelper, uniqueArray } from "./utility";
+import EventICreatorTeamManager from "./EventICreatorTeamManager";
 
 import { useSession } from "next-auth/react";
+import InputElement from "../../UI/Input/InputElement";
+import { inputChangedHandler, isAllInputVaild } from "../../../shared/utility";
 
 const weekdaysSet = [1, 2, 3, 4, 5, 6, 0];
 
@@ -26,7 +29,7 @@ const dayFormating = (day) => dayjs(day).format("YYYY-MM-DDTHH:mm");
 
 //Egyenlőre mindenki csak egy DEPT BaseCrew-t tud kezelni
 
-const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
+const EventCreatorMain = ({ setIsCreatroPage, department, setDepartment }) => {
 	const { daySelected, dispatchCallEvent, selectedEvent, setSelectedEvent } =
 		useContext(StateContext);
 
@@ -63,6 +66,38 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 	const [weekdays, setWeekdays] = useState(weekdaysSet);
 	const [clickedDate, setClickedDate] = useState();
 	const [isClicked, setIsClicked] = useState();
+
+	const eventTemplate = {
+		title: {
+			...InputTemplates.text,
+			disabled: false,
+			elementConfig: { placeholder: "Projek neve" },
+		},
+		shortTitle: {
+			...InputTemplates.text,
+			disabled: false,
+			elementConfig: { placeholder: "Rövidítés" },
+			validation: { required: true, maxLength: 5 },
+		},
+		description: {
+			...InputTemplates.text,
+			disabled: false,
+			elementConfig: { placeholder: "Leírás" },
+		},
+		location: {
+			...InputTemplates.text,
+			disabled: false,
+			elementConfig: { placeholder: "Helyszín" },
+		},
+	};
+
+	const [EventForm, setEventForm] = useState(eventTemplate);
+
+	console.log("isAllInputVaild", isAllInputVaild(EventForm));
+
+	const inputChanged = (event) => {
+		setEventForm(inputChangedHandler(event, EventForm));
+	};
 
 	const addDatesWithTimes = (startDate, endDate, weekdays = undefined) => {
 		let updatedDates = [];
@@ -190,17 +225,9 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 		setIsCreatroPage(false);
 	};
 
-	const addPosHandel = (
-		pos,
-		id,
-		name = "",
-		invitionType = { name: "direct" }
-	) => {
-		if (pos && pos !== "") {
-			const updatedPos = [
-				...baseCrew,
-				{ id: id + Math.random(), pos, name, invitionType },
-			];
+	const addPosHandel = (pos, id) => {
+		const updatedPos = addPosHelper(pos, id, baseCrew, { name: "direct" });
+		if (updatedPos) {
 			setBaseCrew(updatedPos);
 		}
 	};
@@ -368,6 +395,7 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 								setInputData({ ...inputData, shortTitle: e.target.value })
 							}
 						/>
+						<InputElement Form={EventForm} changed={inputChanged} />
 					</div>
 					<div className={classes.Icon}>
 						<IoCalendarOutline />
@@ -499,7 +527,7 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 				</div>
 
 				{department !== "Privát" && selectedEvent?.department !== "Privát" && (
-					<EventInvition
+					<EventICreatorTeamManager
 						crewMembers={inputData.baseCrew}
 						addPosHandel={addPosHandel}
 						department={department}
@@ -517,4 +545,4 @@ const EventModal = ({ setIsCreatroPage, department, setDepartment }) => {
 	);
 };
 
-export default EventModal;
+export default EventCreatorMain;

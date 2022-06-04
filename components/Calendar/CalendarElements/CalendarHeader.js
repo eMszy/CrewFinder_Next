@@ -41,6 +41,8 @@ const CalendarHeader = ({
 
 	const { setShowEventModal } = useContext(StateContext);
 
+	console.log("viewMode", classes.ViewModeActive);
+
 	return (
 		<header className={classes.CalendarHeader}>
 			<div className={classes.Control}>
@@ -50,9 +52,12 @@ const CalendarHeader = ({
 				</Button>
 				{viewTypes.map((vT, idx) => (
 					<div
-						className={classes.ViewModeClass}
+						className={[
+							classes.ViewModeClass,
+							viewMode === vT && classes.ViewModeActive,
+						].join(" ")}
 						key={idx}
-						style={{ backgroundColor: viewMode === vT && "#afd7f8" }}
+						// viewMode === vT && (style={ { backgroundColor: "#afd7f8" }})
 						onClick={() => {
 							setViewMode(vT);
 							setMonthIndex(dayjs().month());

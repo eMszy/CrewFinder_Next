@@ -33,7 +33,7 @@ const StateContextProvider = (props) => {
 	const setStatus = (message) => {
 		if (message != null) {
 			if (message.error) {
-				console.error("Error:", message);
+				console.warn("Error:", message);
 			} else {
 				console.log("Status:", message);
 			}

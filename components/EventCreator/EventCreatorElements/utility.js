@@ -8,3 +8,20 @@ export const uniqueArray = (array1 = [], array2 = []) => {
 	});
 	return Object.values(updatedArray);
 };
+
+export const addPosHelper = (
+	pos,
+	id,
+	baseCrew,
+	invitionType = { name: "open" },
+	name = ""
+) => {
+	if (pos && pos !== "") {
+		const updatedPos = [
+			...baseCrew,
+			{ id: id + Math.random(), pos, name, invitionType },
+		];
+		return updatedPos;
+	}
+	return false;
+};

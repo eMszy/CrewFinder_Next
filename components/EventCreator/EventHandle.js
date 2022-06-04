@@ -1,24 +1,26 @@
 import React, { useContext, useState } from "react";
+import { useSession } from "next-auth/react";
+
+import { StateContext } from "../../context/state-context";
+import EventCreatorMain from "./EventCreatorElements/EventCreatorMain";
+import EventCreatorSecondary from "./EventCreatorElements/EventCreatorSecondary";
+import EventAccepter from "./EventCreatorElements/EventAccepter";
+
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoArrowBack, IoClose } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
-import { StateContext } from "../../context/state-context";
-import EventModal from "./EventCreatorElements/EventModal";
-import EventTeamManager from "./EventCreatorElements/EventTeamManager";
 
 // import control from "../../control.json";
 
-import classes from "./EventModal.module.scss";
-import { useSession } from "next-auth/react";
-import EventAccepter from "./EventCreatorElements/EventAccepter";
+import classes from "./EventHandle.module.scss";
 
-const EventCreaterModal = () => {
+const EventHandle = () => {
 	const { setShowEventModal, selectedEvent, dispatchCallEvent } =
 		useContext(StateContext);
 
 	const { data: session, status } = useSession();
 
-	const [isCreatroPage, setIsCreatroPage] = useState(true);
+	const [isEventCreatorMain, setEventCreatorMain] = useState(true);
 	const [department, setDepartment] = useState(
 		session?.metaData?.isHOD[0] || "Privát"
 	);
@@ -40,10 +42,10 @@ const EventCreaterModal = () => {
 						<div className={classes.Icon}>
 							<GiHamburgerMenu />
 						</div>
-						{!isCreatroPage && (
+						{!isEventCreatorMain && (
 							<div
 								className={`${classes.Icon}  ${classes.Buttom1}`}
-								onClick={() => setIsCreatroPage(true)}
+								onClick={() => setEventCreatorMain(true)}
 							>
 								<IoArrowBack />
 							</div>
@@ -67,27 +69,24 @@ const EventCreaterModal = () => {
 					</div>
 				</header>
 				{!selectedEvent || selectedEvent?.creator === session?.id ? (
-					isCreatroPage ? (
-						<EventModal
-							setIsCreatroPage={setIsCreatroPage}
+					isEventCreatorMain ? (
+						<EventCreatorMain
+							setIsCreatroPage={setEventCreatorMain}
 							department={department}
 							setDepartment={setDepartment}
 						/>
 					) : (
-						<EventTeamManager
-							setIsCreatroPage={setIsCreatroPage}
+						<EventCreatorSecondary
+							setIsCreatroPage={setEventCreatorMain}
 							department={department}
 						/>
 					)
 				) : (
-					<EventAccepter
-						setIsCreatroPage={setIsCreatroPage}
-						department={department}
-					/>
+					<EventAccepter department={department} />
 				)}
 			</div>
 		</div>
 	);
 };
 
-export default EventCreaterModal;
+export default EventHandle;

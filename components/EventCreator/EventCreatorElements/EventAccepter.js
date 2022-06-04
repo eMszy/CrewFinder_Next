@@ -15,7 +15,7 @@ import Button from "../../UI/Button/Button";
 
 import control from "../../../control.json";
 
-import classes from "./../EventModal.module.scss";
+import classes from "./../EventHandle.module.scss";
 
 const EventAccepter = ({ department }) => {
 	const { setShowEventModal, selectedEvent, setStatus } =

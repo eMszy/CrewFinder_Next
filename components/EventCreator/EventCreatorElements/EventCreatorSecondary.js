@@ -5,14 +5,14 @@ import { IoCalendarOutline, IoCloseCircleOutline } from "react-icons/io5";
 import { StateContext } from "../../../context/state-context";
 import SmallCalendar from "../../Calendar/CalendarElements/SmallCalendar";
 import Button from "../../UI/Button/Button";
-import { uniqueArray } from "./utility";
+import { addPosHelper, uniqueArray } from "./utility";
 
 import control from "../../../control.json";
 
-import classes from "./../EventModal.module.scss";
-import EventInvition from "./EventInvition";
+import classes from "./../EventHandle.module.scss";
+import EventICreatorTeamManager from "./EventICreatorTeamManager";
 
-const EventTeamManager = ({ department, setIsCreatroPage }) => {
+const EventCreatorSecondary = ({ department, setIsCreatroPage }) => {
 	const { setShowEventModal, selectedEvent, dispatchCallEvent } =
 		useContext(StateContext);
 
@@ -44,17 +44,9 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 		setCrewMembers([]);
 	};
 
-	const addPosHandel = (
-		pos,
-		id,
-		name = "",
-		invitionType = { name: "open" }
-	) => {
-		if (pos && pos !== "") {
-			const updatedPos = [
-				...crewMembers,
-				{ id: id + Math.random(), pos, name, invitionType },
-			];
+	const addPosHandel = (pos, id) => {
+		const updatedPos = addPosHelper(pos, id, crewMembers);
+		if (updatedPos) {
 			setCrewMembers(updatedPos);
 		}
 	};
@@ -304,7 +296,7 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 						</div>
 					</div>
 					{selectedEvent.department !== "Privát" && (
-						<EventInvition
+						<EventICreatorTeamManager
 							crewMembers={crewMembers}
 							addPosHandel={addPosHandel}
 							department={department}
@@ -338,4 +330,4 @@ const EventTeamManager = ({ department, setIsCreatroPage }) => {
 	);
 };
 
-export default EventTeamManager;
+export default EventCreatorSecondary;
