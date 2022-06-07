@@ -18,7 +18,7 @@ const EventICreatorTeamManager = ({
 	changeHandle,
 	deletPosHandel,
 }) => {
-	console.log("crewMwmbers", crewMembers);
+	// console.log("crewMwmbers", crewMembers);
 	const { data: session } = useSession();
 
 	const [fetchedUsers, setFetchedUsers] = useState([]);

@@ -41,8 +41,6 @@ const CalendarHeader = ({
 
 	const { setShowEventModal } = useContext(StateContext);
 
-	console.log("viewMode", classes.ViewModeActive);
-
 	return (
 		<header className={classes.CalendarHeader}>
 			<div className={classes.Control}>
