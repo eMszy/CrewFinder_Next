@@ -6,8 +6,6 @@ const handler = async (req, res) => {
 		const { input, pos } = req.query;
 		dbConnect();
 
-		console.log("input, pos", input, pos);
-
 		const result = await User.aggregate([
 			{
 				$search: {

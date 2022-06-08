@@ -37,6 +37,7 @@ const EventCreatorMain = ({ setIsCreatroPage, department, setDepartment }) => {
 	const [weekdays, setWeekdays] = useState(weekdaysSet);
 	const [clickedDate, setClickedDate] = useState();
 	const [isClicked, setIsClicked] = useState();
+	const [isTeamManagerValid, setTeamManagerValid] = useState(false);
 
 	const [eventTypedData, setEventTypedData] = useState(
 		eventTypeTemplate(selectedEvent)
@@ -198,13 +199,14 @@ const EventCreatorMain = ({ setIsCreatroPage, department, setDepartment }) => {
 	};
 
 	const deletPosHandel = (id) => {
-		const updatedPos = baseCrew.filter((p) => p.id !== id);
-		setBaseCrew(updatedPos);
+		setBaseCrew((currentBaseCrew) =>
+			currentBaseCrew.filter((p) => p.id !== id)
+		);
 
 		const updatedBasePos = eventInputData.baseCrew.filter((p) => p.id !== id);
 		const updatedPickedDays = [...eventInputData.dates];
 		updatedPickedDays.forEach((day) => {
-			const filteredCrew = day.crew.filter((crew) => crew.id !== id);
+			const filteredCrew = day.crew?.filter((c) => c.id !== id);
 			day.crew = filteredCrew;
 		});
 
@@ -280,7 +282,9 @@ const EventCreatorMain = ({ setIsCreatroPage, department, setDepartment }) => {
 
 	useEffect(() => {
 		let updatedCrew = uniqueArray(eventInputData.baseCrew, baseCrew);
-		setEventInputData({ ...eventInputData, baseCrew: updatedCrew });
+		setEventInputData((currentEventInputData) => {
+			return { ...currentEventInputData, baseCrew: updatedCrew };
+		});
 		// eslint-disable-next-line
 	}, [baseCrew]);
 
@@ -423,6 +427,8 @@ const EventCreatorMain = ({ setIsCreatroPage, department, setDepartment }) => {
 						department={department}
 						changeHandle={changeHandle}
 						deletPosHandel={deletPosHandel}
+						setValid={setTeamManagerValid}
+						isValid={isTeamManagerValid}
 					/>
 				)}
 			</div>
@@ -430,7 +436,7 @@ const EventCreatorMain = ({ setIsCreatroPage, department, setDepartment }) => {
 				<Button
 					type="submit"
 					clicked={submitHandel}
-					disabled={!isAllInputVaild(eventTypedData)}
+					disabled={!isAllInputVaild(eventTypedData) || !isTeamManagerValid}
 				>
 					Tovább
 				</Button>

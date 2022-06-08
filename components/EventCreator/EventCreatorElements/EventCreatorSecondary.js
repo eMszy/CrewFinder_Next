@@ -20,6 +20,7 @@ const EventCreatorSecondary = ({ department, setIsCreatroPage }) => {
 	const [isClicked, setIsClicked] = useState();
 	const [clickedDate, setClickedDate] = useState();
 	const [crewMembers, setCrewMembers] = useState([]);
+	const [isTeamManagerValid, setTeamManagerValid] = useState(true);
 
 	const submitHandle = (e) => {
 		e.preventDefault();
@@ -302,6 +303,8 @@ const EventCreatorSecondary = ({ department, setIsCreatroPage }) => {
 							department={department}
 							changeHandle={(e) => changeHandle(e)}
 							deletPosHandel={deletPosHandel}
+							setValid={setTeamManagerValid}
+							isValid={isTeamManagerValid}
 						/>
 					)}
 
@@ -309,6 +312,7 @@ const EventCreatorSecondary = ({ department, setIsCreatroPage }) => {
 					<div className={classes.SaveBtn}>
 						<Button
 							type="button"
+							disabled={!isTeamManagerValid}
 							clicked={(e) => {
 								e.preventDefault();
 								saveHandle();
@@ -321,7 +325,11 @@ const EventCreatorSecondary = ({ department, setIsCreatroPage }) => {
 				</div>
 
 				<footer className={classes.EventModal_Footer}>
-					<Button type="submit" clicked={submitHandle}>
+					<Button
+						type="submit"
+						clicked={submitHandle}
+						disabled={!isTeamManagerValid}
+					>
 						Mentés
 					</Button>
 				</footer>
