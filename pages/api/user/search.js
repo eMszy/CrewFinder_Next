@@ -1,4 +1,3 @@
-// import { getToken } from "next-auth/jwt";
 import User from "../../../models/user";
 import dbConnect from "../../../shared/dbConnect";
 
@@ -7,12 +6,14 @@ const handler = async (req, res) => {
 		const { input, pos } = req.query;
 		dbConnect();
 
+		console.log("input, pos", input, pos);
+
 		const result = await User.aggregate([
 			{
 				$search: {
 					autocomplete: {
-						query: input,
 						path: "name",
+						query: input,
 						fuzzy: {
 							maxEdits: 1,
 						},
@@ -26,6 +27,7 @@ const handler = async (req, res) => {
 			},
 			{ $project: { name: 1, image: 1 } },
 		]);
+		console.log("result", result);
 		res.statusCode = 200;
 		res.json(result);
 		return;

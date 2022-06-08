@@ -5,6 +5,28 @@ import User from "../../../models/user";
 import dbConnect from "../../../shared/dbConnect";
 
 const handler = async (req, res) => {
+	const updateAllNewUser = async (id, label) => {
+		const user = await User.findById(id);
+		if (!user.events.includes(eventId)) {
+			user.events.push({ _id: eventId, label: label });
+			await user.save();
+		}
+	};
+
+	const invition = (user) => {
+		if (user.status === "new") {
+			user.status = "invited";
+			//invition majd ide kell
+			if (user.label === 4) {
+				updateAllNewUser(user._id, user.label);
+			} else if (user.label === 5) {
+				user.invitionType.result.forEach((u) => {
+					updateAllNewUser(u._id, user.label);
+				});
+			}
+		}
+	};
+
 	try {
 		dbConnect();
 		const token = await getToken({
@@ -14,53 +36,10 @@ const handler = async (req, res) => {
 		});
 		const eventId = req.query.eventId;
 
-		const updateAllNewUser = async (id, label) => {
-			const user = await User.findById(id);
-			if (!user.events.includes(eventId)) {
-				user.events.push({ _id: eventId, label: label });
-				await user.save();
-			}
-		};
-
-		const invition = (user) => {
-			if (user.status === "new") {
-				user.status = "invited";
-				//invition majd ide kell
-				if (user.label === 4) {
-					updateAllNewUser(user._id, user.label);
-				} else if (user.label === 5) {
-					user.invitionType.result.forEach((u) => {
-						updateAllNewUser(u._id, user.label);
-					});
-				}
-			}
-		};
-
 		switch (req.method) {
 			case "GET": {
 				let allEvents = [];
-				if (eventId === "all") {
-					const user = await User.findById(token.id);
-					const events = await Event.find({ _id: user.events });
-					events.forEach((e) => {
-						user.events.forEach((u) => {
-							if (e._id.toString() === u._id.toString()) {
-								e.label = u.label;
-							}
-						});
-					});
-
-					const ownEvents = await Event.find({ _id: user.ownEvents });
-					ownEvents.forEach((o) => {
-						if (o.department === "Privát") {
-							o.label = 6;
-						} else {
-							o.label = 1;
-						}
-					});
-
-					allEvents = [...events, ...ownEvents];
-				} else if (eventId.length === 24 && !isNaN(Number("0x" + eventId))) {
+				if (eventId.length === 24 && !isNaN(Number("0x" + eventId))) {
 					// console.log("user", user);
 					allEvents = await Event.findById(eventId);
 				} else {

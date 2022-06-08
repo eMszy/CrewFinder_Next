@@ -63,7 +63,7 @@ const EventICreatorTeamManager = ({
 				...crewMember,
 				[target.name]: target.value,
 			});
-			if (target.value.length !== 0) {
+			if (target.value.length > 2) {
 				fetchUser(e, crewMember.pos);
 			}
 		} else {
