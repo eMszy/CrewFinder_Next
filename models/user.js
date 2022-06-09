@@ -8,9 +8,17 @@ const userEventSchema = new Schema({
 		ref: "event",
 		required: true,
 	},
+	title: {
+		type: String,
+		required: false,
+	},
+	shortTitle: {
+		type: String,
+		required: false,
+	},
 	label: {
 		type: Number,
-		required: false,
+		required: true,
 	},
 	dates: [
 		{
@@ -19,7 +27,6 @@ const userEventSchema = new Schema({
 			endTime: Number,
 		},
 	],
-	required: false,
 });
 
 const userSchema = new Schema(
@@ -101,8 +108,8 @@ const userSchema = new Schema(
 				default: [],
 			},
 		},
-		ownEvents: [userEventSchema],
-		events: [userEventSchema],
+		ownEvents: [Schema.Types.Mixed],
+		events: [Schema.Types.Mixed],
 	},
 	{ timestamps: true }
 );

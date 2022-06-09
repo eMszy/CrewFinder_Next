@@ -15,15 +15,7 @@ const handler = async (req, res) => {
 
 		if (req.method === "GET") {
 			const user = await User.findById(token.id);
-			const events = await Event.find({ _id: user.events });
-			events.forEach((e) => {
-				user.events.forEach((u) => {
-					//itt kell bevezetni hogy ne az eveteknek a dátumát vegye ki hanem a user.event.dates-et adja vissza
-					if (e._id.toString() === u._id.toString()) {
-						e.label = u.label;
-					}
-				});
-			});
+
 			const ownEvents = await Event.find({ _id: user.ownEvents });
 			ownEvents.forEach((o) => {
 				if (o.department === "Privát") {
@@ -32,7 +24,9 @@ const handler = async (req, res) => {
 					o.label = 1;
 				}
 			});
-			const allEvents = [...events, ...ownEvents];
+			const allEvents = [...user.events, ...ownEvents];
+
+			// console.log("allEvents", allEvents);
 
 			if (!allEvents) {
 				res.statusCode = 404;

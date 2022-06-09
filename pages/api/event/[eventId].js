@@ -15,10 +15,10 @@ const handler = async (req, res) => {
 			secureCookie: process.env.NODE_ENV === "production",
 		});
 
-		const updateAllNewUser = async (id, label, dates) => {
+		const updateAllNewUser = async (id, userDates) => {
 			const user = await User.findById(id);
 			if (!user.events.includes(eventId)) {
-				user.events.push({ _id: eventId, label: label, dates: dates });
+				user.events.push({ _id: eventId, ...userDates });
 				await user.save();
 			}
 		};
@@ -74,7 +74,6 @@ const handler = async (req, res) => {
 
 				data.dates.forEach((date) => {
 					date.crew.forEach((c) => {
-						console.log("c", c.status);
 						if (c._id) {
 							if (c.status === "new") {
 								c.status = "invited";
@@ -82,6 +81,9 @@ const handler = async (req, res) => {
 							if (!crewIds.includes(c._id)) {
 								crewIds.push(c._id);
 								crewDates.push({
+									...data,
+									label: c.label,
+									yourPosition: c.pos,
 									userId: c._id,
 									dates: [
 										{
@@ -130,13 +132,14 @@ const handler = async (req, res) => {
 					);
 
 					if (theUser) {
-						updateAllNewUser(user._id, 4, theUser.dates);
+						// console.log("theUser", theUser);
+						updateAllNewUser(user._id, theUser);
 					} else {
 						//ide jön a nem direkt meghívás?
 					}
 				});
 
-				const test = await Event.findByIdAndUpdate(eventId, data);
+				await Event.findByIdAndUpdate(eventId, data);
 				res.statusCode = 202;
 				res.json({ message: "Sikeresen modósítottad az eseményt" });
 				return;

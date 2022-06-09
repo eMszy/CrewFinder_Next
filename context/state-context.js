@@ -131,9 +131,10 @@ const StateContextProvider = (props) => {
 	useEffect(() => {
 		const loadAllEvents = async () => {
 			try {
-				if (session) {
+				if (status === "authenticated") {
 					const events = await fetch("/api/event/all");
 					const eventsJson = await events.json();
+					console.log("eventsJson", eventsJson);
 					if (events.ok) {
 						setEvents(eventsJson);
 					} else {
@@ -146,14 +147,13 @@ const StateContextProvider = (props) => {
 			}
 		};
 		loadAllEvents();
-	}, [session]);
+	}, [status]);
 
 	useEffect(() => {
 		dispatchCallEvent({
 			type: "init",
 			payload: events,
 		});
-		console.log("events", events);
 	}, [events]);
 
 	const filteredEvents = useMemo(() => {

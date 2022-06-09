@@ -62,8 +62,6 @@ const WeekDays = ({ day, rowStyle }) => {
 		return { backgroundColor: e.label.slice(0, -4).concat("90%)") };
 	};
 
-	console.log("dayEvents", dayEvents);
-
 	return (
 		<div className={classes.MainDayDiv} style={rowStyle()}>
 			<header>
@@ -78,8 +76,6 @@ const WeekDays = ({ day, rowStyle }) => {
 						let findedDay = d.dates?.find(
 							(date) => date.id === +day.format("YYYYMMDD")
 						);
-
-						console.log("d.dates", findedDay?.crew?.length);
 						return (
 							d.label === e.id && (
 								<div
