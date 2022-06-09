@@ -15,31 +15,41 @@ const handler = async (req, res) => {
 			secureCookie: process.env.NODE_ENV === "production",
 		});
 
-		const updateAllNewUser = async (id, userDates) => {
-			const user = await User.findById(id);
-			if (!user.events.includes(eventId)) {
-				user.events.push({ _id: eventId, ...userDates });
-				await user.save();
+		const updateAllNewUser = async (userId, userDates) => {
+			const user = await User.findById(userId);
+			const theEvent = await user.events.find(
+				(usrEvt) => eventId === usrEvt?._id.toString()
+			);
+
+			if (!userDates) {
+				console.log("nincs userDates", user.name);
+				return;
 			}
+
+			if (theEvent) {
+				await user.events.pull(theEvent);
+			}
+			await user.events.push({ _id: eventId, ...userDates });
+			await user.save();
 		};
 
 		switch (req.method) {
 			case "GET": {
-				let allEvents = [];
+				let theEvent = [];
 				if (eventId.length === 24 && !isNaN(Number("0x" + eventId))) {
-					allEvents = await Event.findById(eventId);
+					theEvent = await Event.findById(eventId);
 				} else {
-					allEvents = null;
+					theEvent = null;
 				}
 
-				if (!allEvents) {
+				if (!theEvent) {
 					res.statusCode = 404;
 					res.json({ message: `Nincs ilyen esemény.`, error: true });
 					return;
 				}
 
 				res.statusCode = 200;
-				res.json(allEvents);
+				res.json(theEvent);
 				return;
 			}
 
@@ -83,10 +93,10 @@ const handler = async (req, res) => {
 								crewDates.push({
 									...data,
 									label: c.label,
-									yourPosition: c.pos,
 									userId: c._id,
 									dates: [
 										{
+											yourPosition: c.pos,
 											id: date.id,
 											startTime: date.startTime,
 											endTime: date.endTime,
@@ -97,6 +107,7 @@ const handler = async (req, res) => {
 								crewDates.forEach((crewDate) => {
 									if (crewDate.userId === c._id) {
 										crewDate.dates.push({
+											yourPosition: c.pos,
 											id: date.id,
 											startTime: date.startTime,
 											endTime: date.endTime,
@@ -104,8 +115,14 @@ const handler = async (req, res) => {
 									}
 								});
 							}
-						} else {
-							//nem direkt meghívás
+						} else if (c.invitionType) {
+							c.invitionType.result.forEach((reslt) =>
+								console.log("c", reslt._id)
+							);
+							// console.log("crewId", crewIds);
+							// console.log("crewDates", crewDates);
+							// console.log("user.invitionType.result", user.invitionType.result);
+							//? nem direkt meghívás ITT TARTOK
 						}
 					});
 				});
@@ -132,7 +149,6 @@ const handler = async (req, res) => {
 					);
 
 					if (theUser) {
-						// console.log("theUser", theUser);
 						updateAllNewUser(user._id, theUser);
 					} else {
 						//ide jön a nem direkt meghívás?

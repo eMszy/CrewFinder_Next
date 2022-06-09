@@ -106,7 +106,7 @@ export const eventOtherTemplate = (selectedEvent, daySelected, department) => {
 						endTime: +dayjs(daySelected.hour(18).minute(0)),
 					},
 			  ],
-		yourPosition: selectedEvent
+		creatorPosition: selectedEvent
 			? selectedEvent.yourPosition
 			: Object.values(control.departments[department].positions)[0].name,
 		baseCrew: selectedEvent ? selectedEvent.baseCrew : [],

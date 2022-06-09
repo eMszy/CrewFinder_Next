@@ -142,7 +142,7 @@ const EventCreatorMain = ({ setIsCreatroPage, department, setDepartment }) => {
 				{
 					id: -1,
 					name: "Saját pozicíó",
-					pos: eventInputData.yourPosition,
+					pos: eventInputData.creatorPosition,
 					label: -1,
 					status: "creator",
 				},
@@ -380,11 +380,11 @@ const EventCreatorMain = ({ setIsCreatroPage, department, setDepartment }) => {
 							<div className={classes.YourPosition}>
 								<p>Saját pozicíód: </p>
 								<select
-									value={eventInputData.yourPosition}
+									value={eventInputData.creatorPosition}
 									onChange={(e) =>
 										setEventInputData({
 											...eventInputData,
-											yourPosition: e.target.value,
+											creatorPosition: e.target.value,
 										})
 									}
 								>
