@@ -32,7 +32,15 @@ const crewSchema = new Schema({
 const eventSchema = new Schema(
 	{
 		baseCrew: [crewSchema],
-		dates: [Schema.Types.Mixed],
+		dates: [
+			{
+				startTime: Number,
+				endTime: Number,
+				id: Number,
+				location: { type: String, required: false },
+				crew: [crewSchema],
+			},
+		],
 		description: {
 			type: String,
 			required: true,

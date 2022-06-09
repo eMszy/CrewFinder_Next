@@ -37,7 +37,7 @@ const EventCreatorMain = ({ setIsCreatroPage, department, setDepartment }) => {
 	const [weekdays, setWeekdays] = useState(weekdaysSet);
 	const [clickedDate, setClickedDate] = useState();
 	const [isClicked, setIsClicked] = useState();
-	const [isTeamManagerValid, setTeamManagerValid] = useState(false);
+	const [isTeamManagerValid, setTeamManagerValid] = useState(true);
 
 	const [eventTypedData, setEventTypedData] = useState(
 		eventTypeTemplate(selectedEvent)
@@ -139,7 +139,13 @@ const EventCreatorMain = ({ setIsCreatroPage, department, setDepartment }) => {
 		eventInputData.dates.forEach((d) => {
 			const crew = uniqueArray(d.crew, [
 				...baseCrew,
-				{ id: -1, name: "Saját pozicíó", pos: eventInputData.yourPosition },
+				{
+					id: -1,
+					name: "Saját pozicíó",
+					pos: eventInputData.yourPosition,
+					label: -1,
+					status: "creator",
+				},
 			]);
 			const loc = d.location ? d.location : eventInputData.location;
 			updatedDates.push({ ...d, crew, location: loc });

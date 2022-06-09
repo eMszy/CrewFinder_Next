@@ -12,6 +12,14 @@ const userEventSchema = new Schema({
 		type: Number,
 		required: false,
 	},
+	dates: [
+		{
+			id: Number,
+			startTime: Number,
+			endTime: Number,
+		},
+	],
+	required: false,
 });
 
 const userSchema = new Schema(

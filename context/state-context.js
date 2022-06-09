@@ -153,6 +153,7 @@ const StateContextProvider = (props) => {
 			type: "init",
 			payload: events,
 		});
+		console.log("events", events);
 	}, [events]);
 
 	const filteredEvents = useMemo(() => {

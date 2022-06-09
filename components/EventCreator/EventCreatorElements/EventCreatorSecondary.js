@@ -17,8 +17,8 @@ const EventCreatorSecondary = ({ department, setIsCreatroPage }) => {
 		useContext(StateContext);
 
 	const [pickedDays, setPickedDays] = useState([]);
-	const [isClicked, setIsClicked] = useState();
-	const [clickedDate, setClickedDate] = useState();
+	const [isClicked, setIsClicked] = useState(false);
+	const [clickedDate, setClickedDate] = useState(undefined);
 	const [crewMembers, setCrewMembers] = useState([]);
 	const [isTeamManagerValid, setTeamManagerValid] = useState(true);
 
@@ -41,7 +41,7 @@ const EventCreatorSecondary = ({ department, setIsCreatroPage }) => {
 
 	const resetHandle = () => {
 		setPickedDays([]);
-		setClickedDate();
+		setClickedDate(false);
 		setCrewMembers([]);
 	};
 

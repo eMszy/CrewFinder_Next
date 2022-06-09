@@ -18,6 +18,7 @@ const handler = async (req, res) => {
 			const events = await Event.find({ _id: user.events });
 			events.forEach((e) => {
 				user.events.forEach((u) => {
+					//itt kell bevezetni hogy ne az eveteknek a dátumát vegye ki hanem a user.event.dates-et adja vissza
 					if (e._id.toString() === u._id.toString()) {
 						e.label = u.label;
 					}
