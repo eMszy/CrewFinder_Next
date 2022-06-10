@@ -84,8 +84,6 @@ const MonthDays = ({ day, rowIdx }) => {
 									<div
 										onClick={() => {
 											setSelectedEvent(evt);
-											//Ez a referencia
-											console.log("evt", evt);
 										}}
 										style={getStyle(evt)}
 										className={classes.Event}

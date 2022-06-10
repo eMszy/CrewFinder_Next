@@ -1,14 +1,13 @@
 .MessageMain {
-	width: 100vw;
-	position: fixed;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	position: absolute;
+	width: min-content;
+	z-index: 101;
+	top: -4.5rem;
+	left: 50%;
+	transform: translate(-50%);
+
 	transition-property: all;
 	transition-duration: 3s, 5s;
-	z-index: 100;
-	top: -4.5rem;
-
 	&:hover {
 		cursor: pointer;
 	}

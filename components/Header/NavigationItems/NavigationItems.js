@@ -61,22 +61,3 @@ const NavigationItems = () => {
 };
 
 export default NavigationItems;
-
-export async function getServerSideProps(context) {
-	const session = await getSession(context);
-
-	if (!session) {
-		return {
-			redirect: {
-				permanent: false,
-				destination: "/",
-			},
-		};
-	}
-
-	return {
-		props: {
-			session,
-		},
-	};
-}

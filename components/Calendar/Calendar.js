@@ -11,9 +11,10 @@ import EventHandle from "../EventCreator/EventHandle";
 import { getMonth, getWeek } from "../../shared/utility";
 
 import classes from "./Calendar.module.scss";
+import Backdrop from "../UI/Backdrop/Backdrop";
 
 const Calendar = () => {
-	const { showEventModal } = useContext(StateContext);
+	const { showEventModal, setShowEventModal } = useContext(StateContext);
 
 	const viewTypes = ["Havi", "Heti", "Lista"];
 
@@ -24,7 +25,12 @@ const Calendar = () => {
 
 	return (
 		<div className={classes.CalendarMain}>
-			{showEventModal && <EventHandle />}
+			{showEventModal && (
+				<>
+					<Backdrop clicked={setShowEventModal} />
+					<EventHandle />
+				</>
+			)}
 			<div className={classes.CalendarMain_Header}>
 				<CalendarHeader
 					viewTypes={viewTypes}

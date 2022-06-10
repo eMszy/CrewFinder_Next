@@ -27,7 +27,7 @@ const Layout = (props) => {
 	let headerClass = classes.HeaderNotAuth;
 
 	if (status === "authenticated") {
-		backgroundClass = backgroundClass = classes.MainDiv;
+		backgroundClass = classes.MainDiv;
 		headerClass = classes.Header;
 	}
 
