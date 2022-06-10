@@ -73,7 +73,7 @@ const eventSchema = new Schema(
 			type: String,
 			required: true,
 		},
-		yourPosition: {
+		creatorPosition: {
 			type: String,
 			required: true,
 		},

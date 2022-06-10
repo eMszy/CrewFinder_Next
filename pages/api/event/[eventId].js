@@ -4,6 +4,32 @@ import Event from "../../../models/event";
 import User from "../../../models/user";
 import dbConnect from "../../../shared/dbConnect";
 
+const dataInfos = (data) => {
+	return {
+		startDate: data.startDate,
+		endDate: data.endDate,
+		id: data.id,
+		department: data.department,
+		label: data.label,
+		title: data.title,
+		shortTitle: data.shortTitle,
+		description: data.description,
+		location: data.location,
+		creatorId: data.creator,
+		creatorName: data.creatorName,
+	};
+};
+
+const dateInfos = (c, date) => {
+	return {
+		yourPosition: c.pos,
+		id: date.id,
+		startTime: date.startTime,
+		endTime: date.endTime,
+		invitionType: c.invitionType.name,
+	};
+};
+
 const handler = async (req, res) => {
 	const eventId = req.query.eventId;
 	dbConnect();
@@ -20,17 +46,87 @@ const handler = async (req, res) => {
 			const theEvent = await user.events.find(
 				(usrEvt) => eventId === usrEvt?._id.toString()
 			);
-
 			if (!userDates) {
 				console.log("nincs userDates", user.name);
 				return;
 			}
-
 			if (theEvent) {
 				await user.events.pull(theEvent);
 			}
 			await user.events.push({ _id: eventId, ...userDates });
 			await user.save();
+		};
+
+		const UsersInvite = async (crewIds, crewDates) => {
+			const UsersArray = await User.find({
+				_id: { $in: crewIds },
+			});
+
+			UsersArray.forEach((user) => {
+				const theUser = crewDates.find(
+					(crewDate) => crewDate.userId.toString() === user._id.toString()
+				);
+				if (theUser) {
+					updateAllNewUser(user._id, theUser);
+				}
+			});
+		};
+
+		const invition = async (data) => {
+			let crewDates = [];
+			let directInvitCrewIds = [];
+			let openInvitCrewIds = [];
+
+			data.dates.forEach((date) => {
+				date.crew.forEach((c) => {
+					if (c.invitionType?.name === "direct") {
+						if (!directInvitCrewIds.includes(c._id)) {
+							directInvitCrewIds.push(c._id);
+							crewDates.push({
+								...dataInfos(data),
+								userId: c._id,
+								label: c.label,
+								dates: [dateInfos(c, date)],
+							});
+						} else {
+							crewDates.forEach((crewDate) => {
+								if (crewDate.userId === c._id) {
+									crewDate.dates.push(dateInfos(c, date));
+								}
+							});
+						}
+					} else if (c.invitionType && c.invitionType.result) {
+						c.invitionType.result.forEach((reslt) => {
+							if (!openInvitCrewIds.includes(reslt._id)) {
+								openInvitCrewIds.push(reslt._id);
+								crewDates.push({
+									...dataInfos(data),
+									userId: reslt._id,
+									label: c.label,
+									dates: [dateInfos(c, date)],
+								});
+							} else {
+								crewDates.forEach((crewDate) => {
+									if (crewDate.userId === reslt._id) {
+										crewDate.dates.push(dateInfos(c, date));
+									}
+								});
+							}
+						});
+					}
+					if (c.status === "new") {
+						c.status = "invited";
+					}
+				});
+			});
+
+			let crewIds = [...directInvitCrewIds];
+			openInvitCrewIds.forEach((OIds) => {
+				if (!crewIds.includes(OIds)) {
+					crewIds.push(OIds);
+				}
+			});
+			await UsersInvite(crewIds, crewDates);
 		};
 
 		switch (req.method) {
@@ -55,15 +151,12 @@ const handler = async (req, res) => {
 
 			case "POST": {
 				const data = req.body;
+				console.log("data", data);
 				const event = new Event(data);
 				const user = await User.findById(token.id);
 				user.ownEvents.push({ _id: event._id, label: data.label });
 
-				// console.log("data", data.dates);
-				// nem csak a baseCrewnal kell
-				// data.baseCrew.forEach((user) => {
-				// 	invition(user);
-				// });
+				invition(data);
 
 				await user.save();
 				await event.save();
@@ -79,85 +172,11 @@ const handler = async (req, res) => {
 					throw Error("Nem általad létrehozott esemény");
 				}
 
-				let crewDates = [];
-				let crewIds = [];
+				invition(data);
 
-				data.dates.forEach((date) => {
-					date.crew.forEach((c) => {
-						if (c._id) {
-							if (c.status === "new") {
-								c.status = "invited";
-							}
-							if (!crewIds.includes(c._id)) {
-								crewIds.push(c._id);
-								crewDates.push({
-									...data,
-									label: c.label,
-									userId: c._id,
-									dates: [
-										{
-											yourPosition: c.pos,
-											id: date.id,
-											startTime: date.startTime,
-											endTime: date.endTime,
-										},
-									],
-								});
-							} else {
-								crewDates.forEach((crewDate) => {
-									if (crewDate.userId === c._id) {
-										crewDate.dates.push({
-											yourPosition: c.pos,
-											id: date.id,
-											startTime: date.startTime,
-											endTime: date.endTime,
-										});
-									}
-								});
-							}
-						} else if (c.invitionType) {
-							c.invitionType.result.forEach((reslt) =>
-								console.log("c", reslt._id)
-							);
-							// console.log("crewId", crewIds);
-							// console.log("crewDates", crewDates);
-							// console.log("user.invitionType.result", user.invitionType.result);
-							//? nem direkt meghívás ITT TARTOK
-						}
-					});
-				});
-
-				// const invition = (user) => {
-				// 	if (user.status === "new") {
-				// 		user.status = "invited";
-				// 		//invition majd ide kell
-				// 		if (user.label === 4) {
-				// 			updateAllNewUser(user._id, user.label);
-				// 		} else if (user.label === 5) {
-				// 			user.invitionType.result.forEach((u) => {
-				// 				updateAllNewUser(u._id, user.label);
-				// 			});
-				// 		}
-				// 	}
-				// };
-
-				const UsersArray = await User.find({ _id: { $in: crewIds } });
-
-				UsersArray.forEach((user) => {
-					const theUser = crewDates.find(
-						(crewDate) => crewDate.userId === user._id.toString()
-					);
-
-					if (theUser) {
-						updateAllNewUser(user._id, theUser);
-					} else {
-						//ide jön a nem direkt meghívás?
-					}
-				});
-
-				await Event.findByIdAndUpdate(eventId, data);
+				const event = await Event.findByIdAndUpdate(eventId, data);
 				res.statusCode = 202;
-				res.json({ message: "Sikeresen modósítottad az eseményt" });
+				res.json({ message: "Sikeresen modósítottad az eseményt", event });
 				return;
 			}
 
