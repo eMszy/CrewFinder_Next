@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
+import Image from "next/image";
 import { IoCalendarOutline, IoCloseCircleOutline } from "react-icons/io5";
 
 import { StateContext } from "../../../context/state-context";
@@ -111,6 +112,8 @@ const EventCreatorSecondary = ({ department, setIsCreatroPage }) => {
 		return [...filteredDay, { ...day[id], [name]: value }];
 	};
 
+	console.log("pickedDays", pickedDays);
+
 	return (
 		<div>
 			<form>
@@ -211,7 +214,8 @@ const EventCreatorSecondary = ({ department, setIsCreatroPage }) => {
 																		<option key={id}>{pos}</option>
 																	))}
 															</select>
-															{c.invitionType ? (
+															{c.invitionType &&
+															c.invitionType?.name !== "direct" ? (
 																<select
 																	name="invitionType"
 																	value={c.invitionType?.name}
@@ -225,19 +229,20 @@ const EventCreatorSecondary = ({ department, setIsCreatroPage }) => {
 																		</option>
 																	))}
 																</select>
+															) : c.image ? (
+																<Image
+																	src={c.image}
+																	width={35}
+																	height={35}
+																	alt={c.name}
+																/>
 															) : (
-																<div className={classes.Text400}>Saját</div>
+																<div></div>
 															)}
 															{c.invitionType?.name === "direct" ? (
-																<input
-																	type="text"
-																	name="name"
-																	value={c.name}
-																	required
-																	onChange={() => {
-																		//ezt majd meg kell írni
-																	}}
-																/>
+																<div className={classes.BaseTeam_Pos__Direct}>
+																	{c.name}
+																</div>
 															) : (
 																<div></div>
 															)}

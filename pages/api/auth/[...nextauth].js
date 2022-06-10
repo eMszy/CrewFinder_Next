@@ -80,6 +80,9 @@ export default NextAuth({
 			},
 		}),
 	],
+	pages: {
+		newUser: "/home/profil",
+	},
 	callbacks: {
 		// signIn: async (data) => {
 		// 	console.log("signIn - DATA:", data);

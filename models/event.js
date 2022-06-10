@@ -25,6 +25,7 @@ const crewSchema = new Schema({
 		required: true,
 		default: "new",
 	},
+	image: String,
 	label: { type: Number, required: true },
 	invitionType: Schema.Types.Mixed,
 });

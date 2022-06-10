@@ -376,12 +376,15 @@
 
 		.CrewPosName {
 			display: grid;
-			grid-template-columns: 7rem 9rem auto min-content;
-			justify-items: start;
+			grid-template-columns: 7rem 6rem 10rem min-content;
 			gap: 0 0.5rem;
 			align-items: center;
+			justify-items: center;
 			padding: 0.5rem 0;
 			border-bottom: 2px solid rgba(229, 231, 235, 100);
+			span {
+				border-radius: 999px;
+			}
 			svg {
 				border-radius: 1rem;
 				color: red;

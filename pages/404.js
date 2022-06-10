@@ -13,8 +13,6 @@ const Costume404 = () => {
 	const router = useRouter();
 	const { data: session, status } = useSession();
 
-	console.log("status", session);
-
 	useEffect(() => {
 		let link = "/";
 		if (status === "authenticated") {

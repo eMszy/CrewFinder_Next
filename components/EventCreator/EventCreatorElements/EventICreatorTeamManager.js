@@ -38,16 +38,19 @@ const EventICreatorTeamManager = ({
 
 	const fetchUser = async (e, pos) => {
 		try {
-			const data = await fetch(
+			const res = await fetch(
 				`/api/user/search?input=${e.target.value}&pos=${pos}`
 			);
-			const dataJson = await data.json();
-			if (data.ok) {
-				const filteredData = dataJson.filter(
-					(d) => d._id.toString() !== session.id
-				);
-				setFetchedUsers(filteredData);
+			const dataJson = await res.json();
+
+			if (!res.ok || res.error) {
+				throw Error(resJson.message);
 			}
+
+			const filteredData = dataJson.filter(
+				(d) => d._id.toString() !== session.id
+			);
+			setFetchedUsers(filteredData);
 		} catch (err) {
 			console.error("Error", err);
 			throw new Error({ message: err.message });
@@ -68,11 +71,12 @@ const EventICreatorTeamManager = ({
 		}
 	};
 
-	const directInputHandler = (e, crewMember = crewMemberTarget) => {
+	const directInputHandler = (e, f, crewMember = crewMemberTarget) => {
 		const target = e.currentTarget;
 		if (target.type === "text") {
 			changeHandle({
 				...crewMember,
+				invitionType: { name: "direct" },
 				[target.name]: target.value,
 				_id: null,
 			});
@@ -84,9 +88,8 @@ const EventICreatorTeamManager = ({
 		} else {
 			changeHandle({
 				...crewMember,
-				name: target.value,
-				_id: target.id,
-				// image: target.image,
+				...f,
+				invitionType: { name: "direct" },
 				label: 4,
 			});
 			setCrewMemberTarget([]);
@@ -119,13 +122,17 @@ const EventICreatorTeamManager = ({
 										{crewMember.invitionType?.name === "direct" &&
 											(crewMember._id ? (
 												<div className={classes.BaseTeam_Pos__Direct}>
+													{crewMember.image ? (
+														<Image
+															src={crewMember.image}
+															width={35}
+															height={35}
+															alt={crewMember.name}
+														/>
+													) : (
+														<div></div>
+													)}
 													{crewMember.name}
-													{/* <Image
-														src={crewMember.image}
-														width={35}
-														height={35}
-														alt={crewMember.name}
-													/> */}
 												</div>
 											) : (
 												<input
@@ -136,7 +143,7 @@ const EventICreatorTeamManager = ({
 													required
 													onChange={(e) => {
 														setCrewMemberTarget(crewMember);
-														directInputHandler(e, crewMember);
+														directInputHandler(e, null, crewMember);
 													}}
 												/>
 											))}
@@ -234,7 +241,7 @@ const EventICreatorTeamManager = ({
 											id={f._id}
 											value={f.name}
 											clicked={(e) => {
-												directInputHandler(e);
+												directInputHandler(e, f);
 											}}
 										>
 											<div>{f.name}</div>
