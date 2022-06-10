@@ -151,12 +151,11 @@ const handler = async (req, res) => {
 
 			case "POST": {
 				const data = req.body;
-				console.log("data", data);
 				const event = new Event(data);
 				const user = await User.findById(token.id);
 				user.ownEvents.push({ _id: event._id, label: data.label });
 
-				invition(data);
+				await invition(data);
 
 				await user.save();
 				await event.save();
@@ -172,7 +171,7 @@ const handler = async (req, res) => {
 					throw Error("Nem általad létrehozott esemény");
 				}
 
-				invition(data);
+				await invition(data);
 
 				const event = await Event.findByIdAndUpdate(eventId, data);
 				res.statusCode = 202;

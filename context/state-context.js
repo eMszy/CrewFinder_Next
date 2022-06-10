@@ -132,17 +132,16 @@ const StateContextProvider = (props) => {
 		const loadAllEvents = async () => {
 			try {
 				if (status === "authenticated") {
-					const events = await fetch("/api/event/all");
-					const eventsJson = await events.json();
+					const res = await fetch("/api/event/all");
+					const eventsJson = await res.json();
 					console.log("eventsJson", eventsJson);
-					if (events.ok) {
-						setEvents(eventsJson);
-					} else {
-						setStatus(eventsJson);
+
+					if (!res.ok || res.error) {
+						throw Error(resJson.message);
 					}
+					setEvents(eventsJson);
 				}
 			} catch (err) {
-				console.log("err", err);
 				setStatus({ message: err.message, error: true });
 			}
 		};

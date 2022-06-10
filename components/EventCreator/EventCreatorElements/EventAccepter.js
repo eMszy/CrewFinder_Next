@@ -2,16 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import dayjs from "dayjs";
 import { MdOutlineDescription, MdTitle } from "react-icons/md";
-import {
-	IoCalendarOutline,
-	IoCloseCircleOutline,
-	IoBookmarkOutline,
-	IoLocationOutline,
-} from "react-icons/io5";
+import { IoCalendarOutline, IoCloseCircleOutline } from "react-icons/io5";
 
 import { StateContext } from "../../../context/state-context";
 import SmallCalendar from "../../Calendar/CalendarElements/SmallCalendar";
 import Button from "../../UI/Button/Button";
+import Spinner from "../../UI/Spinner/Spinner";
 
 import control from "../../../control.json";
 
@@ -21,20 +17,42 @@ const EventAccepter = ({ department }) => {
 	const { setShowEventModal, selectedEvent, setStatus } =
 		useContext(StateContext);
 
-	const [pickedDays, setPickedDays] = useState(selectedEvent.dates);
+	const { data: session, status } = useSession();
+
+	const [isLoading, setLoading] = useState(false);
+	const [theEvent, settheEvent] = useState();
+	const [pickedDays, setPickedDays] = useState([]);
 	const [isClicked, setIsClicked] = useState();
 	const [clickedDate, setClickedDate] = useState();
 
-	const { data: session, status } = useSession();
+	useEffect(() => {
+		setLoading(true);
+		const fetchEvent = async () => {
+			try {
+				const res = await fetch(`api/event/${selectedEvent._id}`);
+				const fetchedEvent = await res.json();
+				if (!res.ok || res.error) {
+					throw Error(resJson.message);
+				}
+				settheEvent(fetchedEvent);
+				setPickedDays(fetchedEvent.dates);
+			} catch (err) {
+				setStatus({ message: err.message, error: true });
+			}
+		};
+		fetchEvent();
+		setLoading(false);
+		// eslint-disable-next-line
+	}, []);
 
 	const respondHandler = async (e, answer) => {
 		e.preventDefault();
 		try {
-			console.log("first", selectedEvent, session);
+			console.log("application", theEvent, session);
 			const res = await fetch("/api/event/application", {
 				method: "PUT",
 				body: JSON.stringify({
-					eventId: selectedEvent._id,
+					eventId: theEvent._id,
 					userId: session.id,
 					answer,
 				}),
@@ -61,7 +79,7 @@ const EventAccepter = ({ department }) => {
 		if (clickedDate) {
 			let updatedpickedDays = pickedDays;
 
-			const pickedDay = selectedEvent.dates.find(
+			const pickedDay = theEvent.dates.find(
 				(d) => d.id === +dayjs(clickedDate).format("YYYYMMDD")
 			);
 
@@ -81,8 +99,15 @@ const EventAccepter = ({ department }) => {
 		// eslint-disable-next-line
 	}, [isClicked]);
 
+	if (isLoading || !theEvent || status === "loading")
+		return (
+			<div className={classes.Loding_Spinner}>
+				<Spinner />;
+			</div>
+		);
+
 	return (
-		<div>
+		<>
 			<form>
 				<div className={classes.EventModal_MainBody}>
 					<div className={classes.EventModal_Input}>
@@ -91,12 +116,12 @@ const EventAccepter = ({ department }) => {
 						</div>
 						<div className={classes.EventModal_TwoInput}>
 							<p>
-								{selectedEvent.title} {" - "}
-								{selectedEvent.shortTitle}
+								{theEvent.title} {" - "}
+								{theEvent.shortTitle}
 							</p>
 							<p className={classes.Text400}>
 								{"Létrehozta: "}
-								{selectedEvent.creatorName}
+								{theEvent.creatorName}
 							</p>
 						</div>
 						<div className={classes.Icon}>
@@ -104,15 +129,15 @@ const EventAccepter = ({ department }) => {
 						</div>
 						<div className={classes.EventModal_TwoInputs}>
 							<p className={classes.Text400}>
-								{dayjs(selectedEvent.startDate).format("YYYY. MM. DD.")}
+								{dayjs(theEvent.startDate).format("YYYY. MM. DD.")}
 								{" - "}
-								{dayjs(selectedEvent.endDate).format("MM. DD.")}
+								{dayjs(theEvent.endDate).format("MM. DD.")}
 							</p>
 						</div>
 						<div className={classes.Icon}>
 							<MdOutlineDescription />
 						</div>
-						<p>{selectedEvent.description}</p>
+						<p>{theEvent.description}</p>
 
 						<div className={classes.Icon}>
 							<IoCalendarOutline />
@@ -145,7 +170,7 @@ const EventAccepter = ({ department }) => {
 															{c.id > 0 ? (
 																<p className={classes.Span2}>{c.name}</p>
 															) : (
-																<div>{selectedEvent.creatorName}</div>
+																<div>{theEvent.creatorName}</div>
 															)}
 															{c?._id?.toString() === session.id && (
 																<div
@@ -182,11 +207,11 @@ const EventAccepter = ({ department }) => {
 						<SmallCalendar
 							filteredEvents={[
 								{
-									label: selectedEvent.label,
-									startDate: +dayjs(selectedEvent.startDate),
-									endDate: +dayjs(selectedEvent.endDate),
+									label: theEvent.label,
+									startDate: +dayjs(theEvent.startDate),
+									endDate: +dayjs(theEvent.endDate),
 									dates: pickedDays,
-									selectedEventDates: selectedEvent.dates,
+									selectedEventDates: theEvent.dates,
 								},
 							]}
 							setClickedDate={setClickedDate}
@@ -195,7 +220,7 @@ const EventAccepter = ({ department }) => {
 						<div className={classes.EventModal_Calendar__ControlBtns}>
 							<Button
 								type="button"
-								clicked={() => setPickedDays(selectedEvent.dates)}
+								clicked={() => setPickedDays(theEvent.dates)}
 							>
 								Mind
 							</Button>
@@ -226,7 +251,7 @@ const EventAccepter = ({ department }) => {
 					</Button>
 				</footer>
 			</form>
-		</div>
+		</>
 	);
 };
 
