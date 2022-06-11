@@ -86,7 +86,7 @@ export const date_of_bith = {
 		title: "Születési dátum",
 		type: "date",
 		placeholder: "",
-		editable: true,
+		editable: 1,
 		subfolder: "connectInfo",
 	},
 	value: "",
@@ -105,7 +105,7 @@ export const formTemplate = {
 		...text,
 		elementConfig: {
 			title: "Becenév",
-			editable: true,
+			editable: 1,
 			subfolder: "connectInfo",
 		},
 	},
@@ -114,7 +114,7 @@ export const formTemplate = {
 		elementConfig: {
 			title: "Telefonszám",
 			placeholder: "",
-			editable: true,
+			editable: 1,
 			subfolder: "connectInfo",
 		},
 	},
@@ -126,7 +126,7 @@ export const formTemplate = {
 		elementConfig: {
 			title: "Neme",
 			placeholder: "",
-			editable: true,
+			editable: 1,
 			subfolder: "connectInfo",
 		},
 		validation: {
@@ -138,7 +138,7 @@ export const formTemplate = {
 		elementConfig: {
 			title: "IMDB link",
 			placeholder: "",
-			editable: true,
+			editable: 1,
 			subfolder: "connectInfo",
 		},
 	},
@@ -147,7 +147,7 @@ export const formTemplate = {
 		elementConfig: {
 			title: "Facebook link",
 			placeholder: "",
-			editable: true,
+			editable: 1,
 			subfolder: "connectInfo",
 		},
 	},
@@ -156,7 +156,7 @@ export const formTemplate = {
 		elementConfig: {
 			title: "Város",
 			placeholder: "",
-			editable: true,
+			editable: 1,
 			subfolder: "address",
 		},
 	},
@@ -165,7 +165,7 @@ export const formTemplate = {
 		elementConfig: {
 			title: "Utca",
 			placeholder: "",
-			editable: true,
+			editable: 1,
 			subfolder: "address",
 		},
 	},
@@ -174,7 +174,7 @@ export const formTemplate = {
 		elementConfig: {
 			title: "Irányítószám",
 			placeholder: "",
-			editable: true,
+			editable: 1,
 			subfolder: "address",
 		},
 	},

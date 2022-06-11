@@ -20,7 +20,6 @@ const Input = (props) => {
 					onChange={props.changed}
 					name={props.name}
 					disabled={props.disabled}
-					editable={props.nonEditable}
 				/>
 			);
 			break;
@@ -33,7 +32,6 @@ const Input = (props) => {
 					onChange={props.changed}
 					name={props.name}
 					disabled={props.disabled}
-					editable={props.nonEditable}
 				/>
 			);
 			break;
@@ -45,7 +43,6 @@ const Input = (props) => {
 					onChange={props.changed}
 					name={props.name}
 					disabled={props.disabled}
-					editable={props.nonEditable}
 				>
 					{props.elementConfig.options.map((option) => (
 						<option key={option.value} value={option.value}>
