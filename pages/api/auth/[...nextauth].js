@@ -80,16 +80,14 @@ export default NextAuth({
 			},
 		}),
 	],
-	pages: {
-		newUser: "/home/profil",
-	},
 	callbacks: {
 		// signIn: async (data) => {
 		// 	console.log("signIn - DATA:", data);
 		// 	return true;
 		// },
-		jwt: async ({ token, user }) => {
+		jwt: async ({ token, user, account }) => {
 			if (user) {
+				// console.log("account", account);
 				token.id = user.id;
 				token.metaData = user.metaData;
 			}
@@ -99,6 +97,7 @@ export default NextAuth({
 			if (token) {
 				session.id = token.id;
 				session.metaData = token.metaData;
+				session.error = token.error;
 			}
 			return session;
 		},

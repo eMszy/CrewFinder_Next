@@ -16,6 +16,7 @@ const Message = () => {
 		setMessages({
 			msg: isStatusMsg.message,
 			isError: isStatusMsg.error || null,
+			isInfo: isStatusMsg.info ? true : false,
 		});
 		setIsAnimation(true);
 		const timer = setTimeout(() => {
@@ -35,6 +36,7 @@ const Message = () => {
 				className={[
 					classes.MessageDiv,
 					isStatusMsg.error && classes.Error,
+					isStatusMsg.info && classes.Info,
 				].join(" ")}
 			>
 				<h3>{messages && messages.msg}</h3>

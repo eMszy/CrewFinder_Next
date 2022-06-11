@@ -2,7 +2,7 @@
 	position: absolute;
 	width: min-content;
 	z-index: 101;
-	top: -4.5rem;
+	top: -5.6rem;
 	left: 50%;
 	transform: translate(-50%);
 
@@ -27,6 +27,11 @@
 	.Error {
 		color: red;
 		border: 3px red solid;
+	}
+
+	.Info {
+		color: blue;
+		border: 3px blue solid;
 	}
 }
 

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import Head from "next/head";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 
 import Positions from "../../../components/Profil/Positions";
 import Profil from "../../../components/Profil/Profil";
@@ -15,17 +15,33 @@ import { StateContext } from "../../../context/state-context";
 import classes from "./Profil.module.scss";
 
 const ProfilPage = ({ formedUser, user, err, title }) => {
-	const stateContext = useContext(StateContext);
+	const { setStatus } = useContext(StateContext);
+	const { data: session, status } = useSession();
+
+	console.log("session", session?.metaData);
 
 	useEffect(() => {
 		if (err) {
-			stateContext.setStatus({
+			setStatus({
 				message: err,
 				error: true,
 			});
 		}
 		// eslint-disable-next-line
 	}, [err]);
+
+	useEffect(() => {
+		if (
+			status === "authenticated" &&
+			(!session.metaData.positions || session.metaData.positions.length === 0)
+		) {
+			setStatus({
+				info: true,
+				message:
+					"Kérlek vegyél fel pozicíókat, hogy láthasd milyen munkákból tudsz válogatni!",
+			});
+		}
+	}, [status]);
 
 	return (
 		<>
@@ -57,7 +73,7 @@ export const getServerSideProps = async (context) => {
 			throw Error(user.message);
 		}
 		const formedUser = formingData(user, formTemplate);
-		return { props: { formedUser, user, session, title } };
+		return { props: { formedUser, user, title } };
 	} catch (err) {
 		return {
 			props: { err: err.message, title },

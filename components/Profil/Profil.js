@@ -82,7 +82,7 @@ const Profil = ({ formedUser, user }) => {
 					message: "Sikeres törölted a regisztrációdat",
 					err: true,
 				});
-				signOut();
+				signOut({ callbackUrl: `/` });
 				return res;
 			} catch (err) {
 				stateContext.setStatus({ message: err.message, error: true });

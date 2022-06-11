@@ -13,6 +13,16 @@ const middleware = async (req) => {
 		url.pathname = "/api/auth/signin";
 		return NextResponse.redirect(url);
 	}
+
+	if (!token.metaData.positions || token.metaData.positions.length === 0) {
+		const url = req.nextUrl.clone();
+		if (url.pathname !== "/home/profil") {
+			url.pathname = "/home/profil";
+
+			return NextResponse.redirect(url);
+		}
+	}
+
 	return NextResponse.next();
 };
 

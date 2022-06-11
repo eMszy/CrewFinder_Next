@@ -1,8 +1,7 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { signIn, useSession } from "next-auth/react";
-// import { useRouter } from "next/router";
 import { FcGoogle } from "react-icons/fc";
 import { BsFacebook } from "react-icons/bs";
 
@@ -14,12 +13,20 @@ import Button from "../../components/UI/Button/Button";
 import crewfinderLogoWhite from "../../public/icons/crewfinderLogoWhite.svg";
 import Spinner from "../../components/UI/Spinner/Spinner.js";
 import classes from "./Auth.module.scss";
+import { useRouter } from "next/router";
 
 const AuthForm = () => {
 	const { status } = useSession();
-	// const router = useRouter();
+	const router = useRouter();
 
 	const { setStatus } = useContext(StateContext);
+
+	useEffect(() => {
+		if (status === "authenticated") {
+			router.push("/home");
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [status]);
 
 	const formElmentTemplates = {
 		login: {
@@ -40,39 +47,33 @@ const AuthForm = () => {
 	const signupHandler = async (event) => {
 		event.preventDefault();
 		try {
-			const res = await signIn("SingIn", {
+			await signIn("SingIn", {
 				name: LoginRegForm.name.value,
 				email: LoginRegForm.email.value,
 				password: LoginRegForm.password.value,
-				redirect: false,
+				callbackUrl: `/home`,
 			});
-
-			if (!res.ok || res.error) {
-				throw Error(res.error);
-			}
-
 			setStatus({ message: "Sikeres regisztráció" });
-			return res;
+			return;
 		} catch (err) {
 			setStatus({ message: err.message, error: true });
+			return;
 		}
 	};
 
 	const loginHandler = async (event) => {
 		event.preventDefault();
 		try {
-			const res = await signIn("LogIn", {
+			await signIn("LogIn", {
 				email: LoginRegForm.email.value,
 				password: LoginRegForm.password.value,
-				redirect: false,
+				callbackUrl: `/home`,
 			});
-			if (!res.ok || res.error) {
-				throw Error(res.error);
-			}
 			setStatus({ message: "Sikeres belépés" });
-			return res;
+			return;
 		} catch (err) {
 			setStatus({ message: err.message, error: true });
+			return;
 		}
 	};
 
@@ -139,7 +140,7 @@ const AuthForm = () => {
 					className={classes.LoginMain__LoginForm}
 				>
 					<h2>{IsSignup ? "Regisztráció" : "Belépés"}</h2>
-					{status === "loading" || status === "authenticated" ? (
+					{status !== "unauthenticated" ? (
 						<div className={classes.Spinner}>
 							<Spinner />
 						</div>
@@ -160,13 +161,13 @@ const AuthForm = () => {
 				</form>
 
 				<div className={classes.LoginMain__LoginForm__LoginBtn}>
-					<Button clicked={() => signIn("google")}>
+					<Button clicked={() => signIn("google", { callbackUrl: `/home` })}>
 						<div className={classes.LoginIcons}>
 							<FcGoogle />
 							GOOGLE
 						</div>
 					</Button>
-					<Button clicked={() => signIn("facebook")}>
+					<Button clicked={() => signIn("facebook", { callbackUrl: `/home` })}>
 						<div className={classes.LoginIcons}>
 							<BsFacebook />
 							FACEBOOK

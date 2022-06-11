@@ -1,4 +1,3 @@
-// import { useSession } from "next-auth/react";
 import Head from "next/head";
 
 import Calendar from "../../components/Calendar/Calendar";
@@ -8,7 +7,6 @@ import classes from "../index.module.scss";
 
 const Home = () => {
 	Home.title = "CrewFinder - Home";
-	// const { data: session, status } = useSession();
 
 	return (
 		<>
