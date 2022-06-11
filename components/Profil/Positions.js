@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 
 import { StateContext } from "../../context/state-context";
@@ -8,19 +8,31 @@ import control from "../../control.json";
 import classes from "./Positions.module.scss";
 
 const Positions = ({ user }) => {
-	const stateContext = useContext(StateContext);
+	const { setStatus } = useContext(StateContext);
 
 	const [department, setDepartment] = useState("");
 	const [positions, setPositions] = useState([]);
 	const [yourPositions, setYourPositions] = useState(user?.metaData.positions);
-	const [filteredDepts, setFilteredDepts] = useState(
-		Object.keys(control.departments).filter((dep) => dep !== "Privát")
+
+	const filteredDepts = Object.keys(control.departments).filter(
+		(dep) => dep !== "Privát"
 	);
 
-	// console.log("yourPositions", yourPositions);
-	// console.log("user", user._id, session.id);
-	// console.log("status", status);
-	// console.log("filteredDepts", filteredDepts);
+	const isAnyPosCheck = () => {
+		if (!yourPositions || yourPositions.length === 0) {
+			setStatus({
+				info: true,
+				message:
+					"Kérlek vegyél fel pozicíókat, hogy láthasd milyen munkákból tudsz válogatni!",
+			});
+			return false;
+		}
+		return true;
+	};
+
+	useEffect(() => {
+		isAnyPosCheck();
+	}, []);
 
 	const openDepHandler = (dep) => {
 		setDepartment((currentDept) => {
@@ -44,23 +56,26 @@ const Positions = ({ user }) => {
 	};
 
 	const submitHandler = async () => {
-		try {
-			const res = await fetch("/api/user/" + user._id, {
-				method: "PUT",
-				body: JSON.stringify({ positions: yourPositions, type: "positions" }),
-				headers: {
-					"Content-Type": "application/json",
-				},
-			});
-			const resJson = await res.json();
+		const isAnyPos = isAnyPosCheck();
+		if (isAnyPos) {
+			try {
+				const res = await fetch("/api/user/" + user._id, {
+					method: "PUT",
+					body: JSON.stringify({ positions: yourPositions, type: "positions" }),
+					headers: {
+						"Content-Type": "application/json",
+					},
+				});
+				const resJson = await res.json();
 
-			if (!res.ok || res.error) {
-				throw Error(resJson.message);
+				if (!res.ok || res.error) {
+					throw Error(resJson.message);
+				}
+				setStatus(resJson);
+				return resJson;
+			} catch (err) {
+				setStatus({ message: err.message, error: true });
 			}
-			stateContext.setStatus(resJson);
-			return resJson;
-		} catch (err) {
-			stateContext.setStatus({ message: err.message, error: true });
 		}
 	};
 

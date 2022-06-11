@@ -1,24 +1,19 @@
 import React, { useContext, useEffect } from "react";
 import Head from "next/head";
-import { getSession, useSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 
+import { StateContext } from "../../../context/state-context";
 import Positions from "../../../components/Profil/Positions";
 import Profil from "../../../components/Profil/Profil";
-
 import { formTemplate } from "../../../components/UI/Input/InputTemplates/InputTemplates";
-
 import { formingData } from "../../../shared/utility";
 
 import { server } from "../../../config";
-import { StateContext } from "../../../context/state-context";
 
 import classes from "./Profil.module.scss";
 
 const ProfilPage = ({ formedUser, user, err, title }) => {
 	const { setStatus } = useContext(StateContext);
-	const { data: session, status } = useSession();
-
-	console.log("session", session?.metaData);
 
 	useEffect(() => {
 		if (err) {
@@ -29,19 +24,6 @@ const ProfilPage = ({ formedUser, user, err, title }) => {
 		}
 		// eslint-disable-next-line
 	}, [err]);
-
-	useEffect(() => {
-		if (
-			status === "authenticated" &&
-			(!session.metaData.positions || session.metaData.positions.length === 0)
-		) {
-			setStatus({
-				info: true,
-				message:
-					"Kérlek vegyél fel pozicíókat, hogy láthasd milyen munkákból tudsz válogatni!",
-			});
-		}
-	}, [status]);
 
 	return (
 		<>

@@ -51,7 +51,7 @@ const AuthForm = () => {
 				name: LoginRegForm.name.value,
 				email: LoginRegForm.email.value,
 				password: LoginRegForm.password.value,
-				callbackUrl: `/home`,
+				callbackUrl: `/home/profil`,
 			});
 			setStatus({ message: "Sikeres regisztráció" });
 			return;
