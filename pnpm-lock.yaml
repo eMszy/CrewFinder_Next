@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@next-auth/mongodb-adapter': ^1.0.3
   bcryptjs: ^2.4.3
+  cross-env: ^7.0.3
   cypress: ^10.1.0
   dayjs: ^1.11.3
   eslint: 8.17.0
@@ -39,6 +40,7 @@ dependencies:
   validator: 13.7.0
 
 devDependencies:
+  cross-env: 7.0.3
   cypress: 10.1.0
   eslint: 8.17.0
   eslint-config-next: 12.1.6_qwqcuvhue6diaz4jqbkm5dp3pa
@@ -778,6 +780,14 @@ packages:
       object-assign: 4.1.1
       vary: 1.1.2
     dev: false
+
+  /cross-env/7.0.3:
+    resolution: {integrity: sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw==}
+    engines: {node: '>=10.14', npm: '>=6', yarn: '>=1'}
+    hasBin: true
+    dependencies:
+      cross-spawn: 7.0.3
+    dev: true
 
   /cross-spawn/7.0.3:
     resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
