@@ -16,9 +16,17 @@ const handler = async (req, res) => {
 		if (req.method !== "GET") {
 			throw new Error();
 		}
+
 		const user = await User.findById(token.id);
+		if (!user) {
+			throw Error("A felhasználói adatok betöltése sikertelen.");
+		}
 
 		const ownEvents = await Event.find({ _id: user.ownEvents });
+		if (!user) {
+			throw Error("A felhasználó eseményeinek betöltése sikertelen.");
+		}
+
 		ownEvents.forEach((o) => {
 			if (o.department === "Privát") {
 				o.label = 6;

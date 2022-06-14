@@ -41,38 +41,35 @@ const handler = async (req, res) => {
 			secureCookie: process.env.NODE_ENV === "production",
 		});
 
-		const updateAllNewUser = async (userId, userDates) => {
+		const updateAllNewUser = async (userId, userDates, evtId) => {
 			const user = await User.findById(userId);
 			const theEvent = await user.events.find(
 				(usrEvt) => eventId === usrEvt?._id.toString()
 			);
-			if (!userDates) {
-				console.log("nincs userDates", user.name);
-				return;
-			}
 			if (theEvent) {
+				//valszeg ez nem jó mert így lenulláza a dolgot
 				await user.events.pull(theEvent);
 			}
-			await user.events.push({ _id: eventId, ...userDates });
+			await user.events.push({ _id: evtId, ...userDates });
 			await user.save();
 		};
 
-		const UsersInvite = async (crewIds, crewDates) => {
+		const UsersInvite = async (crewIds, crewDates, evtId) => {
 			const UsersArray = await User.find({
 				_id: { $in: crewIds },
 			});
 
-			UsersArray.forEach((user) => {
-				const theUser = crewDates.find(
+			UsersArray.forEach(async (user) => {
+				const theUser = await crewDates.find(
 					(crewDate) => crewDate.userId.toString() === user._id.toString()
 				);
 				if (theUser) {
-					updateAllNewUser(user._id, theUser);
+					await updateAllNewUser(user._id, theUser, evtId);
 				}
 			});
 		};
 
-		const invition = async (data) => {
+		const invition = async (data, evtId) => {
 			let crewDates = [];
 			let directInvitCrewIds = [];
 			let openInvitCrewIds = [];
@@ -83,6 +80,7 @@ const handler = async (req, res) => {
 						if (!directInvitCrewIds.includes(c._id)) {
 							directInvitCrewIds.push(c._id);
 							crewDates.push({
+								_id: eventId,
 								...dataInfos(data),
 								userId: c._id,
 								label: c.label,
@@ -126,7 +124,7 @@ const handler = async (req, res) => {
 					crewIds.push(OIds);
 				}
 			});
-			await UsersInvite(crewIds, crewDates);
+			await UsersInvite(crewIds, crewDates, evtId);
 		};
 
 		switch (req.method) {
@@ -153,10 +151,11 @@ const handler = async (req, res) => {
 				const data = req.body;
 				const event = new Event(data);
 				const user = await User.findById(token.id);
+				if (!user) {
+					throw Error("A felhasználói adatok betöltése sikertelen.");
+				}
 				user.ownEvents.push({ _id: event._id, label: data.label });
-
-				await invition(data);
-
+				await invition(data, event._id);
 				await user.save();
 				await event.save();
 
@@ -170,10 +169,10 @@ const handler = async (req, res) => {
 				if (data.creator !== token.id) {
 					throw Error("Nem általad létrehozott esemény");
 				}
-
-				await invition(data);
-
 				const event = await Event.findByIdAndUpdate(eventId, data);
+
+				await invition(data, eventId);
+
 				res.statusCode = 202;
 				res.json({ message: "Sikeresen modósítottad az eseményt", event });
 				return;

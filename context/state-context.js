@@ -134,10 +134,8 @@ const StateContextProvider = (props) => {
 				if (status === "authenticated") {
 					const res = await fetch("/api/event/all");
 					const eventsJson = await res.json();
-					console.log("eventsJson", eventsJson);
-
 					if (!res.ok || res.error) {
-						throw Error(resJson.message);
+						throw Error(eventsJson.message);
 					}
 					setEvents(eventsJson);
 				}
