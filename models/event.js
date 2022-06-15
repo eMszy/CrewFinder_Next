@@ -15,11 +15,6 @@ const crewSchema = new Schema({
 		type: String,
 		required: true,
 	},
-	_id: {
-		type: Schema.Types.ObjectId,
-		ref: "user",
-		required: false,
-	},
 	status: {
 		type: String,
 		required: true,

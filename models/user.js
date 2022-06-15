@@ -2,32 +2,55 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const userEventSchema = new Schema({
-	_id: {
-		type: Schema.Types.ObjectId,
-		ref: "event",
-		required: true,
-	},
-	title: {
-		type: String,
-		required: false,
-	},
-	shortTitle: {
-		type: String,
-		required: false,
-	},
-	label: {
-		type: Number,
-		required: true,
-	},
-	dates: [
-		{
-			id: Number,
-			startTime: Number,
-			endTime: Number,
+const userEventSchema = new Schema(
+	{
+		_id: {
+			type: Schema.Types.ObjectId,
+			ref: "event",
+			required: true,
 		},
-	],
-});
+		startDate: Number,
+		endDate: Number,
+		id: Number,
+		department: String,
+		title: {
+			type: String,
+			required: false,
+		},
+		shortTitle: {
+			type: String,
+			required: false,
+		},
+		description: String,
+		// location: String,
+		creator: {
+			type: Schema.Types.ObjectId,
+			ref: "user",
+			required: true,
+		},
+		creatorName: String,
+		positions: [
+			{
+				id: Number,
+				yourPosition: String,
+				invitionType: [Schema.Types.Mixed],
+				label: {
+					type: Number,
+					required: true,
+				},
+				date: [
+					{
+						id: Number,
+						startTime: Number,
+						endTime: Number,
+					},
+				],
+				status: String,
+			},
+		],
+	},
+	{ _id: false }
+);
 
 const userSchema = new Schema(
 	{
@@ -109,7 +132,7 @@ const userSchema = new Schema(
 			},
 		},
 		ownEvents: [Schema.Types.Mixed],
-		events: [Schema.Types.Mixed],
+		events: [userEventSchema],
 	},
 	{ timestamps: true }
 );

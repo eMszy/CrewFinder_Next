@@ -4,29 +4,19 @@ import Event from "../../../models/event";
 import User from "../../../models/user";
 import dbConnect from "../../../shared/dbConnect";
 
-const dataInfos = (data) => {
+const EventInfoTreeHandler = (data, pos) => {
 	return {
-		startDate: data.startDate,
+		_id: data._id,
+		statDate: data.startDate,
 		endDate: data.endDate,
 		id: data.id,
 		department: data.department,
-		label: data.label,
 		title: data.title,
 		shortTitle: data.shortTitle,
 		description: data.description,
-		location: data.location,
-		creatorId: data.creator,
+		creator: data.creator,
 		creatorName: data.creatorName,
-	};
-};
-
-const dateInfos = (c, date) => {
-	return {
-		yourPosition: c.pos,
-		id: date.id,
-		startTime: date.startTime,
-		endTime: date.endTime,
-		invitionType: c.invitionType.name,
+		positions: pos,
 	};
 };
 
@@ -41,90 +31,90 @@ const handler = async (req, res) => {
 			secureCookie: process.env.NODE_ENV === "production",
 		});
 
-		const updateAllNewUser = async (userId, userDates, evtId) => {
-			const user = await User.findById(userId);
-			const theEvent = await user.events.find(
-				(usrEvt) => eventId === usrEvt?._id.toString()
-			);
-			if (theEvent) {
-				//valszeg ez nem jó mert így lenulláza a dolgot
-				await user.events.pull(theEvent);
-			}
-			await user.events.push({ _id: evtId, ...userDates });
-			await user.save();
-		};
-
-		const UsersInvite = async (crewIds, crewDates, evtId) => {
-			const UsersArray = await User.find({
-				_id: { $in: crewIds },
-			});
-
-			UsersArray.forEach(async (user) => {
-				const theUser = await crewDates.find(
-					(crewDate) => crewDate.userId.toString() === user._id.toString()
-				);
-				if (theUser) {
-					await updateAllNewUser(user._id, theUser, evtId);
-				}
-			});
-		};
-
-		const invition = async (data, evtId) => {
-			let crewDates = [];
-			let directInvitCrewIds = [];
-			let openInvitCrewIds = [];
+		const invitionHandler = async (data, evtId) => {
+			let positionsIds = [];
+			let positionsArray = [];
 
 			data.dates.forEach((date) => {
 				date.crew.forEach((c) => {
-					if (c.invitionType?.name === "direct") {
-						if (!directInvitCrewIds.includes(c._id)) {
-							directInvitCrewIds.push(c._id);
-							crewDates.push({
-								_id: eventId,
-								...dataInfos(data),
-								userId: c._id,
-								label: c.label,
-								dates: [dateInfos(c, date)],
-							});
-						} else {
-							crewDates.forEach((crewDate) => {
-								if (crewDate.userId === c._id) {
-									crewDate.dates.push(dateInfos(c, date));
-								}
-							});
-						}
-					} else if (c.invitionType && c.invitionType.result) {
-						c.invitionType.result.forEach((reslt) => {
-							if (!openInvitCrewIds.includes(reslt._id)) {
-								openInvitCrewIds.push(reslt._id);
-								crewDates.push({
-									...dataInfos(data),
-									userId: reslt._id,
-									label: c.label,
-									dates: [dateInfos(c, date)],
-								});
-							} else {
-								crewDates.forEach((crewDate) => {
-									if (crewDate.userId === reslt._id) {
-										crewDate.dates.push(dateInfos(c, date));
-									}
+					if (!positionsIds.includes(c.id) && c.id > 0) {
+						positionsIds.push(c.id);
+						positionsArray.push({
+							id: c.id,
+							yourPosition: c.pos,
+							invitionType: c.invitionType,
+							label: c.label,
+							userId: c._id,
+							date: [
+								{
+									id: date.id,
+									startTime: date.startTime,
+									endTime: date.endTime,
+								},
+							],
+							status: "new",
+						});
+					} else if (c.id > 0) {
+						positionsArray.forEach((pos) => {
+							if (pos.id === c.id) {
+								pos.date.push({
+									id: date.id,
+									startTime: date.startTime,
+									endTime: date.endTime,
 								});
 							}
 						});
 					}
-					if (c.status === "new") {
-						c.status = "invited";
-					}
 				});
 			});
 
-			let crewIds = [...directInvitCrewIds];
-			openInvitCrewIds.forEach((OIds) => {
-				if (!crewIds.includes(OIds)) {
-					crewIds.push(OIds);
+			let usersIdArray = [];
+			let usersPosArray = [];
+
+			positionsArray.forEach((pos) => {
+				if (pos.invitionType.name === "direct") {
+					if (!usersIdArray.includes(pos.userId)) {
+						usersIdArray.push(pos.userId);
+						usersPosArray.push({ userId: pos.userId, pos: [pos] });
+					} else {
+						usersPosArray.forEach((userPos) => {
+							if (userPos.userId === pos.userId) {
+								userPos.pos.push(pos);
+							}
+						});
+					}
+				} else {
+					pos.invitionType.result.forEach((user) => {
+						if (!usersIdArray.includes(user._id)) {
+							usersIdArray.push(user._id);
+							usersPosArray.push({ userId: user._id, pos: [pos] });
+						} else {
+							usersPosArray.forEach((userPos) => {
+								if (userPos.userId === user._id) {
+									userPos.pos.push(pos);
+								}
+							});
+						}
+					});
 				}
 			});
-			await UsersInvite(crewIds, crewDates, evtId);
+
+			usersPosArray.forEach(async (userPosArray) => {
+				const newEvent = EventInfoTreeHandler(data, userPosArray.pos);
+				const user = await User.findById(userPosArray.userId);
+				if (!user) {
+					throw Error("Nincs meg a felhasználó, [eventId]:107");
+				}
+				let updatedEvents = user.events.filter(
+					(event) => event._id.toString() !== evtId
+				);
+				if (!updatedEvents) {
+					updatedEvents = [];
+				}
+				updatedEvents.push(newEvent);
+				user.events = updatedEvents;
+				await user.save();
+			});
 		};
 
 		switch (req.method) {
@@ -155,7 +145,7 @@ const handler = async (req, res) => {
 					throw Error("A felhasználói adatok betöltése sikertelen.");
 				}
 				user.ownEvents.push({ _id: event._id, label: data.label });
-				await invition(data, event._id);
+				await invitionHandler(data, event._id);
 				await user.save();
 				await event.save();
 
@@ -171,7 +161,7 @@ const handler = async (req, res) => {
 				}
 				const event = await Event.findByIdAndUpdate(eventId, data);
 
-				await invition(data, eventId);
+				await invitionHandler(data, eventId);
 
 				res.statusCode = 202;
 				res.json({ message: "Sikeresen modósítottad az eseményt", event });
@@ -189,13 +179,23 @@ const handler = async (req, res) => {
 				}
 
 				const user = await User.findById(token.id);
-				user.ownEvents.pull(eventId);
-
-				//Esetleg hogy az eseményből vegye ki a userId-kat, lehet úgy gyorsabb lenne
+				if (!user) {
+					throw Error("Nincs meg a felhasználó, [eventId]:183");
+				}
+				const updatedOwnEvents = user.ownEvents.filter(
+					(event) => event._id.toString() !== eventId.toString()
+				);
+				user.ownEvents = updatedOwnEvents;
 
 				const users = await User.find({ "events._id": eventId });
+				if (!users) {
+					throw Error("Nincs meg a felhasználó, [eventId]:192");
+				}
 				users.forEach(async (u) => {
-					u.events.pull(eventId);
+					const updatedEvents = u.events.filter(
+						(event) => event._id.toString() !== eventId.toString()
+					);
+					u.events = updatedEvents;
 					await u.save();
 				});
 
