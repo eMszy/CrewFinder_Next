@@ -4,8 +4,11 @@ import dayjs from "dayjs";
 import { StateContext } from "../../../context/state-context";
 
 import classes from "./MonthDays.module.scss";
-import { findColor } from "../../../shared/utility";
-import { eventLoaderHandler, posCounterPerDay } from "./utility";
+import {
+	eventLoaderHandler,
+	getStyle,
+	posCounterPerDay,
+} from "../../../shared/utility";
 
 const MonthDays = ({ day, rowIdx }) => {
 	const [dayEvents, setDayEvents] = useState([]);
@@ -26,26 +29,6 @@ const MonthDays = ({ day, rowIdx }) => {
 		return day.format("YY-MM-DD") === dayjs().format("YY-MM-DD")
 			? classes.ThisDay
 			: null;
-	};
-
-	const getStyle = (evt) => {
-		let style = { background: findColor(evt.label) };
-		if (dayjs(evt.startDate).format("YY-MM-DD") === day.format("YY-MM-DD")) {
-			style = {
-				...style,
-				borderRadius: "999px 0 0 999px",
-				marginLeft: "0.5rem",
-			};
-		}
-
-		if (dayjs(evt.endDate).format("YY-MM-DD") === day.format("YY-MM-DD")) {
-			style = {
-				...style,
-				borderRadius: style.borderRadius ? "999px" : "0 999px 999px 0",
-				marginRight: "0.5rem",
-			};
-		}
-		return style;
 	};
 
 	return (
@@ -76,7 +59,7 @@ const MonthDays = ({ day, rowIdx }) => {
 											onClick={() => {
 												setSelectedEvent(evt);
 											}}
-											style={getStyle(evt)}
+											style={getStyle(evt, day)}
 											className={classes.Event}
 										>
 											{evt.positions && evt.positions.length > 0 && (

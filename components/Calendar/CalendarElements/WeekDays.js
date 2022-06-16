@@ -4,8 +4,12 @@ import dayjs from "dayjs";
 import { StateContext } from "../../../context/state-context";
 
 import classes from "./WeekDays.module.scss";
-import { findColor } from "../../../shared/utility";
-import { eventLoaderHandler, posCounterPerDay } from "./utility";
+
+import {
+	eventLoaderHandler,
+	getStyle,
+	posCounterPerDay,
+} from "../../../shared/utility";
 
 const WeekDays = ({ day, rowStyle }) => {
 	const {
@@ -29,27 +33,6 @@ const WeekDays = ({ day, rowStyle }) => {
 			: null;
 	};
 
-	const getStyle = (evt) => {
-		let style = { background: findColor(evt.label) };
-
-		if (dayjs(evt.startDate).format("YY-MM-DD") === day.format("YY-MM-DD")) {
-			style = {
-				...style,
-				borderRadius: "999px 0 0 999px",
-				marginLeft: "0.5rem",
-			};
-		}
-
-		if (dayjs(evt.endDate).format("YY-MM-DD") === day.format("YY-MM-DD")) {
-			style = {
-				...style,
-				borderRadius: style.borderRadius ? "999px" : "0 999px 999px 0",
-				marginRight: "0.5rem",
-			};
-		}
-		return style;
-	};
-
 	const getBackGround = (e) => {
 		return { backgroundColor: e.label.slice(0, -4).concat("90%)") };
 	};
@@ -65,6 +48,7 @@ const WeekDays = ({ day, rowStyle }) => {
 			{labels.map((e, id) => (
 				<div key={id} style={getBackGround(e)}>
 					{dayEvents.map((evt, idx) => {
+						console.log("evt", evt.label, e.id);
 						return (
 							evt.label === e.id && (
 								<div
@@ -77,7 +61,7 @@ const WeekDays = ({ day, rowStyle }) => {
 								>
 									<div
 										onClick={() => setSelectedEvent(evt)}
-										style={getStyle(evt)}
+										style={getStyle(evt, day)}
 										className={classes.Event}
 									>
 										<div>

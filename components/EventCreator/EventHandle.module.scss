@@ -344,6 +344,8 @@
 .acceptorDates {
 	display: flex;
 	flex-direction: column;
+	grid-column: 1 / span 2;
+
 	.acceptorDates_div {
 		display: flex;
 		align-items: center;
@@ -352,6 +354,8 @@
 		margin: 0.5rem;
 		border: 3px #afd7f8 solid;
 		border-radius: 1rem;
+		transition-property: all;
+		transition-duration: 1s;
 		&:hover {
 			background-color: #afd7f8;
 			cursor: pointer;

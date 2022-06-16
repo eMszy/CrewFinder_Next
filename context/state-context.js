@@ -174,6 +174,15 @@ const StateContextProvider = (props) => {
 									.map((lbl) => lbl.id)
 									.includes(pos.label)
 							) {
+								console.log(
+									"pos.label",
+									pos.label,
+									labels
+										.filter((lbl) => lbl.checked)
+										.map((lbl) => lbl.id)
+										.includes(pos.label)
+								);
+
 								events.push(savedEvent);
 							}
 						});

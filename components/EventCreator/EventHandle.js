@@ -82,7 +82,7 @@ const EventHandle = () => {
 						/>
 					)
 				) : (
-					<EventAccepter department={department} />
+					<EventAccepter />
 				)}
 			</div>
 		</div>

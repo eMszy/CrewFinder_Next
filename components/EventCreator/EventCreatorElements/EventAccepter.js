@@ -14,7 +14,7 @@ import control from "../../../control.json";
 import classes from "./../EventHandle.module.scss";
 import { findColor } from "../../../shared/utility";
 
-const EventAccepter = ({ department }) => {
+const EventAccepter = () => {
 	const { setShowEventModal, selectedEvent, setStatus } =
 		useContext(StateContext);
 
@@ -147,18 +147,13 @@ const EventAccepter = ({ department }) => {
 							<React.Fragment key={event._id}>
 								<div className={classes.EventModal_TwoInput}>
 									<p>
-										{event.title} {" - "}
-										{event.shortTitle}
-									</p>
-									<p className={classes.Text400}>
-										{"Létrehozta: "}
-										{event.creatorName}
+										{event.title} {" - "} {event.shortTitle}
 									</p>
 								</div>
 								<div className={classes.Icon}>
 									<IoCalendarOutline />
 								</div>
-								<div className={classes.EventModal_TwoInputs}>
+								<div className={classes.EventModal_TwoInput}>
 									<p className={classes.Text400}>
 										{dayjs(event.startDate).format("YYYY. MM. DD.")}
 										{" - "}
@@ -168,54 +163,69 @@ const EventAccepter = ({ department }) => {
 								<div className={classes.Icon}>
 									<MdOutlineDescription />
 								</div>
-								<p>{event.description}</p>
-								<div className={classes.Icon}>
-									<IoCalendarOutline />
+								<div>
+									<p className={classes.Text400}>{event.description}</p>
+								</div>
+								<div>
+									<MdTitle />
+								</div>
+								<div>
+									<p className={classes.Text400}>
+										{"Létrehozta: "}
+										{event.creatorName}
+									</p>
 								</div>
 
 								<div className={classes.acceptorDates}>
-									{event.positions.map((pos) => {
-										const style = {
-											backgroundColor: findColor(pos.label)
-												.slice(0, -4)
-												.concat("90%)"),
-										};
-
-										return (
-											<div
-												key={pos.id}
-												id={pos.id}
-												className={[
-													classes.acceptorDates_div,
-													pickedPos &&
-														pos.id.toString() === pickedPos.toString() &&
-														classes.activePos,
-												].join(" ")}
-												onClick={(e) => setPickedPos(e.currentTarget.id)}
-											>
+									{event.positions
+										.sort((a, b) => a.label - b.label)
+										.map((pos) => {
+											const style = {
+												backgroundColor: findColor(pos.label)
+													.slice(0, -4)
+													.concat("90%)"),
+											};
+											const val = control.invitionType.find(
+												(v) => v.type === pos.invitionType[0].name
+											);
+											return (
 												<div
-													style={style}
-													className={classes.acceptorDates_Pos}
+													key={pos.id}
+													id={pos.id}
+													className={[
+														classes.acceptorDates_div,
+														pickedPos &&
+															pos.id.toString() === pickedPos.toString() &&
+															classes.activePos,
+													].join(" ")}
+													onClick={(e) => setPickedPos(e.currentTarget.id)}
 												>
-													Pozició:{" "}
-													<p className={classes.Text400}>
-														{pos.yourPosition} - {pos.invitionType[0].name}
-													</p>
+													<div
+														style={style}
+														className={classes.acceptorDates_Pos}
+													>
+														Pozició:{" "}
+														<p className={classes.Text400}>
+															{pos.yourPosition} - {val.name}
+														</p>
+													</div>
+													<div>
+														{pos.date.map((d) => (
+															<div
+																key={d.startTime}
+																className={classes.Text400}
+															>
+																{dayjs(d.startTime).format("YY. MMMM DD.")}
+																{" - "}
+																{dayjs(d.startTime).format("HH:mm")}
+																{" - "}
+																{dayjs(d.endTime).format("HH:mm")}
+															</div>
+														))}
+													</div>
 												</div>
-												<div>
-													{pos.date.map((d) => (
-														<div key={d.startTime} className={classes.Text400}>
-															{dayjs(d.startTime).format("YY. MMMM DD.")}
-															{" - "}
-															{dayjs(d.startTime).format("HH:mm")}
-															{" - "}
-															{dayjs(d.endTime).format("HH:mm")}
-														</div>
-													))}
-												</div>
-											</div>
-										);
-									})}
+											);
+										})}
 								</div>
 							</React.Fragment>
 						))}
