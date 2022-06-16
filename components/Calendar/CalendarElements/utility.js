@@ -28,3 +28,15 @@ export const eventLoaderHandler = (filteredEvents, day) => {
 	});
 	return events;
 };
+
+export const posCounterPerDay = (evt, day) => {
+	let eventsNum = 0;
+	evt.positions.forEach((p) =>
+		p.date.forEach((d) => {
+			if (day.format("YYYYMMDD") === d.id.toString()) {
+				eventsNum++;
+			}
+		})
+	);
+	return eventsNum;
+};

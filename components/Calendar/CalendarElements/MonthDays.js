@@ -5,7 +5,7 @@ import { StateContext } from "../../../context/state-context";
 
 import classes from "./MonthDays.module.scss";
 import { findColor } from "../../../shared/utility";
-import { eventLoaderHandler } from "./utility";
+import { eventLoaderHandler, posCounterPerDay } from "./utility";
 
 const MonthDays = ({ day, rowIdx }) => {
 	const [dayEvents, setDayEvents] = useState([]);
@@ -63,30 +63,33 @@ const MonthDays = ({ day, rowIdx }) => {
 			>
 				{dayEvents
 					.sort((a, b) => a.startDate - b.startDate)
-					.map((evt, idx) => (
-						<React.Fragment key={idx}>
-							{idx <= 4 &&
-								(dayEvents.length > 5 && idx === 4 ? (
-									<div className={classes.MoreEvent}>
-										<p>További események</p>
-									</div>
-								) : (
-									<div
-										onClick={() => {
-											setSelectedEvent(evt);
-										}}
-										style={getStyle(evt)}
-										className={classes.Event}
-									>
-										{evt.positions && evt.positions.length > 0 && (
-											<p>
-												{evt.shortTitle} - Poziciók: {evt.positions.length}
-											</p>
-										)}
-									</div>
-								))}
-						</React.Fragment>
-					))}
+					.map((evt, idx) => {
+						return (
+							<React.Fragment key={idx}>
+								{idx <= 4 &&
+									(dayEvents.length > 5 && idx === 4 ? (
+										<div className={classes.MoreEvent}>
+											<p>További események</p>
+										</div>
+									) : (
+										<div
+											onClick={() => {
+												setSelectedEvent(evt);
+											}}
+											style={getStyle(evt)}
+											className={classes.Event}
+										>
+											{evt.positions && evt.positions.length > 0 && (
+												<p>
+													{evt.shortTitle} - Poziciók:{" "}
+													{posCounterPerDay(evt, day)}
+												</p>
+											)}
+										</div>
+									))}
+							</React.Fragment>
+						);
+					})}
 			</div>
 		</div>
 	);

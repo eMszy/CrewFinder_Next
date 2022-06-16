@@ -180,7 +180,6 @@ const EventAccepter = ({ department }) => {
 												.slice(0, -4)
 												.concat("90%)"),
 										};
-										console.log("style", style);
 
 										return (
 											<div

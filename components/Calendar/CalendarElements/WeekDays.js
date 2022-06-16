@@ -5,7 +5,7 @@ import { StateContext } from "../../../context/state-context";
 
 import classes from "./WeekDays.module.scss";
 import { findColor } from "../../../shared/utility";
-import { eventLoaderHandler } from "./utility";
+import { eventLoaderHandler, posCounterPerDay } from "./utility";
 
 const WeekDays = ({ day, rowStyle }) => {
 	const {
@@ -87,7 +87,7 @@ const WeekDays = ({ day, rowStyle }) => {
 												evt.title}
 										</div>
 										<div>
-											{evt.shortTitle} - Poziciód: {evt.positions.length}
+											{evt.shortTitle} - Poziciók: {posCounterPerDay(evt, day)}
 										</div>
 									</div>
 								</div>
