@@ -5,6 +5,7 @@ import { StateContext } from "../../../context/state-context";
 
 import classes from "./MonthDays.module.scss";
 import { findColor } from "../../../shared/utility";
+import { eventLoaderHandler } from "./utility";
 
 const MonthDays = ({ day, rowIdx }) => {
 	const [dayEvents, setDayEvents] = useState([]);
@@ -16,20 +17,9 @@ const MonthDays = ({ day, rowIdx }) => {
 		setSelectedEvent,
 	} = useContext(StateContext);
 
-	// console.log("filteredEvents", filteredEvents);
-
 	useEffect(() => {
-		let events = [];
-		filteredEvents.forEach((event) => {
-			let isExist = event.dates.find(
-				(d) =>
-					dayjs(d.startTime).format("YYMMDD") === dayjs(day).format("YYMMDD")
-			);
-			if (isExist) {
-				events.push(event);
-			}
-			setDayEvents(events);
-		});
+		const events = eventLoaderHandler(filteredEvents, day);
+		setDayEvents(events);
 	}, [filteredEvents, day]);
 
 	const getCurrentDayClass = () => {
@@ -88,8 +78,9 @@ const MonthDays = ({ day, rowIdx }) => {
 										style={getStyle(evt)}
 										className={classes.Event}
 									>
-										{dayjs(evt.startDate).format("YY-MM-DD") ===
-											day.format("YY-MM-DD") && <p>{evt.title}</p>}
+										<p>
+											{evt.shortTitle} - Poziciód: {evt.positions.length}
+										</p>
 									</div>
 								))}
 						</React.Fragment>

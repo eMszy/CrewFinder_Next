@@ -154,14 +154,35 @@ const StateContextProvider = (props) => {
 	}, [events]);
 
 	const filteredEvents = useMemo(() => {
-		return savedEvents.filter((evt) =>
-			labels
-				.filter((lbl) => lbl.checked)
-				.map((lbl) => lbl.id)
-				.includes(evt.label)
-		);
-		// .sort((a, b) => b.id - a.id);
-	}, [savedEvents, labels]);
+		let events = [];
+		if (status === "authenticated") {
+			if (savedEvents.length > 0) {
+				savedEvents.forEach((savedEvent) => {
+					if (
+						savedEvent.creator === session.id &&
+						labels
+							.filter((lbl) => lbl.checked)
+							.map((lbl) => lbl.id)
+							.includes(savedEvent.label)
+					) {
+						events.push(savedEvent);
+					} else {
+						savedEvent.positions.forEach((pos) => {
+							if (
+								labels
+									.filter((lbl) => lbl.checked)
+									.map((lbl) => lbl.id)
+									.includes(pos.label)
+							) {
+								events.push(savedEvent);
+							}
+						});
+					}
+				});
+			}
+		}
+		return savedEvents;
+	}, [status, savedEvents, session, labels]);
 
 	useEffect(() => {
 		localStorage.setItem("savedEvents", JSON.stringify(savedEvents));

@@ -47,12 +47,14 @@ const List = () => {
 
 							<div className={classes.ListDates}>
 								Dátumok:{" "}
-								{e.dates.map((d) => (
-									<div key={d.id}>
-										{dayjs(d.startTime).format("MM. DD. - HH:mm")} -{" "}
-										{dayjs(d.endTime).format("HH:mm")}
-									</div>
-								))}
+								{e.positions.map((p) =>
+									p.date.map((d) => (
+										<div key={d.id}>
+											{dayjs(d.startTime).format("MM. DD. - HH:mm")} -{" "}
+											{dayjs(d.endTime).format("HH:mm")}
+										</div>
+									))
+								)}
 							</div>
 						</div>
 					))}

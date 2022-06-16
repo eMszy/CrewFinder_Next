@@ -5,6 +5,7 @@ import { StateContext } from "../../../context/state-context";
 
 import classes from "./WeekDays.module.scss";
 import { findColor } from "../../../shared/utility";
+import { eventLoaderHandler } from "./utility";
 
 const WeekDays = ({ day, rowStyle }) => {
 	const {
@@ -18,17 +19,8 @@ const WeekDays = ({ day, rowStyle }) => {
 	const [dayEvents, setDayEvents] = useState([]);
 
 	useEffect(() => {
-		let events = [];
-		filteredEvents.forEach((event) => {
-			let isExist = event.dates.find(
-				(d) =>
-					dayjs(d.startTime).format("YYMMDD") === dayjs(day).format("YYMMDD")
-			);
-			if (isExist) {
-				events.push(event);
-			}
-			setDayEvents(events);
-		});
+		const events = eventLoaderHandler(filteredEvents, day);
+		setDayEvents(events);
 	}, [filteredEvents, day]);
 
 	const getCurrentDayClass = () => {
@@ -72,12 +64,9 @@ const WeekDays = ({ day, rowStyle }) => {
 			</header>
 			{labels.map((e, id) => (
 				<div key={id} style={getBackGround(e)}>
-					{dayEvents.map((d, idx) => {
-						let findedDay = d.dates?.find(
-							(date) => date.id === +day.format("YYYYMMDD")
-						);
+					{dayEvents.map((evt, idx) => {
 						return (
-							d.label === e.id && (
+							evt.label === e.id && (
 								<div
 									key={idx}
 									className={classes.EventDiv}
@@ -87,17 +76,19 @@ const WeekDays = ({ day, rowStyle }) => {
 									}}
 								>
 									<div
-										onClick={() => setSelectedEvent(d)}
-										style={getStyle(d)}
+										onClick={() => setSelectedEvent(evt)}
+										style={getStyle(evt)}
 										className={classes.Event}
 									>
 										<div>
 											{(dayjs(day).day() === 1 ||
-												dayjs(d.startDate).format("YY-MM-DD") ===
+												dayjs(evt.startDate).format("YY-MM-DD") ===
 													day.format("YY-MM-DD")) &&
-												d.title}
+												evt.title}
 										</div>
-										<div>Stáb: {findedDay?.crew?.length}</div>
+										<div>
+											{evt.shortTitle} - Poziciód: {evt.positions.length}
+										</div>
 									</div>
 								</div>
 							)

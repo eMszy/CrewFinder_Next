@@ -22,13 +22,16 @@ const userEventSchema = new Schema(
 			required: false,
 		},
 		description: String,
-		// location: String,
 		creator: {
 			type: Schema.Types.ObjectId,
 			ref: "user",
 			required: true,
 		},
 		creatorName: String,
+		label: {
+			type: Number,
+			required: true,
+		},
 		positions: [
 			{
 				id: Number,
