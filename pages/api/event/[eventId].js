@@ -4,7 +4,7 @@ import Event from "../../../models/event";
 import User from "../../../models/user";
 import dbConnect from "../../../shared/dbConnect";
 
-const EventInfoTreeHandler = (data, pos) => {
+const EventInfoTreeHandler = (data, pos, label) => {
 	return {
 		_id: data._id,
 		statDate: data.startDate,
@@ -17,6 +17,7 @@ const EventInfoTreeHandler = (data, pos) => {
 		creator: data.creator,
 		creatorName: data.creatorName,
 		positions: pos,
+		label: label,
 	};
 };
 
@@ -100,7 +101,14 @@ const handler = async (req, res) => {
 			});
 
 			usersPosArray.forEach(async (userPosArray) => {
-				const newEvent = EventInfoTreeHandler(data, userPosArray.pos);
+				let label;
+				userPosArray.pos.forEach((p) => {
+					if (!label || p.label < label) {
+						label = p.label;
+					}
+				});
+
+				const newEvent = EventInfoTreeHandler(data, userPosArray.pos, label);
 				const user = await User.findById(userPosArray.userId);
 				if (!user) {
 					throw Error("Nincs meg a felhasználó, [eventId]:107");

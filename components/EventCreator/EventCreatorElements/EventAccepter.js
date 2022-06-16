@@ -20,10 +20,36 @@ const EventAccepter = ({ department }) => {
 	const { data: session, status } = useSession();
 
 	const [isLoading, setLoading] = useState(false);
-	const [theEvent, settheEvent] = useState();
+	const [theEvent, setTheEvent] = useState();
 	const [pickedDays, setPickedDays] = useState([]);
 	const [isClicked, setIsClicked] = useState();
 	const [clickedDate, setClickedDate] = useState();
+
+	const [pickedPos, setPickedPos] = useState();
+
+	const [theUser, setTheUser] = useState();
+
+	useEffect(() => {
+		if (session.id) {
+			setLoading(true);
+			const fetchUser = async () => {
+				try {
+					const res = await fetch(`api/user/${session.id}`);
+					const fetchedUser = await res.json();
+					if (!res.ok || res.error) {
+						throw Error(fetchedUser.message);
+					}
+					setTheUser(fetchedUser);
+					// setPickedDays(fetchedUser.dates);
+				} catch (err) {
+					setStatus({ message: err.message, error: true });
+				}
+			};
+			fetchUser();
+			setLoading(false);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [session]);
 
 	useEffect(() => {
 		setLoading(true);
@@ -34,7 +60,7 @@ const EventAccepter = ({ department }) => {
 				if (!res.ok || res.error) {
 					throw Error(resJson.message);
 				}
-				settheEvent(fetchedEvent);
+				setTheEvent(fetchedEvent);
 				setPickedDays(fetchedEvent.dates);
 			} catch (err) {
 				setStatus({ message: err.message, error: true });
@@ -47,32 +73,34 @@ const EventAccepter = ({ department }) => {
 
 	const respondHandler = async (e, answer) => {
 		e.preventDefault();
-		try {
-			console.log("application", theEvent, session);
-			const res = await fetch("/api/event/application", {
-				method: "PUT",
-				body: JSON.stringify({
-					eventId: theEvent._id,
-					userId: session.id,
-					answer,
-				}),
-				headers: {
-					"Content-Type": "application/json",
-				},
-			});
+		console.log("first", answer);
+		// try {
+		// 	console.log("application", theEvent, session);
+		// 	const res = await fetch("/api/event/application", {
+		// 		method: "PUT",
+		// 		body: JSON.stringify({
+		// 			eventId: theEvent._id,
+		// 			userId: session.id,
+		// 			answer,
+		// 		}),
+		// 		headers: {
+		// 			"Content-Type": "application/json",
+		// 		},
+		// 	});
 
-			const resJson = await res.json();
-			if (!res.ok || res.error) {
-				throw Error(resJson.message);
-			}
+		// 	const resJson = await res.json();
+		// 	if (!res.ok || res.error) {
+		// 		throw Error(resJson.message);
+		// 	}
 
-			setStatus(resJson);
-			setShowEventModal(false);
-			return resJson;
-		} catch (err) {
-			setShowEventModal(false);
-			setStatus({ message: err.message, error: true });
-		}
+		setStatus({ message: "Sikeresen jelentkeztél a pozicíóra" });
+		// setStatus(resJson);
+		setShowEventModal(false);
+		// 	return resJson;
+		// } catch (err) {
+		// 	setShowEventModal(false);
+		// 	setStatus({ message: err.message, error: true });
+		// }
 	};
 
 	useEffect(() => {
@@ -99,7 +127,7 @@ const EventAccepter = ({ department }) => {
 		// eslint-disable-next-line
 	}, [isClicked]);
 
-	if (isLoading || !theEvent || status === "loading")
+	if (isLoading || !theUser || !theEvent || status === "loading")
 		return (
 			<div className={classes.Loding_Spinner}>
 				<Spinner />;
@@ -114,94 +142,71 @@ const EventAccepter = ({ department }) => {
 						<div className={classes.Icon}>
 							<MdTitle />
 						</div>
-						<div className={classes.EventModal_TwoInput}>
-							<p>
-								{theEvent.title} {" - "}
-								{theEvent.shortTitle}
-							</p>
-							<p className={classes.Text400}>
-								{"Létrehozta: "}
-								{theEvent.creatorName}
-							</p>
-						</div>
-						<div className={classes.Icon}>
-							<IoCalendarOutline />
-						</div>
-						<div className={classes.EventModal_TwoInputs}>
-							<p className={classes.Text400}>
-								{dayjs(theEvent.startDate).format("YYYY. MM. DD.")}
-								{" - "}
-								{dayjs(theEvent.endDate).format("MM. DD.")}
-							</p>
-						</div>
-						<div className={classes.Icon}>
-							<MdOutlineDescription />
-						</div>
-						<p>{theEvent.description}</p>
+						{theUser.events.map((event) => (
+							<React.Fragment key={event._id}>
+								<div className={classes.EventModal_TwoInput}>
+									<p>
+										{event.title} {" - "}
+										{event.shortTitle}
+									</p>
+									<p className={classes.Text400}>
+										{"Létrehozta: "}
+										{event.creatorName}
+									</p>
+								</div>
+								<div className={classes.Icon}>
+									<IoCalendarOutline />
+								</div>
+								<div className={classes.EventModal_TwoInputs}>
+									<p className={classes.Text400}>
+										{dayjs(event.startDate).format("YYYY. MM. DD.")}
+										{" - "}
+										{dayjs(event.endDate).format("MM. DD.")}
+									</p>
+								</div>
+								<div className={classes.Icon}>
+									<MdOutlineDescription />
+								</div>
+								<p>{event.description}</p>
+								<div className={classes.Icon}>
+									<IoCalendarOutline />
+								</div>
 
-						<div className={classes.Icon}>
-							<IoCalendarOutline />
-						</div>
-						<div className={classes.datesCrew_div}>
-							{pickedDays
-								.sort((a, b) => a.id - b.id)
-								.map((p, _idx) => (
-									<div key={_idx}>
-										<div className={classes.datesCrew}>
-											<div className={classes.DateAndLoc}>
-												<div>
-													{dayjs(p.startTime).format("YYYY. MMMM. DD.")}
-												</div>
-												<div>{dayjs(p.startTime).format("dddd")}</div>
+								<div className={classes.acceptorDates}>
+									{event.positions.map((pos) => (
+										<div
+											key={pos.id}
+											id={pos.id}
+											className={[
+												classes.acceptorDates_div,
+												pickedPos &&
+													pos.id.toString() === pickedPos.toString() &&
+													classes.activePos,
+											].join(" ")}
+											onClick={(e) => setPickedPos(e.currentTarget.id)}
+										>
+											<div>
+												Pozició:{" "}
 												<p className={classes.Text400}>
-													{dayjs(p.startTime).format("HH:mm")}
+													{pos.yourPosition} - {pos.invitionType[0].name}
 												</p>
-												<p className={classes.Text400}>
-													{dayjs(p.endTime).format("HH:mm")}
-												</p>
-												<p className={classes.Text400}>{p.location}</p>
 											</div>
 											<div>
-												{p?.crew
-													.sort((a, b) => a.id - b.id)
-													.map((c, idx) => (
-														<div key={idx} className={classes.CrewPosName}>
-															<p className={classes.Text400}>{c.pos}</p>
-															{c.id > 0 ? (
-																<p className={classes.Span2}>{c.name}</p>
-															) : (
-																<div>{theEvent.creatorName}</div>
-															)}
-															{c?._id?.toString() === session.id && (
-																<div
-																	className={classes.Icon}
-																	// onClick={() => deletPosHandel(c.id, p.id)}
-																	onClick={() => console.log(c._id, p.id)}
-																>
-																	<IoCloseCircleOutline />
-																</div>
-															)}
-															{c.invitionType?.name === "attribute" && (
-																<div className={classes.CrewPosName_Attribute}>
-																	{control.departments[
-																		department
-																	].attribute.map((att, id) => (
-																		<div key={id}>
-																			<label htmlFor={att.type}>
-																				{att.name} -{" "}
-																				{att.range[c.invitionType[att.type]]}
-																			</label>
-																		</div>
-																	))}
-																</div>
-															)}
-														</div>
-													))}
+												{pos.date.map((d) => (
+													<div key={d.startTime} className={classes.Text400}>
+														{dayjs(d.startTime).format("YY. MMMM DD.")}
+														{" - "}
+														{dayjs(d.startTime).format("HH:mm")}
+														{" - "}
+														{dayjs(d.endTime).format("HH:mm")}
+													</div>
+												))}
 											</div>
 										</div>
-									</div>
-								))}
-						</div>
+									))}
+								</div>
+							</React.Fragment>
+						))}
 					</div>
 					<div className={classes.EventModal_Calendar}>
 						<SmallCalendar
@@ -237,6 +242,7 @@ const EventAccepter = ({ department }) => {
 							respondHandler(e, true);
 						}}
 						btnType="Success"
+						disabled={!pickedPos}
 					>
 						Igen, válalom
 					</Button>

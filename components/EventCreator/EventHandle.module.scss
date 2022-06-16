@@ -341,6 +341,28 @@
 	}
 }
 
+.acceptorDates {
+	display: flex;
+	flex-direction: column;
+	.acceptorDates_div {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 1rem;
+		margin: 0.5rem;
+		border: 3px #afd7f8 solid;
+		border-radius: 1rem;
+		&:hover {
+			background-color: #afd7f8;
+			cursor: pointer;
+		}
+	}
+	.activePos {
+		background-color: #afd7f8;
+		border-color: green;
+	}
+}
+
 .datesCrew_div {
 	display: flex;
 	flex-wrap: wrap;
