@@ -78,9 +78,11 @@ const MonthDays = ({ day, rowIdx }) => {
 										style={getStyle(evt)}
 										className={classes.Event}
 									>
-										<p>
-											{evt.shortTitle} - Poziciód: {evt.positions.length}
-										</p>
+										{evt.positions && evt.positions.length > 0 && (
+											<p>
+												{evt.shortTitle} - Poziciók: {evt.positions.length}
+											</p>
+										)}
 									</div>
 								))}
 						</React.Fragment>

@@ -12,6 +12,7 @@ import Spinner from "../../UI/Spinner/Spinner";
 import control from "../../../control.json";
 
 import classes from "./../EventHandle.module.scss";
+import { findColor } from "../../../shared/utility";
 
 const EventAccepter = ({ department }) => {
 	const { setShowEventModal, selectedEvent, setStatus } =
@@ -173,37 +174,49 @@ const EventAccepter = ({ department }) => {
 								</div>
 
 								<div className={classes.acceptorDates}>
-									{event.positions.map((pos) => (
-										<div
-											key={pos.id}
-											id={pos.id}
-											className={[
-												classes.acceptorDates_div,
-												pickedPos &&
-													pos.id.toString() === pickedPos.toString() &&
-													classes.activePos,
-											].join(" ")}
-											onClick={(e) => setPickedPos(e.currentTarget.id)}
-										>
-											<div>
-												Pozició:{" "}
-												<p className={classes.Text400}>
-													{pos.yourPosition} - {pos.invitionType[0].name}
-												</p>
+									{event.positions.map((pos) => {
+										const style = {
+											backgroundColor: findColor(pos.label)
+												.slice(0, -4)
+												.concat("90%)"),
+										};
+										console.log("style", style);
+
+										return (
+											<div
+												key={pos.id}
+												id={pos.id}
+												className={[
+													classes.acceptorDates_div,
+													pickedPos &&
+														pos.id.toString() === pickedPos.toString() &&
+														classes.activePos,
+												].join(" ")}
+												onClick={(e) => setPickedPos(e.currentTarget.id)}
+											>
+												<div
+													style={style}
+													className={classes.acceptorDates_Pos}
+												>
+													Pozició:{" "}
+													<p className={classes.Text400}>
+														{pos.yourPosition} - {pos.invitionType[0].name}
+													</p>
+												</div>
+												<div>
+													{pos.date.map((d) => (
+														<div key={d.startTime} className={classes.Text400}>
+															{dayjs(d.startTime).format("YY. MMMM DD.")}
+															{" - "}
+															{dayjs(d.startTime).format("HH:mm")}
+															{" - "}
+															{dayjs(d.endTime).format("HH:mm")}
+														</div>
+													))}
+												</div>
 											</div>
-											<div>
-												{pos.date.map((d) => (
-													<div key={d.startTime} className={classes.Text400}>
-														{dayjs(d.startTime).format("YY. MMMM DD.")}
-														{" - "}
-														{dayjs(d.startTime).format("HH:mm")}
-														{" - "}
-														{dayjs(d.endTime).format("HH:mm")}
-													</div>
-												))}
-											</div>
-										</div>
-									))}
+										);
+									})}
 								</div>
 							</React.Fragment>
 						))}
