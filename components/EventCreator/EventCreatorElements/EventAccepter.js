@@ -20,15 +20,12 @@ const EventAccepter = () => {
 
 	const { data: session, status } = useSession();
 
-	const [isLoading, setLoading] = useState(false);
-	const [theEvent, setTheEvent] = useState();
-	const [pickedDays, setPickedDays] = useState([]);
-	const [isClicked, setIsClicked] = useState();
-	const [clickedDate, setClickedDate] = useState();
-
-	const [pickedPos, setPickedPos] = useState();
-
 	const [theUser, setTheUser] = useState();
+	const [theEvent, setTheEvent] = useState();
+	const [pickedPos, setPickedPos] = useState();
+	const [pickedPosId, setPickedPosId] = useState();
+
+	const [isLoading, setLoading] = useState(false);
 
 	useEffect(() => {
 		if (session.id) {
@@ -40,8 +37,11 @@ const EventAccepter = () => {
 					if (!res.ok || res.error) {
 						throw Error(fetchedUser.message);
 					}
+					const event = fetchedUser.events.find(
+						(e) => e._id.toString() === selectedEvent._id.toString()
+					);
+					setTheEvent(event);
 					setTheUser(fetchedUser);
-					// setPickedDays(fetchedUser.dates);
 				} catch (err) {
 					setStatus({ message: err.message, error: true });
 				}
@@ -52,25 +52,16 @@ const EventAccepter = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [session]);
 
+	console.log("theUser", theUser);
+
 	useEffect(() => {
-		setLoading(true);
-		const fetchEvent = async () => {
-			try {
-				const res = await fetch(`api/event/${selectedEvent._id}`);
-				const fetchedEvent = await res.json();
-				if (!res.ok || res.error) {
-					throw Error(resJson.message);
-				}
-				setTheEvent(fetchedEvent);
-				setPickedDays(fetchedEvent.dates);
-			} catch (err) {
-				setStatus({ message: err.message, error: true });
-			}
-		};
-		fetchEvent();
-		setLoading(false);
-		// eslint-disable-next-line
-	}, []);
+		if ((theEvent, pickedPosId)) {
+			const thePosition = theEvent.positions.find(
+				(p) => p.id.toString() === pickedPosId.toString()
+			);
+			setPickedPos(thePosition);
+		}
+	}, [pickedPosId, theEvent]);
 
 	const respondHandler = async (e, answer) => {
 		e.preventDefault();
@@ -104,31 +95,7 @@ const EventAccepter = () => {
 		// }
 	};
 
-	useEffect(() => {
-		if (clickedDate) {
-			let updatedpickedDays = pickedDays;
-
-			const pickedDay = theEvent.dates.find(
-				(d) => d.id === +dayjs(clickedDate).format("YYYYMMDD")
-			);
-
-			if (pickedDay) {
-				let isExist = updatedpickedDays.find((d) => d.id === pickedDay.id);
-
-				if (!isExist) {
-					updatedpickedDays.push(pickedDay);
-				} else {
-					updatedpickedDays = pickedDays.filter((d) => d.id !== pickedDay.id);
-				}
-
-				setClickedDate();
-				setPickedDays(updatedpickedDays);
-			}
-		}
-		// eslint-disable-next-line
-	}, [isClicked]);
-
-	if (isLoading || !theUser || !theEvent || status === "loading")
+	if (isLoading || !theUser || status === "loading")
 		return (
 			<div className={classes.Loding_Spinner}>
 				<Spinner />;
@@ -140,42 +107,18 @@ const EventAccepter = () => {
 			<form>
 				<div className={classes.EventModal_MainBody}>
 					<div className={classes.EventModal_Input}>
-						<div className={classes.Icon}>
-							<MdTitle />
-						</div>
 						{theUser.events.map((event) => (
-							<React.Fragment key={event._id}>
-								<div className={classes.EventModal_TwoInput}>
+							<div key={event._id} className={classes.acceptorDates_Main}>
+								<div>
+									{" "}
 									<p>
 										{event.title} {" - "} {event.shortTitle}
 									</p>
-								</div>
-								<div className={classes.Icon}>
-									<IoCalendarOutline />
-								</div>
-								<div className={classes.EventModal_TwoInput}>
-									<p className={classes.Text400}>
-										{dayjs(event.startDate).format("YYYY. MM. DD.")}
-										{" - "}
-										{dayjs(event.endDate).format("MM. DD.")}
-									</p>
-								</div>
-								<div className={classes.Icon}>
-									<MdOutlineDescription />
-								</div>
-								<div>
-									<p className={classes.Text400}>{event.description}</p>
-								</div>
-								<div>
-									<MdTitle />
-								</div>
-								<div>
 									<p className={classes.Text400}>
 										{"Létrehozta: "}
 										{event.creatorName}
 									</p>
 								</div>
-
 								<div className={classes.acceptorDates}>
 									{event.positions
 										.sort((a, b) => a.label - b.label)
@@ -188,73 +131,77 @@ const EventAccepter = () => {
 											const val = control.invitionType.find(
 												(v) => v.type === pos.invitionType[0].name
 											);
+
 											return (
 												<div
 													key={pos.id}
 													id={pos.id}
 													className={[
 														classes.acceptorDates_div,
-														pickedPos &&
-															pos.id.toString() === pickedPos.toString() &&
+														pickedPosId &&
+															pos.id.toString() === pickedPosId.toString() &&
 															classes.activePos,
 													].join(" ")}
-													onClick={(e) => setPickedPos(e.currentTarget.id)}
+													onClick={(e) => setPickedPosId(e.currentTarget.id)}
 												>
 													<div
 														style={style}
 														className={classes.acceptorDates_Pos}
 													>
-														Pozició:{" "}
+														<p>{pos.yourPosition}</p>
+														<p className={classes.Text400}>{val.name}</p>
 														<p className={classes.Text400}>
-															{pos.yourPosition} - {val.name}
+															Napok: {pos.date.length}
 														</p>
-													</div>
-													<div>
-														{pos.date.map((d) => (
-															<div
-																key={d.startTime}
-																className={classes.Text400}
-															>
-																{dayjs(d.startTime).format("YY. MMMM DD.")}
-																{" - "}
-																{dayjs(d.startTime).format("HH:mm")}
-																{" - "}
-																{dayjs(d.endTime).format("HH:mm")}
-															</div>
-														))}
 													</div>
 												</div>
 											);
 										})}
 								</div>
-							</React.Fragment>
+							</div>
 						))}
 					</div>
-					<div className={classes.EventModal_Calendar}>
-						<SmallCalendar
-							filteredEvents={[
-								{
-									label: theEvent.label,
-									startDate: +dayjs(theEvent.startDate),
-									endDate: +dayjs(theEvent.endDate),
-									dates: pickedDays,
-									selectedEventDates: theEvent.dates,
-								},
-							]}
-							setClickedDate={setClickedDate}
-							setIsClicked={setIsClicked}
-						/>
-						<div className={classes.EventModal_Calendar__ControlBtns}>
-							<Button
-								type="button"
-								clicked={() => setPickedDays(theEvent.dates)}
-							>
-								Mind
-							</Button>
-							<Button type="button" clicked={() => setPickedDays([])}>
-								Töröl
-							</Button>
+					<div className={classes.Sidebar}>
+						<div className={classes.EventModal_Calendar}>
+							<SmallCalendar
+								filteredEvents={[
+									{
+										label: pickedPos?.label || 7,
+										startDate: +dayjs(theEvent.startDate),
+										endDate: +dayjs(theEvent.endDate),
+										dates: pickedPos?.date,
+									},
+								]}
+							/>
 						</div>
+						{pickedPos && (
+							<div className={classes.EventModal_Sidebar}>
+								<div className={classes.EventModal_Sidebar_div}>
+									<p>Leírás</p>
+									<p className={classes.Text400}>{theEvent.description}</p>
+								</div>
+								<div className={classes.EventModal_Sidebar_div}>
+									<p>Dátumok:</p>
+									{pickedPos?.date?.map((d) => (
+										<p key={d.startTime} className={classes.Text400}>
+											{dayjs(d.startTime).format("YY. MMMM DD.")}
+											{" - "}
+											{dayjs(d.startTime).format("HH:mm")}
+											{" - "}
+											{dayjs(d.endTime).format("HH:mm")}
+										</p>
+									))}
+								</div>
+								<div className={classes.EventModal_Sidebar_div}>
+									<p>Teljes esemény:</p>
+									<p className={classes.Text400}>
+										{dayjs(pickedPos.startDate).format("YYYY. MM. DD.")}
+										{" - "}
+										{dayjs(pickedPos.endDate).format("MM. DD.")}
+									</p>
+								</div>
+							</div>
+						)}
 					</div>
 				</div>
 				<footer className={classes.EventModal_Footer}>
@@ -264,7 +211,7 @@ const EventAccepter = () => {
 							respondHandler(e, true);
 						}}
 						btnType="Success"
-						disabled={!pickedPos}
+						disabled={!pickedPosId}
 					>
 						Igen, válalom
 					</Button>

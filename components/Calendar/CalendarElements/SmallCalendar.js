@@ -19,13 +19,19 @@ const SmallCalendar = ({ filteredEvents, setClickedDate, setIsClicked }) => {
 		const nowDay = dayjs().format(format);
 		const currDay = day.format(format);
 
-		let fEventByDay = filteredEvents[0].dates.find(
-			(date) => dayjs(date?.startTime).format(format) === currDay
-		);
+		let fEventByDay;
+		if (filteredEvents[0].dates) {
+			fEventByDay = filteredEvents[0].dates.find(
+				(date) => dayjs(date?.startTime).format(format) === currDay
+			);
+		}
 
-		let fEventAllDay = filteredEvents[0].selectedEventDates.find(
-			(date) => dayjs(date.startTime).format(format) === currDay
-		);
+		let fEventAllDay;
+		if (filteredEvents[0].selectedEventDates) {
+			fEventAllDay = filteredEvents[0].selectedEventDates.find(
+				(date) => dayjs(date.startTime).format(format) === currDay
+			);
+		}
 
 		let style = { borderRadius: "999px" };
 
@@ -80,9 +86,13 @@ const SmallCalendar = ({ filteredEvents, setClickedDate, setIsClicked }) => {
 									key={idx}
 									className={classes.SmallDates}
 									style={getDayClass(day)}
-									onClick={() => {
-										setClickedDate(day), setIsClicked(Math.random());
-									}}
+									onClick={
+										setClickedDate && setIsClicked
+											? () => {
+													setClickedDate(day), setIsClicked(Math.random());
+											  }
+											: () => {}
+									}
 								>
 									<span>{day.format("D")}</span>
 								</div>
