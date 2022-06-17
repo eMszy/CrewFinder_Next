@@ -2,28 +2,31 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const crewSchema = new Schema({
-	id: {
-		type: Number,
-		required: true,
+const crewSchema = new Schema(
+	{
+		id: {
+			type: Number,
+			required: true,
+		},
+		name: {
+			type: String,
+			required: false,
+		},
+		pos: {
+			type: String,
+			required: true,
+		},
+		status: {
+			type: String,
+			required: true,
+			default: "new",
+		},
+		image: String,
+		label: { type: Number, required: true },
+		invitionType: Schema.Types.Mixed,
 	},
-	name: {
-		type: String,
-		required: false,
-	},
-	pos: {
-		type: String,
-		required: true,
-	},
-	status: {
-		type: String,
-		required: true,
-		default: "new",
-	},
-	image: String,
-	label: { type: Number, required: true },
-	invitionType: Schema.Types.Mixed,
-});
+	{ autoIndex: false }
+);
 
 const eventSchema = new Schema(
 	{
@@ -36,6 +39,7 @@ const eventSchema = new Schema(
 				location: { type: String, required: false },
 				crew: [crewSchema],
 			},
+			{ autoIndex: false },
 		],
 		description: {
 			type: String,
@@ -88,7 +92,7 @@ const eventSchema = new Schema(
 		},
 	},
 	{ timestamps: true },
-	{ autoIndex: false }
+	{ autoIndex: true }
 );
 
 module.exports = mongoose.models.Event || mongoose.model("Event", eventSchema);

@@ -4,9 +4,9 @@ import Event from "../../../models/event";
 import User from "../../../models/user";
 import dbConnect from "../../../shared/dbConnect";
 
-const EventInfoTreeHandler = (data, pos, label) => {
+const EventInfoTreeHandler = (data, pos, label, evtId) => {
 	return {
-		_id: data._id,
+		_id: evtId,
 		statDate: data.startDate,
 		endDate: data.endDate,
 		id: data.id,
@@ -108,7 +108,12 @@ const handler = async (req, res) => {
 					}
 				});
 
-				const newEvent = EventInfoTreeHandler(data, userPosArray.pos, label);
+				const newEvent = EventInfoTreeHandler(
+					data,
+					userPosArray.pos,
+					label,
+					evtId
+				);
 				const user = await User.findById(userPosArray.userId);
 				if (!user) {
 					throw Error("Nincs meg a felhasználó, [eventId]:107");
@@ -147,7 +152,7 @@ const handler = async (req, res) => {
 
 			case "POST": {
 				const data = req.body;
-				const event = new Event(data);
+				const event = await new Event(data);
 				const user = await User.findById(token.id);
 				if (!user) {
 					throw Error("A felhasználói adatok betöltése sikertelen.");
