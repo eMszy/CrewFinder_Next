@@ -155,43 +155,23 @@ const StateContextProvider = (props) => {
 
 	const filteredEvents = useMemo(() => {
 		let events = [];
-		if (status === "authenticated") {
-			if (savedEvents.length > 0) {
-				savedEvents.forEach((savedEvent) => {
-					if (
-						savedEvent.creator === session.id &&
-						labels
-							.filter((lbl) => lbl.checked)
-							.map((lbl) => lbl.id)
-							.includes(savedEvent.label)
-					) {
-						events.push(savedEvent);
-					} else {
-						savedEvent.positions.forEach((pos) => {
-							if (
-								labels
-									.filter((lbl) => lbl.checked)
-									.map((lbl) => lbl.id)
-									.includes(pos.label)
-							) {
-								console.log(
-									"pos.label",
-									pos.label,
-									labels
-										.filter((lbl) => lbl.checked)
-										.map((lbl) => lbl.id)
-										.includes(pos.label)
-								);
+		const filteredLabels = labels
+			.filter((lbl) => lbl.checked)
+			.map((lbl) => lbl.id);
 
-								events.push(savedEvent);
-							}
-						});
-					}
-				});
+		savedEvents.forEach((event) => {
+			let positions = [];
+			event.positions?.forEach((pos) => {
+				if (filteredLabels.includes(pos.label)) {
+					positions.push(pos);
+				}
+			});
+			if (filteredLabels.includes(event.label)) {
+				events.push({ ...event, positions: positions });
 			}
-		}
-		return savedEvents;
-	}, [status, savedEvents, session, labels]);
+		});
+		return events;
+	}, [savedEvents, labels]);
 
 	useEffect(() => {
 		localStorage.setItem("savedEvents", JSON.stringify(savedEvents));

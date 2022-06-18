@@ -85,6 +85,8 @@ const handler = async (req, res) => {
 		event.dates = updatedEventDates;
 		user.events = updatedUserEvents;
 
+		console.log("first", user.events.toObject());
+
 		await event.save();
 		await user.save();
 

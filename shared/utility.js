@@ -189,7 +189,7 @@ export const posCounterPerDay = (evt, day) => {
 };
 
 export const getStyle = (evt, day) => {
-	let label = 5;
+	let label;
 	if (evt.label === 1 || evt.label === 6) {
 		label = evt.label;
 	} else {
