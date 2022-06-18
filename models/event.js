@@ -37,7 +37,7 @@ const eventSchema = new Schema(
 				endTime: Number,
 				id: Number,
 				location: { type: String, required: false },
-				crew: [crewSchema],
+				crew: [Schema.Types.Mixed],
 			},
 			{ autoIndex: false },
 		],

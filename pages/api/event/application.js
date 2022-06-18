@@ -4,42 +4,97 @@ import dbConnect from "../../../shared/dbConnect";
 
 const handler = async (req, res) => {
 	dbConnect();
-	const { eventId, userId, answer } = req.body;
-	const answerNum = answer ? 2 : 7;
-	try {
-		const user = await User.findById(userId);
-		user.events.forEach((u) => {
-			if (u.id === eventId) {
-				u.label = answerNum;
+	const { eventId, positionId, userId, answer } = req.body;
+
+	const getLabel = (type) => {
+		if (answer) {
+			if (type === "open") {
+				return 3;
 			}
-		});
+			if (type === "direct") {
+				return 2;
+			}
+		} else {
+			return 7;
+		}
+	};
 
-		const event = await Event.findById(eventId);
-		console.log("event", event.baseCrew, userId);
-		const findedBaseMember = event.baseCrew.find(
-			(b) => b._id.toString() === userId
-		);
-		findedBaseMember.label = answerNum;
+	try {
+		let user = await User.findById(userId);
+		if (!user) {
+			throw Error("Felhasználó nem található");
+		}
 
-		event.dates.forEach((d) => {
-			d.crew.find((b) => {
-				if (b._id && b._id === userId) {
-					b.label = answerNum;
+		let event = await Event.findById(eventId);
+		if (!event) {
+			throw Error("Felhasználó nem található");
+		}
+
+		let updatedEventDates = event.dates.toObject();
+
+		updatedEventDates.forEach((d) => {
+			d.crew.forEach((crew) => {
+				if (crew.id.toString() === positionId) {
+					crew.label = getLabel(crew.invitionType.name);
+					if (answer) {
+						if (!crew.candidates) {
+							crew.candidates = [];
+						}
+						crew.candidates.push({
+							_id: user._id,
+							name: user.name,
+							image: user.image,
+						});
+					} else {
+						crew.candidates = crew.candidates.filter(
+							(c) => c._id.toString() !== userId
+						);
+					}
 				}
 			});
 		});
 
-		await Event.findByIdAndUpdate(eventId, event);
+		let updatedUserEvents = user.events.toObject();
+		let otherUsers = [];
+
+		updatedUserEvents.forEach((e) => {
+			if (e._id.toString() === eventId) {
+				let newEventLabel;
+				e.positions.forEach((pos) => {
+					if (pos.id.toString() === positionId) {
+						pos.label = getLabel(pos.invitionType[0].name);
+						pos.status = answer ? "applied" : "resigned";
+						if (!newEventLabel || pos.label < newEventLabel) {
+							newEventLabel = pos.label;
+						}
+						if (pos.invitionType[0].result) {
+							otherUsers = pos.invitionType[0].result.filter(
+								(u) => u._id.toString() !== userId
+							);
+						}
+					} else if (!newEventLabel || pos.label < newEventLabel) {
+						newEventLabel = pos.label;
+					}
+				});
+				e.label = newEventLabel;
+			}
+		});
+
+		console.log("otherUsers", otherUsers);
+
+		event.dates = updatedEventDates;
+		user.events = updatedUserEvents;
+
+		await event.save();
 		await user.save();
 
 		const message = answer
 			? { message: "Sikeresen jelentkeztél" }
-			: { message: "Sikeresen lemondtad" };
+			: { message: "Sikeresen lemondtad", info: !answer };
 		res.statusCode = 200;
 		res.json(message);
 		return;
 	} catch (err) {
-		console.log("err", err);
 		res.statusCode = 404;
 		res.json({ message: err.message, error: true });
 		return;
