@@ -45,7 +45,7 @@ const handler = async (req, res) => {
 							name: user.name,
 							image: user.image,
 						});
-					} else {
+					} else if (crew.candidates) {
 						crew.candidates = crew.candidates.filter(
 							(c) => c._id.toString() !== userId
 						);
