@@ -132,11 +132,9 @@ const handler = async (req, res) => {
 
 		switch (req.method) {
 			case "GET": {
-				let theEvent = [];
+				let theEvent;
 				if (eventId.length === 24 && !isNaN(Number("0x" + eventId))) {
 					theEvent = await Event.findById(eventId);
-				} else {
-					theEvent = null;
 				}
 
 				if (!theEvent) {
@@ -154,9 +152,11 @@ const handler = async (req, res) => {
 				const data = req.body;
 				const event = await new Event(data);
 				const user = await User.findById(token.id);
+
 				if (!user) {
 					throw Error("A felhasználói adatok betöltése sikertelen.");
 				}
+
 				user.ownEvents.push({ _id: event._id, label: data.label });
 				await invitionHandler(data, event._id);
 				await user.save();

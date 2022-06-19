@@ -104,6 +104,28 @@ const StateContextProvider = (props) => {
 		}
 	};
 
+	const applicationEvent = async (payload) => {
+		try {
+			const res = await fetch("/api/event/application", {
+				method: "PUT",
+				body: JSON.stringify(payload),
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+			const resJson = await res.json();
+			if (!res.ok || res.error) {
+				throw Error(resJson.message);
+			}
+			setStatus(resJson);
+			setShowEventModal(false);
+			return resJson;
+		} catch (err) {
+			// setShowEventModal(false);
+			setStatus({ message: err.message, error: true });
+		}
+	};
+
 	const savedEventsReducer = (state, { type, payload }) => {
 		switch (type) {
 			case "init": {
@@ -111,6 +133,7 @@ const StateContextProvider = (props) => {
 			}
 			case "push": {
 				createEvent(payload);
+				console.log("payload", payload, state);
 				return [...state, payload];
 			}
 			case "update": {
@@ -120,6 +143,12 @@ const StateContextProvider = (props) => {
 			case "delete": {
 				deleteEvent(payload);
 				return state.filter((evt) => evt.id !== payload.id);
+			}
+			case "application": {
+				applicationEvent(payload);
+				return state.map((evt) =>
+					evt._id === payload.theEvent._id ? payload.theEvent : evt
+				);
 			}
 			default:
 				throw new Error();
@@ -155,21 +184,23 @@ const StateContextProvider = (props) => {
 
 	const filteredEvents = useMemo(() => {
 		let events = [];
-		const filteredLabels = labels
-			.filter((lbl) => lbl.checked)
-			.map((lbl) => lbl.id);
+		if (savedEvents && savedEvents.length > 0) {
+			const filteredLabels = labels
+				.filter((lbl) => lbl.checked)
+				.map((lbl) => lbl.id);
 
-		savedEvents.forEach((event) => {
-			let positions = [];
-			event.positions?.forEach((pos) => {
-				if (filteredLabels.includes(pos.label)) {
-					positions.push(pos);
+			savedEvents.forEach((event) => {
+				let positions = [];
+				event.positions?.forEach((pos) => {
+					if (filteredLabels.includes(pos.label)) {
+						positions.push(pos);
+					}
+				});
+				if (filteredLabels.includes(event.label)) {
+					events.push({ ...event, positions: positions });
 				}
 			});
-			if (filteredLabels.includes(event.label)) {
-				events.push({ ...event, positions: positions });
-			}
-		});
+		}
 		return events;
 	}, [savedEvents, labels]);
 

@@ -4,28 +4,17 @@ import dbConnect from "../../../shared/dbConnect";
 
 const handler = async (req, res) => {
 	dbConnect();
-	const { eventId, positionId, userId, answer } = req.body;
-
-	const getLabel = (type) => {
-		if (answer) {
-			if (type === "open") {
-				return 3;
-			}
-			if (type === "direct") {
-				return 2;
-			}
-		} else {
-			return 7;
-		}
-	};
+	const {
+		theUserEvents,
+		theEvent,
+		positionId,
+		userSession,
+		answer,
+		getLabel: theLabel,
+	} = req.body;
 
 	try {
-		let user = await User.findById(userId);
-		if (!user) {
-			throw Error("Felhasználó nem található");
-		}
-
-		let event = await Event.findById(eventId);
+		let event = await Event.findById(theEvent._id);
 		if (!event) {
 			throw Error("Felhasználó nem található");
 		}
@@ -35,60 +24,31 @@ const handler = async (req, res) => {
 		updatedEventDates.forEach((d) => {
 			d.crew.forEach((crew) => {
 				if (crew.id.toString() === positionId) {
-					crew.label = getLabel(crew.invitionType.name);
+					crew.label = theLabel;
 					if (answer) {
 						if (!crew.candidates) {
 							crew.candidates = [];
 						}
 						crew.candidates.push({
-							_id: user._id,
-							name: user.name,
-							image: user.image,
+							_id: userSession.id,
+							name: userSession.user.name,
+							image: userSession.user.image,
 						});
 					} else if (crew.candidates) {
 						crew.candidates = crew.candidates.filter(
-							(c) => c._id.toString() !== userId
+							(c) => c._id.toString() !== userSession.id
 						);
 					}
 				}
 			});
 		});
 
-		let updatedUserEvents = user.events.toObject();
-		let otherUsers = [];
-
-		updatedUserEvents.forEach((e) => {
-			if (e._id.toString() === eventId) {
-				let newEventLabel;
-				e.positions.forEach((pos) => {
-					if (pos.id.toString() === positionId) {
-						pos.label = getLabel(pos.invitionType[0].name);
-						pos.status = answer ? "applied" : "resigned";
-						if (!newEventLabel || pos.label < newEventLabel) {
-							newEventLabel = pos.label;
-						}
-						if (pos.invitionType[0].result) {
-							otherUsers = pos.invitionType[0].result.filter(
-								(u) => u._id.toString() !== userId
-							);
-						}
-					} else if (!newEventLabel || pos.label < newEventLabel) {
-						newEventLabel = pos.label;
-					}
-				});
-				e.label = newEventLabel;
-			}
+		event.dates = updatedEventDates;
+		await User.findByIdAndUpdate(userSession.id, {
+			events: theUserEvents,
 		});
 
-		console.log("otherUsers", otherUsers);
-
-		event.dates = updatedEventDates;
-		user.events = updatedUserEvents;
-
-		console.log("first", user.events.toObject());
-
 		await event.save();
-		await user.save();
 
 		const message = answer
 			? { message: "Sikeresen jelentkeztél" }

@@ -13,12 +13,13 @@ import classes from "./../EventHandle.module.scss";
 import { findColor } from "../../../shared/utility";
 
 const EventAccepter = () => {
-	const { setShowEventModal, setStatus, daySelected } =
+	const { setStatus, daySelected, dispatchCallEvent } =
 		useContext(StateContext);
 
 	const { data: session, status } = useSession();
 
-	const [theUserEvents, setTheUserEvents] = useState();
+	const [theUserEvents, setUserEvents] = useState();
+	const [filteredUserEvents, setFilteredUserEvents] = useState();
 	const [theEvent, setTheEvent] = useState();
 	const [pickedPos, setPickedPos] = useState();
 	const [pickedPosId, setPickedPosId] = useState();
@@ -47,9 +48,8 @@ const EventAccepter = () => {
 							})
 						)
 					);
-
-					// console.log("filteredEvents", filteredEvents);
-					setTheUserEvents(filteredEvents);
+					setUserEvents(fetchedUser.events);
+					setFilteredUserEvents(filteredEvents);
 				} catch (err) {
 					setStatus({ message: err.message, error: true });
 				}
@@ -71,33 +71,57 @@ const EventAccepter = () => {
 
 	const respondHandler = async (e, answer) => {
 		e.preventDefault();
-		try {
-			const res = await fetch("/api/event/application", {
-				method: "PUT",
-				body: JSON.stringify({
-					eventId: theEvent._id,
-					positionId: pickedPosId,
-					userId: session.id,
-					answer,
-				}),
-				headers: {
-					"Content-Type": "application/json",
-				},
-			});
-			const resJson = await res.json();
-			if (!res.ok || res.error) {
-				throw Error(resJson.message);
+
+		const getLabel = () => {
+			if (answer) {
+				if (pickedPos.invitionType[0].name === "open") {
+					return 3;
+				}
+				if (pickedPos.invitionType[0].name === "direct") {
+					return 2;
+				}
+			} else {
+				return 7;
 			}
-			setStatus(resJson);
-			setShowEventModal(false);
-			return resJson;
-		} catch (err) {
-			// setShowEventModal(false);
-			setStatus({ message: err.message, error: true });
-		}
+		};
+
+		// let otherUsers = [];
+
+		let newEventLabel;
+		theEvent.positions.forEach((pos) => {
+			if (pos.id.toString() === pickedPosId) {
+				pos.label = getLabel();
+				pos.status = answer ? "applied" : "resigned";
+				if (!newEventLabel || pos.label < newEventLabel) {
+					newEventLabel = pos.label;
+				}
+				// if (pos.invitionType[0].result) {
+				// 	otherUsers = pos.invitionType[0].result.filter(
+				// 		(u) => u._id.toString() !== session.id
+				// 	);
+				// }
+			} else if (!newEventLabel || pos.label < newEventLabel) {
+				newEventLabel = pos.label;
+			}
+		});
+		theEvent.label = newEventLabel;
+
+		// console.log('otherUsers', otherUsers)
+
+		theUserEvents.map((evt) => (evt._id === theEvent._id ? theEvent : evt));
+
+		const payload = {
+			theUserEvents: theUserEvents,
+			theEvent: theEvent,
+			positionId: pickedPosId,
+			userSession: session,
+			answer,
+			getLabel: getLabel(),
+		};
+		dispatchCallEvent({ type: "application", payload });
 	};
 
-	if (isLoading || !theUserEvents || status === "loading")
+	if (isLoading || !filteredUserEvents || status === "loading")
 		return (
 			<div className={classes.Loding_Spinner}>
 				<Spinner />;
@@ -109,7 +133,7 @@ const EventAccepter = () => {
 			<form>
 				<div className={classes.EventModal_MainBody}>
 					<div className={classes.acceptorDates_MainLayout}>
-						{theUserEvents.map((event) => (
+						{filteredUserEvents.map((event) => (
 							<div key={event._id} className={classes.acceptorDates_MainDiv}>
 								<div>
 									{" "}

@@ -18,6 +18,7 @@ const handler = async (req, res) => {
 		}
 
 		const user = await User.findById(token.id);
+		// .populate('event');
 		if (!user) {
 			throw Error("A felhasználói adatok betöltése sikertelen.");
 		}
