@@ -1,4 +1,3 @@
-import { useSession } from "next-auth/react";
 import Head from "next/head";
 
 import Calendar from "../../components/Calendar/Calendar";

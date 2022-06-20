@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useReducer, useMemo } from "react";
 import { useSession } from "next-auth/react";
+import io from "socket.io-client";
 import dayjs from "dayjs";
+
 import control from "../control.json";
 
 export const StateContext = React.createContext({
@@ -26,9 +28,10 @@ const StateContextProvider = (props) => {
 	const [selectedEvent, setSelectedEvent] = useState(null);
 	const [labels, setLabels] = useState(control.labels);
 	const [isStatusMsg, setIsStatusMsg] = useState(null);
-	const [events, setEvents] = useState([]);
 
 	const { data: session, status } = useSession();
+
+	let socket;
 
 	const setStatus = (message) => {
 		if (message != null) {
@@ -118,10 +121,8 @@ const StateContextProvider = (props) => {
 				throw Error(resJson.message);
 			}
 			setStatus(resJson);
-			setShowEventModal(false);
 			return resJson;
 		} catch (err) {
-			// setShowEventModal(false);
 			setStatus({ message: err.message, error: true });
 		}
 	};
@@ -150,6 +151,12 @@ const StateContextProvider = (props) => {
 					evt._id === payload.theEvent._id ? payload.theEvent : evt
 				);
 			}
+			case "incoming": {
+				const ownEvent = state.filter(
+					(evt) => evt.label === 1 || evt.label === 6
+				);
+				return [...payload, ...ownEvent];
+			}
 			default:
 				throw new Error();
 		}
@@ -157,30 +164,43 @@ const StateContextProvider = (props) => {
 
 	const [savedEvents, dispatchCallEvent] = useReducer(savedEventsReducer, []);
 
+	const socketInitializer = async () => {
+		await fetch("/api/socket");
+		socket = io();
+		socket.on("connect", () => {
+			console.log("Socket.IO connected on " + session.id + " broadcast.");
+		});
+		socket.on(session.id, (updatedEvents) => {
+			console.log("msg", updatedEvents);
+			dispatchCallEvent({
+				type: "incoming",
+				payload: updatedEvents,
+			});
+		});
+	};
+
 	useEffect(() => {
 		const loadAllEvents = async () => {
 			try {
-				if (status === "authenticated") {
-					const res = await fetch("/api/event/all");
-					const eventsJson = await res.json();
-					if (!res.ok || res.error) {
-						throw Error(eventsJson.message);
-					}
-					setEvents(eventsJson);
+				const res = await fetch("/api/event/all");
+				const eventsJson = await res.json();
+				if (!res.ok || res.error) {
+					throw Error(eventsJson.message);
 				}
+				dispatchCallEvent({
+					type: "init",
+					payload: eventsJson,
+				});
 			} catch (err) {
 				setStatus({ message: err.message, error: true });
 			}
 		};
-		loadAllEvents();
+		if (status === "authenticated") {
+			loadAllEvents();
+			socketInitializer();
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [status]);
-
-	useEffect(() => {
-		dispatchCallEvent({
-			type: "init",
-			payload: events,
-		});
-	}, [events]);
 
 	const filteredEvents = useMemo(() => {
 		let events = [];
