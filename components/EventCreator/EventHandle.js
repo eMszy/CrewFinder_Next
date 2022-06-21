@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { StateContext } from "../../context/state-context";
 import EventCreatorMain from "./EventCreatorElements/EventCreatorMain";
 import EventCreatorSecondary from "./EventCreatorElements/EventCreatorSecondary";
-import EventAccepter from "./EventCreatorElements/EventAccepter";
+import EventAccepter from "./EventCreatorElements/EventDateAccepter";
 
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoArrowBack, IoClose } from "react-icons/io5";

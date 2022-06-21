@@ -100,6 +100,14 @@ const handler = async (req, res) => {
 				}
 			});
 
+			// const users = await User.find({ _id: { $in: usersIdArray } });
+			// if (!users) {
+			// 	throw Error("Nincs meg a felhasználó, [eventId]:107");
+			// }
+
+			// console.log("users", users);
+			// console.log("usersPosArray", usersPosArray);
+
 			usersPosArray.forEach(async (userPosArray) => {
 				let label;
 				userPosArray.pos.forEach((p) => {

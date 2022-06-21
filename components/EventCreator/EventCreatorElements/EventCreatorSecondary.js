@@ -112,7 +112,7 @@ const EventCreatorSecondary = ({ department, setIsCreatroPage }) => {
 		return [...filteredDay, { ...day[id], [name]: value }];
 	};
 
-	console.log("pickedDays", pickedDays);
+	// console.log("pickedDays", pickedDays);
 
 	return (
 		<div>

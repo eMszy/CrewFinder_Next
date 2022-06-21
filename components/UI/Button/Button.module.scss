@@ -53,3 +53,12 @@
 		border-color: red;
 	}
 }
+
+.Info {
+	background-color: white;
+	border-color: rgb(175, 215, 248);
+	&:hover {
+		background-color: rgb(175, 215, 248);
+		border-color: rgb(175, 215, 248);
+	}
+}

@@ -36,7 +36,7 @@ const SmallCalendar = ({ filteredEvents, setClickedDate, setIsClicked }) => {
 		let style = { borderRadius: "999px" };
 
 		if (nowDay === currDay) {
-			style = { ...style, borderColor: "#afd7f8" };
+			style = { borderColor: "#afd7f8" };
 		}
 
 		if (fEventAllDay) {

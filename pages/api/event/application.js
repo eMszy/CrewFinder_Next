@@ -42,6 +42,7 @@ const handler = async (req, res) => {
 				}
 			});
 		});
+		console.log("theUserEvents", theUserEvents);
 
 		event.dates = updatedEventDates;
 		await User.findByIdAndUpdate(userSession.id, {

@@ -134,7 +134,6 @@ const StateContextProvider = (props) => {
 			}
 			case "push": {
 				createEvent(payload);
-				console.log("payload", payload, state);
 				return [...state, payload];
 			}
 			case "update": {
@@ -152,10 +151,24 @@ const StateContextProvider = (props) => {
 				);
 			}
 			case "incoming": {
-				const ownEvent = state.filter(
-					(evt) => evt.label === 1 || evt.label === 6
-				);
-				return [...payload, ...ownEvent];
+				const ids = [];
+				const events = [];
+
+				payload.forEach((p) => {
+					if (!ids.includes(p._id)) {
+						ids.push(p._id);
+						events.push(p);
+					}
+				});
+
+				state.forEach((s) => {
+					if (!ids.includes(s._id)) {
+						ids.push(s._id);
+						events.push(s);
+					}
+				});
+
+				return events;
 			}
 			default:
 				throw new Error();
