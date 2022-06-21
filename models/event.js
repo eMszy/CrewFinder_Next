@@ -1,63 +1,10 @@
-import mongoose from "mongoose";
+import mongoose, { SchemaTypes } from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const crewSchema = new Schema(
-	{
-		id: {
-			type: Number,
-			required: true,
-		},
-		name: {
-			type: String,
-			required: false,
-		},
-		pos: {
-			type: String,
-			required: true,
-		},
-		status: {
-			type: String,
-			required: true,
-			default: "new",
-		},
-		image: String,
-		label: { type: Number, required: true },
-		invitionType: Schema.Types.Mixed,
-	},
-	{ autoIndex: false }
-);
-
 const eventSchema = new Schema(
 	{
-		baseCrew: [crewSchema],
-		dates: [
-			{
-				startTime: Number,
-				endTime: Number,
-				id: Number,
-				location: { type: String, required: false },
-				crew: [Schema.Types.Mixed],
-			},
-			{ autoIndex: false },
-		],
-		description: {
-			type: String,
-			required: true,
-		},
-		endDate: {
-			type: Number,
-			required: true,
-		},
-		id: {
-			type: Number,
-			required: true,
-		},
-		label: {
-			type: Number,
-			required: true,
-		},
-		location: {
+		title: {
 			type: String,
 			required: true,
 		},
@@ -65,34 +12,62 @@ const eventSchema = new Schema(
 			type: String,
 			required: true,
 		},
+		description: {
+			type: String,
+			required: true,
+		},
+		location: {
+			type: String,
+			required: false,
+		},
 		startDate: {
 			type: Number,
 			required: true,
 		},
-		title: {
-			type: String,
+		endDate: {
+			type: Number,
 			required: true,
 		},
-		creatorPosition: {
-			type: String,
+		weight: {
+			type: Number,
 			required: true,
 		},
-		creatorName: {
+		department: {
 			type: String,
-			required: true,
+			required: false,
 		},
+		dates: [
+			{
+				id: {
+					type: Number,
+					required: true,
+				},
+				startTime: {
+					type: Number,
+					required: true,
+				},
+				endTime: {
+					type: Number,
+					required: true,
+				},
+			},
+			{ _id: false },
+		],
 		creator: {
 			type: Schema.Types.ObjectId,
 			ref: "user",
 			required: true,
 		},
-		department: {
-			type: String,
-			required: true,
-		},
+		positions: [
+			{
+				type: Schema.Types.ObjectId,
+				ref: "positions",
+				required: true,
+			},
+			{ _id: false },
+		],
 	},
-	{ timestamps: true },
-	{ autoIndex: true }
+	{ timestamps: true }
 );
 
 module.exports = mongoose.models.Event || mongoose.model("Event", eventSchema);

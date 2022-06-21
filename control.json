@@ -1,7 +1,7 @@
 {
   "labels": [
     {
-      "id": 6,
+      "id": 0,
       "label": "hsl(300, 100%, 30%)",
       "title": "Privát esemény",
       "checked": true
@@ -37,7 +37,7 @@
       "checked": true
     },
     {
-      "id": 7,
+      "id": 6,
       "label": "hsl(0, 0%, 80%)",
       "title": "Lemodott",
       "checked": false

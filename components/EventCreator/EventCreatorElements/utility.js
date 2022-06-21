@@ -106,25 +106,21 @@ export const eventOtherTemplate = (selectedEvent, daySelected, department) => {
 						endTime: +dayjs(daySelected.hour(18).minute(0)),
 					},
 			  ],
-		creatorPosition: selectedEvent
-			? selectedEvent.yourPosition
-			: Object.values(control.departments[department].positions)[0].name,
-		baseCrew: selectedEvent ? selectedEvent.baseCrew : [],
-		// ha nincs egy nap se kijelölve akkor vissza ugrik az aktuális napra
-		// Valami nem jó a napok óra-perc beállításán
 		startDate: selectedEvent
 			? dayFormating(selectedEvent.startDate)
 			: dayFormating(daySelected.hour(6).minute(0)),
 		endDate: selectedEvent
 			? dayFormating(selectedEvent.endDate)
 			: dayFormating(daySelected.hour(18).minute(0)),
-		id: selectedEvent ? selectedEvent.id : Math.random(),
+		weight: selectedEvent
+			? selectedEvent.weight
+			: +dayjs(daySelected).format(`YYYYMMDD`) +
+			  Math.floor(Math.random() * (9999 - 1000) + 1),
 		department: selectedEvent ? selectedEvent.department : department,
-		label: selectedEvent
-			? selectedEvent.label
-			: department === "Privát"
-			? 6
-			: 1,
+		positions: selectedEvent ? selectedEvent.positions : [],
+		creatorPosition: selectedEvent
+			? selectedEvent.creatorPosition
+			: Object.values(control.departments[department].positions)[0].name,
 	};
 };
 

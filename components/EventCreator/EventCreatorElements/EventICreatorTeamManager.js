@@ -105,7 +105,9 @@ const EventICreatorTeamManager = ({
 			</div>
 			<div>
 				<div>
-					<p>{isEventCreatorMain ? "Az alapcsapatod" : "A beugrós csapatod"}</p>
+					<p>
+						{isEventCreatorMain ? "Az alap csapatod" : "A beugrós csapatod"}
+					</p>
 				</div>
 				<div className={classes.BaseTeam}>
 					<div className={classes.BaseTeam_PosDiv}>

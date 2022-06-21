@@ -2,59 +2,6 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const userEventSchema = new Schema(
-	{
-		_id: {
-			type: Schema.Types.ObjectId,
-			ref: "event",
-			required: true,
-		},
-		startDate: Number,
-		endDate: Number,
-		id: Number,
-		department: String,
-		title: {
-			type: String,
-			required: false,
-		},
-		shortTitle: {
-			type: String,
-			required: false,
-		},
-		description: String,
-		creator: {
-			type: Schema.Types.ObjectId,
-			ref: "user",
-			required: true,
-		},
-		creatorName: String,
-		label: {
-			type: Number,
-			required: true,
-		},
-		positions: [
-			{
-				id: Number,
-				yourPosition: String,
-				invitionType: [Schema.Types.Mixed],
-				label: {
-					type: Number,
-					required: true,
-				},
-				date: [
-					{
-						id: Number,
-						startTime: Number,
-						endTime: Number,
-					},
-				],
-				status: String,
-			},
-		],
-	},
-	{ _id: false }
-);
-
 const userSchema = new Schema(
 	{
 		email: {
@@ -134,8 +81,29 @@ const userSchema = new Schema(
 				default: [],
 			},
 		},
-		ownEvents: [Schema.Types.Mixed],
-		events: [userEventSchema],
+		events: [
+			{
+				eventId: {
+					type: Schema.Types.ObjectId,
+					ref: "event",
+					required: true,
+				},
+				positionIds: [
+					{
+						type: Schema.Types.ObjectId,
+						ref: "positions",
+						required: true,
+					},
+				],
+				label: {
+					type: String,
+					required: true,
+				},
+				status: String,
+				messages: [{ message: String, masgStatus: String }],
+			},
+			{ _id: false },
+		],
 	},
 	{ timestamps: true }
 );

@@ -14,7 +14,7 @@ const Home = () => {
 				<title>{Home.title}</title>
 			</Head>
 			<div className={classes.Main}>
-				<Sidebar />
+				{/* <Sidebar /> */}
 				<Calendar />
 			</div>
 		</>

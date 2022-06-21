@@ -133,8 +133,9 @@ const StateContextProvider = (props) => {
 				return payload;
 			}
 			case "push": {
+				console.log("push payload: ", payload);
 				createEvent(payload);
-				return [...state, payload];
+				return [...state];
 			}
 			case "update": {
 				updateEvent(payload);

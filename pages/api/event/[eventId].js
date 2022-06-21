@@ -2,6 +2,8 @@ import { getToken } from "next-auth/jwt";
 
 import Event from "../../../models/event";
 import User from "../../../models/user";
+import Position from "../../../models/position";
+
 import dbConnect from "../../../shared/dbConnect";
 
 const EventInfoTreeHandler = (data, pos, label, evtId) => {
@@ -157,16 +159,35 @@ const handler = async (req, res) => {
 			}
 
 			case "POST": {
-				const data = req.body;
-				const event = await new Event(data);
+				const { eventData, creatorPositionData, label } = req.body;
+
+				const event = await new Event(eventData);
+				const position = await new Position(creatorPositionData);
 				const user = await User.findById(token.id);
+
+				console.log("position", position.toObject());
 
 				if (!user) {
 					throw Error("A felhasználói adatok betöltése sikertelen.");
 				}
 
-				user.ownEvents.push({ _id: event._id, label: data.label });
-				await invitionHandler(data, event._id);
+				position.eventId = event._id;
+				position.user = user._id;
+				event.positions = position._id;
+
+				const userEvent = {
+					eventId: event._id,
+					positionId: [position._id],
+					label: label,
+					status: "new",
+					// messages: [],
+				};
+
+				user.events.push(userEvent);
+
+				// await invitionHandler(data, event._id);
+
+				await position.save();
 				await user.save();
 				await event.save();
 

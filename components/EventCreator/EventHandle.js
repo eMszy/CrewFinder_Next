@@ -42,12 +42,27 @@ const EventHandle = () => {
 						<div className={classes.Icon}>
 							<GiHamburgerMenu />
 						</div>
-						{!isEventCreatorMain && (
+
+						<div
+							className={[
+								classes.Icon,
+								classes.Buttom1,
+								isEventCreatorMain && classes.Active,
+							].join(" ")}
+							onClick={() => setEventCreatorMain(true)}
+						>
+							1
+						</div>
+						{selectedEvent && (
 							<div
-								className={`${classes.Icon}  ${classes.Buttom1}`}
-								onClick={() => setEventCreatorMain(true)}
+								className={[
+									classes.Icon,
+									classes.Buttom1,
+									!isEventCreatorMain && classes.Active,
+								].join(" ")}
+								onClick={() => setEventCreatorMain(false)}
 							>
-								<IoArrowBack />
+								2
 							</div>
 						)}
 					</div>

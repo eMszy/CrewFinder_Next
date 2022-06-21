@@ -117,167 +117,14 @@ const EventCreatorSecondary = ({
 	};
 
 	// console.log("pickedDays", pickedDays);
+	console.log("selectedEvent", selectedEvent);
 
 	return (
 		<div>
 			<form>
 				<div className={classes.EventModal_MainBody}>
 					<div className={classes.EventModal_Input}>
-						<div className={classes.Icon}>
-							<IoCalendarOutline />
-						</div>
-						<div className={classes.datesCrew_div}>
-							{pickedDays
-								.sort((a, b) => a.id - b.id)
-								.map((p, _idx) => (
-									<div key={_idx}>
-										<div className={classes.datesCrew}>
-											<div className={classes.DateAndLoc}>
-												<div>
-													{dayjs(p.startTime).format("YYYY. MMMM. DD.")}
-												</div>
-												<div>{dayjs(p.startTime).format("dddd")}</div>
-
-												<input
-													type="time"
-													name="startTime"
-													value={dayjs(p.startTime).format("HH:mm")}
-													required
-													onChange={(e) => {
-														const dateAndTime = dayjs(p.startTime).format(
-															`YYYY-MM-DDT${e.target.value}`
-														);
-														setPickedDays(
-															onChangeHandle(
-																+dayjs(dateAndTime),
-																_idx,
-																e.target.name,
-																pickedDays
-															)
-														);
-													}}
-												/>
-												<input
-													type="time"
-													name="endTime"
-													value={dayjs(p.endTime).format("HH:mm")}
-													min={p.startDate}
-													required
-													onChange={(e) => {
-														const dateAndTime = dayjs(p.startTime).format(
-															`YYYY-MM-DDT${e.target.value}`
-														);
-														setPickedDays(
-															onChangeHandle(
-																+dayjs(dateAndTime),
-																_idx,
-																e.target.name,
-																pickedDays
-															)
-														);
-													}}
-												/>
-												<input
-													type="text"
-													name="location"
-													placeholder="Helyszín"
-													value={p.location}
-													required
-													onChange={(e) => {
-														setPickedDays(
-															onChangeHandle(
-																e.target.value,
-																_idx,
-																e.target.name,
-																pickedDays
-															)
-														);
-													}}
-												/>
-											</div>
-											<div>
-												{p?.crew
-													.sort((a, b) => a.id - b.id)
-													.map((c, idx) => (
-														<div key={idx} className={classes.CrewPosName}>
-															<select
-																name="pos"
-																value={c.pos}
-																onChange={(e) => {
-																	//ezt majd meg kell írni
-																}}
-															>
-																{control.departments[
-																	selectedEvent.department
-																] &&
-																	Object.keys(
-																		control.departments[
-																			selectedEvent.department
-																		].positions
-																	).map((pos, id) => (
-																		<option key={id}>{pos}</option>
-																	))}
-															</select>
-															{c.invitionType &&
-															c.invitionType?.name !== "direct" ? (
-																<select
-																	name="invitionType"
-																	value={c.invitionType?.name}
-																	onChange={(e) => {
-																		//ezt majd meg kell írni
-																	}}
-																>
-																	{control.invitionType.map((t) => (
-																		<option key={t.type} value={t.type}>
-																			{t.name}
-																		</option>
-																	))}
-																</select>
-															) : c.image ? (
-																<Image
-																	src={c.image}
-																	width={35}
-																	height={35}
-																	alt={c.name}
-																/>
-															) : (
-																<div></div>
-															)}
-															{c.invitionType?.name === "direct" ? (
-																<div className={classes.BaseTeam_Pos__Direct}>
-																	{c.name}
-																</div>
-															) : (
-																<div></div>
-															)}
-															<div
-																className={classes.Icon}
-																onClick={() => deletPosHandel(c.id, p.id)}
-															>
-																<IoCloseCircleOutline />
-															</div>
-
-															{c.invitionType?.name === "attribute" && (
-																<div className={classes.CrewPosName_Attribute}>
-																	{control.departments[
-																		department
-																	].attribute.map((att, id) => (
-																		<div key={id}>
-																			<label htmlFor={att.type}>
-																				{att.name} -{" "}
-																				{att.range[c.invitionType[att.type]]}
-																			</label>
-																		</div>
-																	))}
-																</div>
-															)}
-														</div>
-													))}
-											</div>
-										</div>
-									</div>
-								))}
-						</div>
+						{/* ide jönnek a pozik */}
 					</div>
 					<div className={classes.EventModal_Calendar}>
 						<SmallCalendar
@@ -304,33 +151,6 @@ const EventCreatorSecondary = ({
 								Töröl
 							</Button>
 						</div>
-					</div>
-					{selectedEvent.department !== "Privát" && (
-						<EventICreatorTeamManager
-							crewMembers={crewMembers}
-							addPosHandel={addPosHandel}
-							department={department}
-							changeHandle={(e) => changeHandle(e)}
-							deletPosHandel={deletPosHandel}
-							setValid={setTeamManagerValid}
-							isValid={isTeamManagerValid}
-							isEventCreatorMain={isEventCreatorMain}
-						/>
-					)}
-
-					<div></div>
-					<div className={classes.SaveBtn}>
-						<Button
-							type="button"
-							disabled={!isTeamManagerValid}
-							clicked={(e) => {
-								e.preventDefault();
-								saveHandle();
-								resetHandle();
-							}}
-						>
-							Változások mentése
-						</Button>
 					</div>
 				</div>
 

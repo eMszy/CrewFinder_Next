@@ -21,8 +21,6 @@ const EventAccepter = () => {
 		setShowEventModal,
 	} = useContext(StateContext);
 
-	console.log("daySelected", daySelected);
-
 	const { data: session, status } = useSession();
 
 	const [theUserEvents, setUserEvents] = useState();
@@ -287,7 +285,7 @@ const EventAccepter = () => {
 							<SmallCalendar
 								filteredEvents={[
 									{
-										label: pickedPos?.label || 6,
+										label: pickedPos?.label || 0,
 										startDate: +dayjs(theEvent?.startDate),
 										endDate: +dayjs(theEvent?.endDate),
 										dates: pickedPos?.date,

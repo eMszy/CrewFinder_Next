@@ -149,7 +149,7 @@ export const eventLoaderHandler = (filteredEvents, day) => {
 	let events = [];
 	filteredEvents.forEach((event) => {
 		if (event.label === 1 || event.label === 6) {
-			let isExist = event.dates.find(
+			let isExist = event?.dates?.find(
 				(d) =>
 					dayjs(d.startTime).format("YYMMDD") === dayjs(day).format("YYMMDD")
 			);
