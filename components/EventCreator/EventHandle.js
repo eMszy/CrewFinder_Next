@@ -74,11 +74,13 @@ const EventHandle = () => {
 							setIsCreatroPage={setEventCreatorMain}
 							department={department}
 							setDepartment={setDepartment}
+							isEventCreatorMain={isEventCreatorMain}
 						/>
 					) : (
 						<EventCreatorSecondary
 							setIsCreatroPage={setEventCreatorMain}
 							department={department}
+							isEventCreatorMain={isEventCreatorMain}
 						/>
 					)
 				) : (

@@ -13,7 +13,11 @@ import control from "../../../control.json";
 import classes from "./../EventHandle.module.scss";
 import EventICreatorTeamManager from "./EventICreatorTeamManager";
 
-const EventCreatorSecondary = ({ department, setIsCreatroPage }) => {
+const EventCreatorSecondary = ({
+	department,
+	setIsCreatroPage,
+	isEventCreatorMain,
+}) => {
 	const { setShowEventModal, selectedEvent, dispatchCallEvent } =
 		useContext(StateContext);
 
@@ -310,6 +314,7 @@ const EventCreatorSecondary = ({ department, setIsCreatroPage }) => {
 							deletPosHandel={deletPosHandel}
 							setValid={setTeamManagerValid}
 							isValid={isTeamManagerValid}
+							isEventCreatorMain={isEventCreatorMain}
 						/>
 					)}
 

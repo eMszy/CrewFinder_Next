@@ -19,6 +19,7 @@ const EventICreatorTeamManager = ({
 	deletPosHandel,
 	setValid,
 	isValid,
+	isEventCreatorMain,
 }) => {
 	const { data: session } = useSession();
 
@@ -104,7 +105,7 @@ const EventICreatorTeamManager = ({
 			</div>
 			<div>
 				<div>
-					<p>Az csapatod:</p>
+					<p>{isEventCreatorMain ? "Az alapcsapatod" : "A beugrós csapatod"}</p>
 				</div>
 				<div className={classes.BaseTeam}>
 					<div className={classes.BaseTeam_PosDiv}>

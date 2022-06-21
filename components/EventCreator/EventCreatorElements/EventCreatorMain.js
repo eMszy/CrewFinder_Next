@@ -27,7 +27,12 @@ import { inputChangedHandler, isAllInputVaild } from "../../../shared/utility";
 
 //Egyenlőre mindenki csak egy DEPT BaseCrew-t tud kezelni
 
-const EventCreatorMain = ({ setIsCreatroPage, department, setDepartment }) => {
+const EventCreatorMain = ({
+	setIsCreatroPage,
+	department,
+	setDepartment,
+	isEventCreatorMain,
+}) => {
 	const { daySelected, dispatchCallEvent, selectedEvent, setSelectedEvent } =
 		useContext(StateContext);
 
@@ -435,6 +440,7 @@ const EventCreatorMain = ({ setIsCreatroPage, department, setDepartment }) => {
 						deletPosHandel={deletPosHandel}
 						setValid={setTeamManagerValid}
 						isValid={isTeamManagerValid}
+						isEventCreatorMain={isEventCreatorMain}
 					/>
 				)}
 			</div>
