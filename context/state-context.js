@@ -20,6 +20,9 @@ export const StateContext = React.createContext({
 	filteredEvents: [],
 	isStatusMsg: null,
 	setStatus: () => {},
+	createEvent: (payload) => {},
+	updateEvent: (payload) => {},
+	userId: "",
 });
 
 const StateContextProvider = (props) => {
@@ -28,10 +31,9 @@ const StateContextProvider = (props) => {
 	const [selectedEvent, setSelectedEvent] = useState(null);
 	const [labels, setLabels] = useState(control.labels);
 	const [isStatusMsg, setIsStatusMsg] = useState(null);
+	const [userId, setUserId] = useState(null);
 
 	const { data: session, status } = useSession();
-
-	let socket;
 
 	const setStatus = (message) => {
 		if (message != null) {
@@ -58,8 +60,12 @@ const StateContextProvider = (props) => {
 			if (!res.ok || res.error) {
 				throw Error(resJson.message);
 			}
-			await setSelectedEvent(resJson.event);
+			setSelectedEvent(resJson.event);
 			setStatus(resJson);
+			dispatchCallEvent({
+				type: "createEvent",
+				payload: resJson.event,
+			});
 			return resJson;
 		} catch (err) {
 			setShowEventModal(false);
@@ -68,6 +74,7 @@ const StateContextProvider = (props) => {
 	};
 
 	const updateEvent = async (payload) => {
+		console.log("payload", payload);
 		try {
 			const res = await fetch("/api/event/" + payload._id, {
 				method: "PUT",
@@ -81,10 +88,14 @@ const StateContextProvider = (props) => {
 			if (!res.ok || res.error) {
 				throw Error(resJson.message);
 			}
+			dispatchCallEvent({
+				type: "updateEvent",
+				payload: resJson.event,
+			});
 			setStatus(resJson);
 			return;
 		} catch (err) {
-			setShowEventModal(false);
+			// setShowEventModal(false);
 			setStatus({ message: err.message, error: true });
 		}
 	};
@@ -127,50 +138,53 @@ const StateContextProvider = (props) => {
 		}
 	};
 
+	console.log("selectedEvent", selectedEvent);
+
 	const savedEventsReducer = (state, { type, payload }) => {
 		switch (type) {
 			case "init": {
-				return payload;
+				console.log("payload", payload);
+				return [...payload];
 			}
-			case "push": {
-				console.log("push payload: ", payload);
-				createEvent(payload);
-				return [...state];
+			case "createEvent": {
+				console.log("state", state);
+				return [...state, payload];
 			}
-			case "update": {
-				updateEvent(payload);
-				return state.map((evt) => (evt.id === payload.id ? payload : evt));
-			}
-			case "delete": {
-				deleteEvent(payload);
-				return state.filter((evt) => evt.id !== payload.id);
-			}
-			case "application": {
-				applicationEvent(payload);
+			case "updateEvent": {
 				return state.map((evt) =>
-					evt._id === payload.theEvent._id ? payload.theEvent : evt
+					evt.event._id === payload?._id ? payload : evt
 				);
 			}
-			case "incoming": {
-				const ids = [];
-				const events = [];
+			// case "delete": {
+			// 	deleteEvent(payload);
+			// 	return state.filter((evt) => evt.id !== payload.id);
+			// }
+			// case "application": {
+			// 	applicationEvent(payload);
+			// 	return state.map((evt) =>
+			// 		evt._id === payload.theEvent._id ? payload.theEvent : evt
+			// 	);
+			// }
+			// case "incoming": {
+			// 	const ids = [];
+			// 	const events = [];
 
-				payload.forEach((p) => {
-					if (!ids.includes(p._id)) {
-						ids.push(p._id);
-						events.push(p);
-					}
-				});
+			// 	payload.forEach((p) => {
+			// 		if (!ids.includes(p._id)) {
+			// 			ids.push(p._id);
+			// 			events.push(p);
+			// 		}
+			// 	});
 
-				state.forEach((s) => {
-					if (!ids.includes(s._id)) {
-						ids.push(s._id);
-						events.push(s);
-					}
-				});
+			// 	state.forEach((s) => {
+			// 		if (!ids.includes(s._id)) {
+			// 			ids.push(s._id);
+			// 			events.push(s);
+			// 		}
+			// 	});
 
-				return events;
-			}
+			// 	return events;
+			// }
 			default:
 				throw new Error();
 		}
@@ -178,14 +192,18 @@ const StateContextProvider = (props) => {
 
 	const [savedEvents, dispatchCallEvent] = useReducer(savedEventsReducer, []);
 
+	let socket;
+
 	const socketInitializer = async () => {
 		await fetch("/api/socket");
 		socket = io();
-		socket.on("connect", () => {
-			console.log("Socket.IO connected on " + session.id + " broadcast.");
-		});
+		if (!socket.connected) {
+			socket.on("connect", () => {
+				console.log("Socket.IO connected on " + session.id + " broadcast.");
+			});
+		}
 		socket.on(session.id, (updatedEvents) => {
-			console.log("msg", updatedEvents);
+			console.log("Updates from Socket: ", updatedEvents);
 			dispatchCallEvent({
 				type: "incoming",
 				payload: updatedEvents,
@@ -194,47 +212,47 @@ const StateContextProvider = (props) => {
 	};
 
 	useEffect(() => {
-		const loadAllEvents = async () => {
-			try {
-				const res = await fetch("/api/event/all");
-				const eventsJson = await res.json();
-				if (!res.ok || res.error) {
-					throw Error(eventsJson.message);
-				}
-				dispatchCallEvent({
-					type: "init",
-					payload: eventsJson,
-				});
-			} catch (err) {
-				setStatus({ message: err.message, error: true });
-			}
-		};
 		if (status === "authenticated") {
+			const loadAllEvents = async () => {
+				try {
+					const res = await fetch("/api/event/all");
+					const eventsJson = await res.json();
+					if (!res.ok || res.error) {
+						throw Error(eventsJson.message);
+					}
+					dispatchCallEvent({
+						type: "init",
+						payload: eventsJson,
+					});
+				} catch (err) {
+					setStatus({ message: err.message, error: true });
+				}
+			};
+			setUserId(session.id);
+			console.log("socket", socket);
+			// socketInitializer();
 			loadAllEvents();
-			socketInitializer();
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [status]);
 
 	const filteredEvents = useMemo(() => {
 		let events = [];
-		if (savedEvents && savedEvents.length > 0) {
+		if (savedEvents && savedEvents.length) {
 			const filteredLabels = labels
 				.filter((lbl) => lbl.checked)
 				.map((lbl) => lbl.id);
 
 			savedEvents.forEach((event) => {
-				let positions = [];
-				event.positions?.forEach((pos) => {
-					if (filteredLabels.includes(pos.label)) {
-						positions.push(pos);
-					}
-				});
-				if (filteredLabels.includes(event.label)) {
+				const positions = event.positions.filter((pos) =>
+					filteredLabels.includes(pos.label)
+				);
+				if (positions.length) {
 					events.push({ ...event, positions: positions });
 				}
 			});
 		}
+
 		return events;
 	}, [savedEvents, labels]);
 
@@ -269,6 +287,9 @@ const StateContextProvider = (props) => {
 				filteredEvents,
 				isStatusMsg,
 				setStatus,
+				createEvent,
+				updateEvent,
+				userId,
 			}}
 		>
 			{props.children}

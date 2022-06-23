@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const positionSchema = new Schema({
 	eventId: {
 		type: Schema.Types.ObjectId,
-		ref: "event",
+		ref: "Event",
 		required: true,
 	},
 	posName: {
@@ -16,15 +16,15 @@ const positionSchema = new Schema({
 		type: Number,
 		required: true,
 	},
-	invition: [
-		{
-			type: {
-				type: String,
-				required: true,
-			},
-			attribute: [Schema.Types.Mixed],
+	invition: {
+		type: {
+			type: String,
+			required: true,
 		},
-	],
+		attribute: [Schema.Types.Mixed],
+		_id: false,
+	},
+
 	dates: [
 		{
 			id: {
@@ -40,15 +40,15 @@ const positionSchema = new Schema({
 				required: true,
 			},
 			location: String,
+			_id: false,
 		},
-		{ _id: false },
 	],
 	users: [
 		{
 			type: Schema.Types.ObjectId,
-			ref: "user",
+			ref: "User",
+			_id: false,
 		},
-		{ _id: false },
 	],
 	status: String,
 });

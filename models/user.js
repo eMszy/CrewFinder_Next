@@ -83,26 +83,29 @@ const userSchema = new Schema(
 		},
 		events: [
 			{
-				eventId: {
+				event: {
 					type: Schema.Types.ObjectId,
-					ref: "event",
+					ref: "Event",
 					required: true,
 				},
-				positionIds: [
+				_id: false,
+				positions: [
 					{
-						type: Schema.Types.ObjectId,
-						ref: "positions",
-						required: true,
+						position: {
+							type: Schema.Types.ObjectId,
+							ref: "Position",
+							required: true,
+						},
+						label: {
+							type: Number,
+							required: true,
+						},
+						status: String,
+						messages: [{ message: String, msgStatus: String }],
+						_id: false,
 					},
 				],
-				label: {
-					type: String,
-					required: true,
-				},
-				status: String,
-				messages: [{ message: String, masgStatus: String }],
 			},
-			{ _id: false },
 		],
 	},
 	{ timestamps: true }

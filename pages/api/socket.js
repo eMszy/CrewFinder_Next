@@ -19,30 +19,30 @@ const SocketHandler = async (req, res) => {
 	// 	},
 	// ];
 
-	const changeStream = User.watch();
+	// const changeStream = User.watch();
 
-	if (res.socket.server.io) {
-		console.log("Socket is already running on " + token.id);
-	} else {
-		console.log("Socket is initializing with " + token.id);
-		const io = new Server(res.socket.server);
-		res.socket.server.io = io;
+	// if (res.socket.server.io) {
+	// 	console.log("Socket is already running on " + token.id);
+	// } else {
+	// 	console.log("Socket is initializing with " + token.id);
+	// 	const io = new Server(res.socket.server);
+	// 	res.socket.server.io = io;
 
-		io.on("connection", (socket) => {
-			changeStream.on("change", (next) => {
-				console.log("ID: ", next.documentKey._id.toString(), token.id);
+	// 	io.on("connection", (socket) => {
+	// 		changeStream.on("change", (next) => {
+	// 			console.log("ID: ", next.documentKey._id.toString(), token.id);
 
-				const userId = next.documentKey._id.toString();
-				console.log("next", next);
-				const updatedUserEvents = next.updateDescription.updatedFields.events;
+	// 			const userId = next.documentKey._id.toString();
+	// 			console.log("next", next);
+	// 			if (next?.updateDescription?.updatedFields) {
+	// 				const updatedFields = next.updateDescription.updatedFields.events;
 
-				console.log("payload", userId, updatedUserEvents);
-				if (updatedUserEvents) {
-					socket.broadcast.emit(userId, updatedUserEvents);
-				}
-			});
-		});
-	}
+	// 				console.log("payload", userId, updatedFields);
+	// 				socket.broadcast.emit(userId, updatedFields);
+	// 			}
+	// 		});
+	// 	});
+	// }
 
 	res.end();
 };

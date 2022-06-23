@@ -22,7 +22,9 @@ const EventHandle = () => {
 
 	const [isEventCreatorMain, setEventCreatorMain] = useState(true);
 	const [department, setDepartment] = useState(
-		session?.metaData?.isHOD[0] || "Privát"
+		selectedEvent
+			? selectedEvent.event.department
+			: session?.metaData?.isHOD[0] || "Privát"
 	);
 
 	const deletHandel = (e) => {
@@ -83,7 +85,7 @@ const EventHandle = () => {
 						</div>
 					</div>
 				</header>
-				{!selectedEvent || selectedEvent?.creator === session?.id ? (
+				{!selectedEvent || selectedEvent.event.creator === session?.id ? (
 					isEventCreatorMain ? (
 						<EventCreatorMain
 							setIsCreatroPage={setEventCreatorMain}

@@ -42,7 +42,7 @@ export const eventTypeTemplate = (selectedEvent) => {
 	return {
 		title: {
 			...InputTemplates.text,
-			value: selectedEvent ? selectedEvent.title : "",
+			value: selectedEvent ? selectedEvent.event.title : "",
 			disabled: false,
 			valid: selectedEvent ? true : false,
 			elementConfig: {
@@ -56,7 +56,7 @@ export const eventTypeTemplate = (selectedEvent) => {
 		},
 		shortTitle: {
 			...InputTemplates.text,
-			value: selectedEvent ? selectedEvent.shortTitle : "",
+			value: selectedEvent ? selectedEvent.event.shortTitle : "",
 			disabled: false,
 			valid: selectedEvent ? true : false,
 			elementConfig: {
@@ -66,7 +66,7 @@ export const eventTypeTemplate = (selectedEvent) => {
 		},
 		description: {
 			...InputTemplates.text,
-			value: selectedEvent ? selectedEvent.description : "",
+			value: selectedEvent ? selectedEvent.event.description : "",
 			disabled: false,
 			valid: selectedEvent ? true : false,
 			elementConfig: {
@@ -80,7 +80,7 @@ export const eventTypeTemplate = (selectedEvent) => {
 		},
 		location: {
 			...InputTemplates.text,
-			value: selectedEvent ? selectedEvent.location : "",
+			value: selectedEvent ? selectedEvent.event.location : "",
 			disabled: false,
 			valid: selectedEvent ? true : false,
 			elementConfig: {
@@ -98,7 +98,7 @@ export const eventTypeTemplate = (selectedEvent) => {
 export const eventOtherTemplate = (selectedEvent, daySelected, department) => {
 	return {
 		dates: selectedEvent
-			? selectedEvent.dates
+			? selectedEvent.event.dates
 			: [
 					{
 						id: +dayjs(daySelected).format(`YYYYMMDD`),
@@ -107,19 +107,20 @@ export const eventOtherTemplate = (selectedEvent, daySelected, department) => {
 					},
 			  ],
 		startDate: selectedEvent
-			? dayFormating(selectedEvent.startDate)
+			? dayFormating(selectedEvent.event.startDate)
 			: dayFormating(daySelected.hour(6).minute(0)),
 		endDate: selectedEvent
-			? dayFormating(selectedEvent.endDate)
+			? dayFormating(selectedEvent.event.endDate)
 			: dayFormating(daySelected.hour(18).minute(0)),
 		weight: selectedEvent
-			? selectedEvent.weight
+			? selectedEvent.event.weight
 			: +dayjs(daySelected).format(`YYYYMMDD`) +
 			  Math.floor(Math.random() * (9999 - 1000) + 1),
-		department: selectedEvent ? selectedEvent.department : department,
-		positions: selectedEvent ? selectedEvent.positions : [],
+		department: selectedEvent ? selectedEvent.event.department : department,
 		creatorPosition: selectedEvent
-			? selectedEvent.creatorPosition
+			? selectedEvent.positions.find(
+					(pos) => pos.position.invition.type === "creator"
+			  ).position.posName
 			: Object.values(control.departments[department].positions)[0].name,
 	};
 };

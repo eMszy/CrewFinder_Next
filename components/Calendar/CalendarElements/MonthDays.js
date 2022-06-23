@@ -18,12 +18,13 @@ const MonthDays = ({ day, rowIdx }) => {
 		setShowEventModal,
 		filteredEvents,
 		setSelectedEvent,
+		userId,
 	} = useContext(StateContext);
 
 	useEffect(() => {
-		const events = eventLoaderHandler(filteredEvents, day);
+		const events = eventLoaderHandler(filteredEvents, day, userId);
 		setDayEvents(events);
-	}, [filteredEvents, day]);
+	}, [filteredEvents, day, userId]);
 
 	const getCurrentDayClass = () => {
 		return day.format("YY-MM-DD") === dayjs().format("YY-MM-DD")
@@ -45,7 +46,7 @@ const MonthDays = ({ day, rowIdx }) => {
 				}}
 			>
 				{dayEvents
-					.sort((a, b) => a.startDate - b.startDate)
+					.sort((a, b) => a.label - b.label)
 					.map((evt, idx) => {
 						return (
 							<React.Fragment key={idx}>
@@ -59,13 +60,12 @@ const MonthDays = ({ day, rowIdx }) => {
 											onClick={() => {
 												setSelectedEvent(evt);
 											}}
-											style={getStyle(evt, day)}
+											style={getStyle(evt, day, userId)}
 											className={classes.Event}
 										>
 											{evt.positions && evt.positions.length > 0 && (
 												<p>
-													{evt.shortTitle} - Poziciók:{" "}
-													{posCounterPerDay(evt, day)}
+													{evt.event.shortTitle} - Poziciók: {evt.posCounter}
 												</p>
 											)}
 										</div>

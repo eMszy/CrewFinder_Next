@@ -145,79 +145,54 @@ export const formingData = (resivedUserData, formTemplate) => {
 	return updatedObject;
 };
 
-export const eventLoaderHandler = (filteredEvents, day) => {
+export const eventLoaderHandler = (filteredEvents, day, userId) => {
 	let events = [];
-	filteredEvents.forEach((event) => {
-		if (event.label === 1 || event.label === 6) {
-			let isExist = event?.dates?.find(
-				(d) =>
-					dayjs(d.startTime).format("YYMMDD") === dayjs(day).format("YYMMDD")
-			);
-			if (isExist) {
-				events.push(event);
-			}
-		} else {
-			let eventId = [];
-			event.positions.forEach((pos) => {
-				let isExist = pos.date.find(
-					(d) =>
-						dayjs(d.startTime).format("YYMMDD") === dayjs(day).format("YYMMDD")
-				);
-
-				if (isExist && !eventId.includes(event._id)) {
-					events.push(event);
-					eventId.push(event._id);
-				}
-			});
-		}
-	});
-	return events;
-};
-
-export const posCounterPerDay = (evt, day) => {
-	let eventsNum = 0;
-	if (evt.label !== 1 && evt.label !== 6) {
-		evt.positions.forEach((p) =>
-			p.date.forEach((d) => {
-				if (day.format("YYYYMMDD") === d.id.toString()) {
-					eventsNum++;
-				}
-			})
-		);
-	}
-	return eventsNum;
-};
-
-export const getStyle = (evt, day) => {
-	let label;
-	if (evt.label === 1 || evt.label === 6) {
-		label = evt.label;
-	} else {
-		evt.positions.forEach((p) => {
-			p.date.forEach((d) => {
-				if (d.id.toString() === day.format("YYYYMMDD")) {
-					if (!label || label > p.label) {
-						label = p.label;
-					}
+	if (filteredEvents[0]?.event.creator === userId) {
+		filteredEvents.forEach((event) => {
+			event.event.dates.forEach((d) => {
+				if (d.id.toString() === dayjs(day).format("YYYYMMDD")) {
+					const label = event.event.department === "Privát" ? 0 : 1;
+					events.push({ ...event, label, posCounter: event.positions.length });
 				}
 			});
 		});
+	} else {
+		filteredEvents.forEach((event) => {
+			event.positions.forEach((pos) => {
+				let label;
+				pos.position.dates.forEach((d) => {
+					if (d.id === +day.format("YYYYMMDD")) {
+						if (!label || label > pos.label) {
+							label = pos.label;
+						}
+						events.push({
+							...event,
+							label,
+							posCounter: event.positions.length,
+						});
+					}
+				});
+			});
+		});
 	}
+	return events;
+};
 
-	let style = { background: findColor(label) };
+export const getStyle = (evt, day) => {
+	let style = { background: findColor(evt.label) };
 	if (dayjs(evt.startDate).format("YY-MM-DD") === day.format("YY-MM-DD")) {
 		style = {
 			...style,
-			borderRadius: "999px 0 0 999px",
-			marginLeft: "0.5rem",
+			// borderRadius: "999px 0 0 999px",
+			// marginLeft: "0.5rem",
 		};
 	}
 
 	if (dayjs(evt.endDate).format("YY-MM-DD") === day.format("YY-MM-DD")) {
 		style = {
 			...style,
-			borderRadius: style.borderRadius ? "999px" : "0 999px 999px 0",
-			marginRight: "0.5rem",
+			// borderRadius: style.borderRadius ? "999px" : "0 999px 999px 0",
+			// marginRight: "0.5rem",
 		};
 	}
 	return style;

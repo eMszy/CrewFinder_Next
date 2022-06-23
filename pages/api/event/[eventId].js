@@ -102,14 +102,6 @@ const handler = async (req, res) => {
 				}
 			});
 
-			// const users = await User.find({ _id: { $in: usersIdArray } });
-			// if (!users) {
-			// 	throw Error("Nincs meg a felhasználó, [eventId]:107");
-			// }
-
-			// console.log("users", users);
-			// console.log("usersPosArray", usersPosArray);
-
 			usersPosArray.forEach(async (userPosArray) => {
 				let label;
 				userPosArray.pos.forEach((p) => {
@@ -159,54 +151,86 @@ const handler = async (req, res) => {
 			}
 
 			case "POST": {
-				const { eventData, creatorPositionData, label } = req.body;
+				const { event, positions } = req.body;
 
-				const event = await new Event(eventData);
-				const position = await new Position(creatorPositionData);
-				const user = await User.findById(token.id);
+				const eventModel = await new Event(event);
+				const positionModel = await new Position(positions[0]);
+				const userModel = await User.findById(token.id);
 
-				console.log("position", position.toObject());
-
-				if (!user) {
+				if (!userModel) {
 					throw Error("A felhasználói adatok betöltése sikertelen.");
 				}
 
-				position.eventId = event._id;
-				position.user = user._id;
-				event.positions = position._id;
+				positionModel.eventId = eventModel._id;
+				positionModel.user = userModel._id;
+				eventModel.positions = positionModel._id;
 
-				const userEvent = {
-					eventId: event._id,
-					positionId: [position._id],
-					label: label,
-					status: "new",
-					// messages: [],
-				};
+				console.log("first", positions[0].label);
 
-				user.events.push(userEvent);
+				userModel.events.push({
+					event: eventModel._id,
+					positions: [
+						{
+							position: positionModel._id,
+							label: positions[0].label,
+							status: "new",
+							// messages: [],
+						},
+					],
+				});
 
-				// await invitionHandler(data, event._id);
-
-				await position.save();
-				await user.save();
-				await event.save();
+				await userModel.save();
+				await eventModel.save();
+				await positionModel.save();
 
 				res.statusCode = 201;
-				res.json({ message: "Sikeresen létrehoztál egy eseményt", event });
+				res.json({
+					message: "Sikeresen létrehoztál egy eseményt",
+					event: {
+						event: eventModel,
+						positions: [
+							{
+								position: positionModel,
+								label: positions[0].label,
+								status: "new",
+								// messages: [],
+							},
+						],
+					},
+				});
 				return;
 			}
 
 			case "PUT": {
-				const data = req.body;
-				if (data.creator !== token.id) {
+				const { event, positions, _id, creatorId } = req.body;
+
+				if (creatorId !== token.id) {
 					throw Error("Nem általad létrehozott esemény");
 				}
-				const event = await Event.findByIdAndUpdate(eventId, data);
 
-				await invitionHandler(data, eventId);
+				if (positions.length) {
+					positions.forEach(async (pos) => {
+						await Position.findByIdAndUpdate(pos._id, pos, {
+							new: true,
+						});
+					});
+				}
+
+				let eventModel;
+				if (event) {
+					eventModel = await Event.findByIdAndUpdate(eventId, event, {
+						new: true,
+					}).populate("positions");
+				}
+
+				console.log("first", eventModel.toObject());
+
+				// await invitionHandler(data, eventId);
 
 				res.statusCode = 202;
-				res.json({ message: "Sikeresen modósítottad az eseményt", event });
+				res.json({
+					message: "Sikeresen modósítottad az eseményt",
+				});
 				return;
 			}
 

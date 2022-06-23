@@ -24,7 +24,7 @@ import EventICreatorTeamManager from "./EventICreatorTeamManager";
 import { useSession } from "next-auth/react";
 import InputElement from "../../UI/Input/InputElement";
 import { inputChangedHandler, isAllInputVaild } from "../../../shared/utility";
-import { clearPreviewData } from "next/dist/server/api-utils";
+import { createPostfix } from "typescript";
 
 //Egyenlőre mindenki csak egy DEPT BaseCrew-t tud kezelni
 
@@ -34,8 +34,15 @@ const EventCreatorMain = ({
 	setDepartment,
 	isEventCreatorMain,
 }) => {
-	const { daySelected, dispatchCallEvent, selectedEvent, setSelectedEvent } =
-		useContext(StateContext);
+	const {
+		daySelected,
+		dispatchCallEvent,
+		selectedEvent,
+		setSelectedEvent,
+		createEvent,
+		updateEvent,
+		userId,
+	} = useContext(StateContext);
 
 	const { data: session, status } = useSession();
 
@@ -43,6 +50,8 @@ const EventCreatorMain = ({
 	const [clickedDate, setClickedDate] = useState();
 	const [isClicked, setIsClicked] = useState();
 	const [isTeamManagerValid, setTeamManagerValid] = useState(true);
+
+	const [isDateTuched, setDateTuched] = useState(false);
 
 	const [eventTypedData, setEventTypedData] = useState(
 		eventTypeTemplate(selectedEvent)
@@ -140,89 +149,88 @@ const EventCreatorMain = ({
 
 	const submitHandel = async (e) => {
 		e.preventDefault();
-		// let updatedDates = [];
 
-		const eventData = {
-			title: eventTypedData.title.value,
-			shortTitle: eventTypedData.shortTitle.value,
-			description: eventTypedData.description.value,
-			location: eventTypedData.location.value,
-			startDate: +dayjs(eventInputData.startDate),
-			endDate: +dayjs(eventInputData.endDate),
-			weight: eventInputData.weight,
-			department: eventInputData.department,
-			dates: eventInputData.dates,
-			creator: selectedEvent ? selectedEvent.creator : session.id,
-			positions: eventInputData.positions,
-		};
+		const event = {};
+		const creatorPosition = {};
 
-		const creatorPositionData = {
-			eventId: null,
-			posName: eventInputData.creatorPosition,
-			weight:
-				control.departments[eventInputData.department].positions[
-					eventInputData.creatorPosition
-				]?.weight || 0,
+		const theCreatorPos = selectedEvent?.positions.find(
+			(pos) => pos.position.invition[0].type === "creator"
+		);
 
-			invition: { type: "creator" },
-			dates: eventInputData.dates,
-		};
+		if (!selectedEvent || isDateTuched || isClicked) {
+			Object.assign(event, {
+				startDate: +dayjs(eventInputData.startDate),
+				endDate: +dayjs(eventInputData.endDate),
+				dates: eventInputData.dates,
+			});
+			Object.assign(creatorPosition, {
+				startDate: +dayjs(eventInputData.startDate),
+				endDate: +dayjs(eventInputData.endDate),
+				dates: eventInputData.dates,
+			});
+		}
+		if (!selectedEvent) {
+			Object.assign(event, {
+				weight: eventInputData.weight,
+				department: eventInputData.department,
+				positions: eventInputData.positions,
+				creator: session.id,
+				creatorPosition: eventInputData.creatorPosition,
+			});
+			Object.assign(creatorPosition, {
+				invition: { type: "creator" },
+				weight:
+					control.departments[eventInputData.department].positions[
+						eventInputData.creatorPosition
+					]?.weight || 0,
+			});
+		}
+		for (const [key, value] of Object.entries(eventTypedData)) {
+			if (value.touched) {
+				Object.assign(event, { [key]: value.value });
+			}
+		}
 
+		if (theCreatorPos?.position.posName !== eventInputData.creatorPosition) {
+			Object.assign(creatorPosition, {
+				posName: eventInputData.creatorPosition,
+			});
+		}
+
+		const baseTeamPositions = [];
+		const positions = [];
 		const label = department === "Privát" ? 0 : 1;
 
-		// eventInputData.dates.forEach((d) => {
-		// 	const crew = uniqueArray(d.crew, [
-		// 		...baseCrew,
-		// 		{
-		// 			id: -1,
-		// 			name: "Saját pozicíó",
-		// 			pos: eventInputData.creatorPosition,
-		// 			label: -1,
-		// 			status: "creator",
-		// 		},
-		// 	]);
-		// 	const loc = d.location ? d.location : eventInputData.location;
-		// 	updatedDates.push({ ...d, crew, location: loc });
-		// });
+		if (Object.keys(creatorPosition).length !== 0) {
+			positions.push({
+				...creatorPosition,
+				// _id: theCreatorPos.position._id,
+				label,
+			});
+		}
 
-		// const calendarEvent = {
-		// 	...eventInputData,
-		// 	title: eventTypedData.title.value,
-		// 	shortTitle: eventTypedData.shortTitle.value,
-		// 	description: eventTypedData.description.value,
-		// 	location: eventTypedData.location.value,
+		if (baseTeamPositions && baseTeamPositions.length) {
+			positions.push(baseTeamPositions);
+		}
 
-		// 	startDate: +dayjs(eventInputData.startDate),
-		// 	endDate: +dayjs(eventInputData.endDate),
-		// 	baseCrew: eventInputData.baseCrew,
-		// 	dates: updatedDates,
-		// 	id: selectedEvent
-		// 		? selectedEvent.id
-		// 		: eventInputData.label + Math.random(),
-		// 	creator: session.id,
-		// 	creatorName: selectedEvent
-		// 		? selectedEvent.creatorName
-		// 		: session.user.name,
-		// 	department: department,
-		// };
+		if (!selectedEvent) {
+			createEvent({
+				event,
+				positions,
+			});
+		} else if (Object.keys(event).length !== 0) {
+			updateEvent({
+				...event,
+				creatorId: userId,
+				_id: selectedEvent.event._id,
+			});
+		} else if (positions.length) {
+			console.log("positions.length", positions.length);
+			// createPositions({
+			// 	positions
+			// })
+		}
 
-		// if (selectedEvent) {
-		// 	calendarEvent._id = selectedEvent._id;
-		// 	calendarEvent.creator = selectedEvent.creator;
-		// 	calendarEvent.department = selectedEvent.department;
-		// }
-
-		// console.log("calendarEvent", calendarEvent);
-		// setSelectedEvent(calendarEvent);
-
-		// if (selectedEvent) {
-		// 	dispatchCallEvent({ type: "update", payload: calendarEvent });
-		// } else {
-		dispatchCallEvent({
-			type: "push",
-			payload: { eventData, creatorPositionData, label },
-		});
-		// }
 		// setIsCreatroPage(false);
 	};
 
@@ -262,15 +270,14 @@ const EventCreatorMain = ({
 
 	useEffect(() => {
 		setEventInputData((currentData) => {
-			return { ...currentData, department };
+			return {
+				...currentData,
+				department,
+				creatorPosition: Object.values(
+					control.departments[department].positions
+				)[0].name,
+			};
 		});
-
-		// department === "Privát"
-		// 	? (updateData = { ...updateData, label: 0 })
-		// 	: (updateData = { ...updateData, label: 1 });
-
-		// setEventInputData(updateData);
-		// eslint-disable-next-line
 	}, [department]);
 
 	// useEffect(() => {
@@ -353,8 +360,8 @@ const EventCreatorMain = ({
 					</div>
 					<div className={classes.YourPosition}>
 						<p>Esemény:</p>
-						{selectedEvent?.department ? (
-							<p>{selectedEvent.department}</p>
+						{selectedEvent ? (
+							<p>{selectedEvent.event.department}</p>
 						) : (
 							<select
 								value={department.positions}
@@ -379,12 +386,13 @@ const EventCreatorMain = ({
 							value={eventInputData.startDate}
 							min={dayFormating(dayjs())}
 							required
-							onChange={(e) =>
+							onChange={(e) => {
+								setDateTuched(true);
 								setEventInputData({
 									...eventInputData,
 									startDate: e.target.value,
-								})
-							}
+								});
+							}}
 						/>
 						<input
 							type="datetime-local"
@@ -392,12 +400,13 @@ const EventCreatorMain = ({
 							value={eventInputData.endDate}
 							min={eventInputData.startDate}
 							required
-							onChange={(e) =>
+							onChange={(e) => {
+								setDateTuched(true);
 								setEventInputData({
 									...eventInputData,
 									endDate: e.target.value,
-								})
-							}
+								});
+							}}
 						/>
 					</div>
 					<div className={classes.Icon}>
@@ -411,14 +420,23 @@ const EventCreatorMain = ({
 							return (
 								<span
 									key={i}
-									onClick={() => setWeekdaysHandel(dayNum)}
+									onClick={() => {
+										setDateTuched(true);
+										setWeekdaysHandel(dayNum);
+									}}
 									style={style}
 								>
 									{day}
 								</span>
 							);
 						})}
-						<div onClick={allDayCheck} className={classes.weekDayClass}>
+						<div
+							onClick={() => {
+								allDayCheck();
+								setDateTuched(true);
+							}}
+							className={classes.weekDayClass}
+						>
 							Összes nap
 						</div>
 					</div>
@@ -451,13 +469,12 @@ const EventCreatorMain = ({
 						</>
 					)}
 				</div>
-
 				<div className={classes.EventModal_CalendarDiv}>
 					<div className={classes.EventModal_Calendar}>
 						<SmallCalendar
 							filteredEvents={[
 								{
-									label: department === "Privát" ? 0 : 1,
+									label: eventInputData.department === "Privát" ? 0 : 1,
 									startDate: +dayjs(eventInputData.startDate),
 									endDate: +dayjs(eventInputData.endDate),
 									dates: eventInputData.dates,
@@ -468,14 +485,19 @@ const EventCreatorMain = ({
 							setIsClicked={setIsClicked}
 						/>
 					</div>
-					{selectedEvent && (
-						<div>
-							<p className={classes.CreatorName}>Létrehozta:</p>
-							<p>{selectedEvent.creatorName}</p>
-						</div>
-					)}
+					{/* {console.log(selectedEvent.event)} */}
+					{selectedEvent &&
+						(selectedEvent.event.creator === userId ? (
+							<div>
+								<p> Saját esemény </p>
+							</div>
+						) : (
+							<div>
+								<p className={classes.CreatorName}>Létrehozta:</p>
+								<p> IDE KELL A NÉV</p>
+							</div>
+						))}
 				</div>
-
 				{/* {department !== "Privát" && selectedEvent?.department !== "Privát" && (
 					<EventICreatorTeamManager
 						crewMembers={eventInputData.baseCrew}

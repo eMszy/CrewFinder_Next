@@ -1,4 +1,4 @@
-import mongoose, { SchemaTypes } from "mongoose";
+import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
@@ -50,18 +50,18 @@ const eventSchema = new Schema(
 					type: Number,
 					required: true,
 				},
+				_id: false,
 			},
-			{ _id: false },
 		],
 		creator: {
 			type: Schema.Types.ObjectId,
-			ref: "user",
+			ref: "User",
 			required: true,
 		},
 		positions: [
 			{
 				type: Schema.Types.ObjectId,
-				ref: "positions",
+				ref: "Position",
 				required: true,
 			},
 			{ _id: false },
