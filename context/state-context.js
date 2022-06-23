@@ -61,7 +61,7 @@ const StateContextProvider = (props) => {
 				throw Error(resJson.message);
 			}
 			setSelectedEvent(resJson.event);
-			setStatus(resJson);
+			setStatus({ message: resJson.message });
 			dispatchCallEvent({
 				type: "createEvent",
 				payload: resJson.event,
@@ -74,7 +74,6 @@ const StateContextProvider = (props) => {
 	};
 
 	const updateEvent = async (payload) => {
-		console.log("payload", payload);
 		try {
 			const res = await fetch("/api/event/" + payload._id, {
 				method: "PUT",
@@ -90,7 +89,7 @@ const StateContextProvider = (props) => {
 			}
 			dispatchCallEvent({
 				type: "updateEvent",
-				payload: resJson.event,
+				payload: resJson.events,
 			});
 			setStatus(resJson);
 			return;
@@ -138,22 +137,17 @@ const StateContextProvider = (props) => {
 		}
 	};
 
-	console.log("selectedEvent", selectedEvent);
-
 	const savedEventsReducer = (state, { type, payload }) => {
 		switch (type) {
 			case "init": {
-				console.log("payload", payload);
-				return [...payload];
+				return payload;
 			}
 			case "createEvent": {
-				console.log("state", state);
 				return [...state, payload];
 			}
 			case "updateEvent": {
-				return state.map((evt) =>
-					evt.event._id === payload?._id ? payload : evt
-				);
+				// console.log("state", state, payload);
+				return payload;
 			}
 			// case "delete": {
 			// 	deleteEvent(payload);
@@ -191,6 +185,8 @@ const StateContextProvider = (props) => {
 	};
 
 	const [savedEvents, dispatchCallEvent] = useReducer(savedEventsReducer, []);
+
+	console.log("savedEvents", savedEvents);
 
 	let socket;
 

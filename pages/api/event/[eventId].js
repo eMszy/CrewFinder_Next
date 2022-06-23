@@ -161,12 +161,10 @@ const handler = async (req, res) => {
 					throw Error("A felhasználói adatok betöltése sikertelen.");
 				}
 
-				positionModel.eventId = eventModel._id;
-				positionModel.user = userModel._id;
 				eventModel.positions = positionModel._id;
+				positionModel.eventId = eventModel._id;
 
-				console.log("first", positions[0].label);
-
+				positionModel.users.push(userModel._id);
 				userModel.events.push({
 					event: eventModel._id,
 					positions: [
@@ -202,34 +200,90 @@ const handler = async (req, res) => {
 			}
 
 			case "PUT": {
-				const { event, positions, _id, creatorId } = req.body;
+				const { event, positions, creatorId } = req.body;
+				let newPosIds = [];
+				let positionModel;
+
+				// console.log("event", event);
 
 				if (creatorId !== token.id) {
 					throw Error("Nem általad létrehozott esemény");
 				}
 
-				if (positions.length) {
+				if (positions && positions.length) {
 					positions.forEach(async (pos) => {
-						await Position.findByIdAndUpdate(pos._id, pos, {
+						positionModel = await Position.findByIdAndUpdate(pos._id, pos, {
 							new: true,
 						});
+						if (pos.invition.type !== "creator") {
+							if (positionModel) {
+								//Ki kell e értesíteni a pozicióra jelentkezett user-eket?
+							} else {
+								positionModel = await new Position(pos);
+								newPosIds.push(positionModel._id); //!Miért nem megy be az Array-ba?
+
+								const userUpdateObjct = {
+									event: pos.eventId,
+									positions: [
+										{
+											position: positionModel,
+											label: pos.invition.type === "direct" ? 4 : 5,
+											status: "new",
+											messages: [],
+										},
+									],
+								};
+
+								const candidateUsers = await User.updateMany(
+									{
+										// const candidateUsers = await User.find({
+										$and: [
+											{ _id: { $nin: [creatorId] } },
+											{ "metaData.positions": { $in: [pos.posName] } },
+										],
+									},
+									{ userUpdateObjct }
+								);
+								console.log("candidateUsers", candidateUsers);
+
+								//  candidateUsers._id to array & pos.users.push(newUsersArray)
+							}
+							// await positionModel.save();
+						}
+
+						await positionModel.save();
+						// console.log("positionModel", positionModel.toObject());
+						console.log("newPosIds", newPosIds);
 					});
 				}
 
-				let eventModel;
 				if (event) {
-					eventModel = await Event.findByIdAndUpdate(eventId, event, {
+					const eventModel = await Event.findByIdAndUpdate(event._id, event, {
 						new: true,
-					}).populate("positions");
+					});
+
+					if (!eventModel) {
+						throw Error("Nem található az esemény. [eventId]:266");
+					}
+
+					if (newPosIds.length) {
+						eventModel.positions.push(newPosIds);
+					}
+					await eventModel.save();
 				}
 
-				console.log("first", eventModel.toObject());
+				const user = await User.findById(token.id)
+					.populate("events.event")
+					.populate("events.positions.position");
 
-				// await invitionHandler(data, eventId);
+				if (!user) {
+					throw Error("A felhasználói adatok betöltése sikertelen.");
+				}
 
 				res.statusCode = 202;
 				res.json({
 					message: "Sikeresen modósítottad az eseményt",
+					events: user.events,
 				});
 				return;
 			}

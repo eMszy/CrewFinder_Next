@@ -154,7 +154,7 @@ const EventCreatorMain = ({
 		const creatorPosition = {};
 
 		const theCreatorPos = selectedEvent?.positions.find(
-			(pos) => pos.position.invition[0].type === "creator"
+			(pos) => pos.position.invition.type === "creator"
 		);
 
 		if (!selectedEvent || isDateTuched || isClicked) {
@@ -204,34 +204,40 @@ const EventCreatorMain = ({
 		if (Object.keys(creatorPosition).length !== 0) {
 			positions.push({
 				...creatorPosition,
-				// _id: theCreatorPos.position._id,
+				_id: theCreatorPos?.position._id,
+				invition: { type: "creator" },
 				label,
 			});
 		}
 
-		if (baseTeamPositions && baseTeamPositions.length) {
+		if (baseTeamPositions.length) {
 			positions.push(baseTeamPositions);
 		}
+
+		let updateData = {};
 
 		if (!selectedEvent) {
 			createEvent({
 				event,
 				positions,
 			});
-		} else if (Object.keys(event).length !== 0) {
-			updateEvent({
-				...event,
-				creatorId: userId,
-				_id: selectedEvent.event._id,
-			});
-		} else if (positions.length) {
-			console.log("positions.length", positions.length);
-			// createPositions({
-			// 	positions
-			// })
+		} else {
+			if (Object.keys(event).length !== 0) {
+				Object.assign(updateData, {
+					event: {
+						...event,
+						// creatorId: userId,
+						_id: selectedEvent.event._id,
+					},
+				});
+			}
+			if (positions.length) {
+				Object.assign(updateData, { positions });
+			}
+			if (Object.keys(updateData).length !== 0) {
+				updateEvent({ ...updateData, creatorId: userId });
+			}
 		}
-
-		// setIsCreatroPage(false);
 	};
 
 	const addPosHandel = (pos, id) => {
