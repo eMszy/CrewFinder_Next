@@ -22,6 +22,7 @@ export const StateContext = React.createContext({
 	setStatus: () => {},
 	createEvent: (payload) => {},
 	updateEvent: (payload) => {},
+	deleteEvent: (payload) => {},
 	userId: "",
 });
 
@@ -91,26 +92,31 @@ const StateContextProvider = (props) => {
 				type: "updateEvent",
 				payload: resJson.events,
 			});
-			setStatus(resJson);
+			setStatus({ message: resJson.message });
 			return;
 		} catch (err) {
-			// setShowEventModal(false);
+			setShowEventModal(false);
 			setStatus({ message: err.message, error: true });
 		}
 	};
 
 	const deleteEvent = async (payload) => {
 		try {
-			const res = await fetch("/api/event/" + payload._id, {
+			const res = await fetch("/api/event/" + payload, {
 				method: "DELETE",
 			});
 			const resJson = await res.json();
 			if (!res.ok || res.error) {
 				throw Error(resJson.message);
 			}
-			setStatus(resJson);
-			setSelectedEvent(resJson.event);
-			return resJson;
+			dispatchCallEvent({
+				type: "deleteEvent",
+				payload: resJson.eventId,
+			});
+			setStatus({ message: resJson.message });
+			setSelectedEvent(null);
+			setShowEventModal(false);
+			return;
 		} catch (err) {
 			setShowEventModal(false);
 			setStatus({ message: err.message, error: true });
@@ -146,13 +152,12 @@ const StateContextProvider = (props) => {
 				return [...state, payload];
 			}
 			case "updateEvent": {
-				// console.log("state", state, payload);
 				return payload;
 			}
-			// case "delete": {
-			// 	deleteEvent(payload);
-			// 	return state.filter((evt) => evt.id !== payload.id);
-			// }
+			case "deleteEvent": {
+				console.log("state", state, payload);
+				return state.filter((evt) => evt.event._id !== payload);
+			}
 			// case "application": {
 			// 	applicationEvent(payload);
 			// 	return state.map((evt) =>
@@ -285,6 +290,7 @@ const StateContextProvider = (props) => {
 				setStatus,
 				createEvent,
 				updateEvent,
+				deleteEvent,
 				userId,
 			}}
 		>

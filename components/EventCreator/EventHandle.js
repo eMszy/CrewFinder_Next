@@ -15,7 +15,7 @@ import { MdDelete } from "react-icons/md";
 import classes from "./EventHandle.module.scss";
 
 const EventHandle = () => {
-	const { setShowEventModal, selectedEvent, dispatchCallEvent } =
+	const { setShowEventModal, selectedEvent, dispatchCallEvent, deleteEvent } =
 		useContext(StateContext);
 
 	const { data: session, status } = useSession();
@@ -29,11 +29,7 @@ const EventHandle = () => {
 
 	const deletHandel = (e) => {
 		e.preventDefault();
-		dispatchCallEvent({
-			type: "delete",
-			payload: selectedEvent,
-		});
-		setShowEventModal(false);
+		deleteEvent(selectedEvent.event._id);
 	};
 
 	return (
@@ -69,7 +65,7 @@ const EventHandle = () => {
 						)}
 					</div>
 					<div className={classes.IconDiv}>
-						{selectedEvent && session.id === selectedEvent.creator && (
+						{selectedEvent && session.id === selectedEvent.event.creator && (
 							<div
 								className={`${classes.Icon}  ${classes.Buttom2}`}
 								onClick={deletHandel}

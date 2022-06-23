@@ -298,32 +298,23 @@ const handler = async (req, res) => {
 					throw Error("Nem általad létrehozott esemény");
 				}
 
-				const user = await User.findById(token.id);
-				if (!user) {
-					throw Error("Nincs meg a felhasználó, [eventId]:183");
-				}
-				const updatedOwnEvents = user.ownEvents.filter(
-					(event) => event._id.toString() !== eventId.toString()
-				);
-				user.ownEvents = updatedOwnEvents;
-
-				const users = await User.find({ "events._id": eventId });
-				if (!users) {
-					throw Error("Nincs meg a felhasználó, [eventId]:192");
-				}
-				users.forEach(async (u) => {
-					const updatedEvents = u.events.filter(
-						(event) => event._id.toString() !== eventId.toString()
-					);
-					u.events = updatedEvents;
-					await u.save();
+				await Position.deleteMany({
+					_id: { $in: [event.positions] },
 				});
 
-				await user.save();
-				await event.deleteOne();
+				await User.updateMany(
+					{
+						"events.event": { $in: [event._id] },
+					},
+					{ $pull: { events: { event: event._id } } }
+				);
 
+				await event.deleteOne();
 				res.statusCode = 202;
-				res.json({ message: "Sikeresen törölted az eseményt" });
+				res.json({
+					message: "Sikeresen törölted az eseményt",
+					eventId: eventId,
+				});
 				return;
 			}
 		}
