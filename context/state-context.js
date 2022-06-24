@@ -23,7 +23,6 @@ export const StateContext = React.createContext({
 	createEvent: (payload) => {},
 	updateEvent: (payload) => {},
 	deleteEvent: (payload) => {},
-	userId: "",
 });
 
 const StateContextProvider = (props) => {
@@ -32,7 +31,6 @@ const StateContextProvider = (props) => {
 	const [selectedEvent, setSelectedEvent] = useState(null);
 	const [labels, setLabels] = useState(control.labels);
 	const [isStatusMsg, setIsStatusMsg] = useState(null);
-	const [userId, setUserId] = useState(null);
 
 	const { data: session, status } = useSession();
 
@@ -143,6 +141,8 @@ const StateContextProvider = (props) => {
 		}
 	};
 
+	console.log("process.env.NODE_ENV", process.env.NODE_ENV);
+
 	const savedEventsReducer = (state, { type, payload }) => {
 		switch (type) {
 			case "init": {
@@ -155,7 +155,7 @@ const StateContextProvider = (props) => {
 				return payload;
 			}
 			case "deleteEvent": {
-				console.log("state", state, payload);
+				// console.log("state", state, payload);
 				return state.filter((evt) => evt.event._id !== payload);
 			}
 			// case "application": {
@@ -229,7 +229,6 @@ const StateContextProvider = (props) => {
 					setStatus({ message: err.message, error: true });
 				}
 			};
-			setUserId(session.id);
 			console.log("socket", socket);
 			// socketInitializer();
 			loadAllEvents();
@@ -291,7 +290,6 @@ const StateContextProvider = (props) => {
 				createEvent,
 				updateEvent,
 				deleteEvent,
-				userId,
 			}}
 		>
 			{props.children}

@@ -22,16 +22,16 @@ export const uniqueArray = (array1 = [], array2 = []) => {
 };
 
 export const addPosHelper = (
-	pos,
+	posName,
 	id,
-	baseCrew,
-	invitionType = { name: "open" },
+	basePositions,
+	invition = { type: "open" },
 	name = ""
 ) => {
-	if (pos && pos !== "") {
+	if (posName && posName !== "") {
 		const updatedPos = [
-			...baseCrew,
-			{ id: id + Math.random(), pos, name, invitionType },
+			...basePositions,
+			{ id: id + Math.random(), posName, name, invition },
 		];
 		return updatedPos;
 	}
@@ -112,10 +112,10 @@ export const eventOtherTemplate = (selectedEvent, daySelected, department) => {
 		endDate: selectedEvent
 			? dayFormating(selectedEvent.event.endDate)
 			: dayFormating(daySelected.hour(18).minute(0)),
-		weight: selectedEvent
-			? selectedEvent.event.weight
-			: +dayjs(daySelected).format(`YYYYMMDD`) +
-			  Math.floor(Math.random() * (9999 - 1000) + 1),
+		// weight: selectedEvent
+		// 	? selectedEvent.event.weight
+		// 	: +dayjs(daySelected).format(`YYYYMMDD`) +
+		// 	  Math.floor(Math.random() * (9999 - 1000) + 1),
 		department: selectedEvent ? selectedEvent.event.department : department,
 		creatorPosition: selectedEvent
 			? selectedEvent.positions.find(

@@ -1,10 +1,11 @@
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
 	IoAmericanFootballOutline,
 	IoCloseCircleOutline,
 } from "react-icons/io5";
+import { StateContext } from "../../../context/state-context";
 
 import control from "../../../control.json";
 
@@ -20,27 +21,35 @@ const EventICreatorTeamManager = ({
 	setValid,
 	isValid,
 	isEventCreatorMain,
+	eventPositions,
+	isLoading,
 }) => {
 	const { data: session } = useSession();
 
 	const [fetchedUsers, setFetchedUsers] = useState([]);
 	const [crewMemberTarget, setCrewMemberTarget] = useState([]);
 
+	const { selectedEvent, setStatus } = useContext(StateContext);
+	console.log("crewMembers", crewMembers);
+
+	// console.log("selectedEvent", selectedEvent);
+
 	useEffect(() => {
 		let isAllDirectInputValid = true;
 		crewMembers.forEach((crewMember) => {
-			if (crewMember.invitionType.name === "direct" && !crewMember._id) {
+			if (crewMember.invition.type === "direct" && !crewMember._id) {
 				isAllDirectInputValid = false;
 			}
 			setValid(isAllDirectInputValid);
 		});
-		// eslint-disable-next-line
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [crewMembers]);
 
-	const fetchUser = async (e, pos) => {
+	const fetchUser = async (e, posName) => {
+		console.log("e, posName: ", e.target.value, posName);
 		try {
 			const res = await fetch(
-				`/api/user/search?input=${e.target.value}&pos=${pos}`
+				`/api/user/search?input=${e.target.value}&pos=${posName}`
 			);
 			const dataJson = await res.json();
 
@@ -77,12 +86,12 @@ const EventICreatorTeamManager = ({
 		if (target.type === "text") {
 			changeHandle({
 				...crewMember,
-				invitionType: { name: "direct" },
+				invition: { type: "direct" },
 				[target.name]: target.value,
 				_id: null,
 			});
 			if (target.value.length > 2) {
-				fetchUser(e, crewMember.pos);
+				fetchUser(e, crewMember.posName);
 			} else {
 				setFetchedUsers([]);
 			}
@@ -90,7 +99,7 @@ const EventICreatorTeamManager = ({
 			changeHandle({
 				...crewMember,
 				...f,
-				invitionType: { name: "direct" },
+				invition: { type: "direct" },
 				label: 4,
 			});
 			setCrewMemberTarget([]);
@@ -120,9 +129,9 @@ const EventICreatorTeamManager = ({
 								return (
 									<div key={idx} className={classes.BaseTeam_Pos}>
 										<div className={classes.BaseTeam_PosTitle}>
-											{crewMember.pos}
+											{crewMember.posName}
 										</div>
-										{crewMember.invitionType?.name === "direct" &&
+										{crewMember.invition.type === "direct" &&
 											(crewMember._id ? (
 												<div className={classes.BaseTeam_Pos__Direct}>
 													{crewMember.image ? (
@@ -150,18 +159,15 @@ const EventICreatorTeamManager = ({
 													}}
 												/>
 											))}
-										{crewMember.invitionType?.name === "attribute" && (
+										{crewMember.invition.type === "attribute" && (
 											<div className={classes.BaseTeam_Pos_Attribute}>
-												<div>
-													Találtok száma:{" "}
-													{crewMember.invitionType.result.length}
-												</div>
+												<div>Találtok száma: {crewMember.users?.length}</div>
 												{control.departments[department].attribute.map(
 													(att, id) => (
 														<div key={id}>
 															<label htmlFor={att.type}>
 																{att.name} -{" "}
-																{att.range[crewMember.invitionType[att.type]]}
+																{att.range[crewMember.invition[att.type]]}
 															</label>
 															<input
 																type="range"
@@ -171,17 +177,17 @@ const EventICreatorTeamManager = ({
 																max={att.range.length - 1}
 																onChange={async (e) => {
 																	const findUsers = await fetchNumberofUsers(
-																		crewMember.pos,
+																		crewMember.posName,
 																		"attribute"
 																	);
 																	changeHandle({
 																		...crewMember,
 																		label: 5,
-																		invitionType: {
-																			...crewMember.invitionType,
-																			[e.target.name]: e.target.value,
-																			result: findUsers,
+																		invition: {
+																			...crewMember.invition,
+																			[e.target.type]: e.target.value,
 																		},
+																		users: findUsers,
 																	});
 																}}
 															/>
@@ -190,17 +196,14 @@ const EventICreatorTeamManager = ({
 												)}
 											</div>
 										)}
-										{crewMember.invitionType?.name === "open" && (
+										{crewMember.invition?.type === "open" && (
 											<div className={classes.BaseTeam_Pos_Attribut}>
-												<div>
-													Találtok száma:{" "}
-													{crewMember.invitionType.result?.length}
-												</div>
+												<div>Találtok száma: {crewMember.users?.length}</div>
 											</div>
 										)}
 										<select
-											name="invitionType"
-											value={crewMember.invitionType?.name}
+											name="invition"
+											value={crewMember.invition.type}
 											onChange={async (e) => {
 												changeHandle({
 													...crewMember,
@@ -208,9 +211,9 @@ const EventICreatorTeamManager = ({
 													_id: null,
 													label: 5,
 													[e.target.name]: {
-														name: e.target.value,
-														result: await fetchNumberofUsers(crewMember.pos),
+														type: e.target.value,
 													},
+													users: await fetchNumberofUsers(crewMember.posName),
 												});
 											}}
 										>

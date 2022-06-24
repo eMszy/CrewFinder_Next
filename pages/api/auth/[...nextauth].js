@@ -137,4 +137,5 @@ export default NextAuth({
 			console.log("signOut");
 		},
 	},
+	debug: false,
 });

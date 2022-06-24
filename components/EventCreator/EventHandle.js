@@ -91,7 +91,7 @@ const EventHandle = () => {
 						/>
 					) : (
 						<EventCreatorSecondary
-							setIsCreatroPage={setEventCreatorMain}
+							setEventCreatroPage={setEventCreatorMain}
 							department={department}
 							isEventCreatorMain={isEventCreatorMain}
 						/>

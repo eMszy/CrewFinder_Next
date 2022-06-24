@@ -7,17 +7,19 @@ const handler = async (req, res) => {
 		dbConnect();
 
 		const result = await User.aggregate([
-			{
-				$search: {
-					autocomplete: {
-						path: "name",
-						query: input,
-						fuzzy: {
-							maxEdits: 1,
-						},
-					},
-				},
-			},
+			// {
+			// 	$search: {
+			// 		autocomplete: {
+			// 			path: "name",
+			// 			query: input,
+			// 			fuzzy: {
+			// 				maxEdits: 1,
+			// 			},
+			// 		},
+			// 	},
+			// },
+
+			{ $match: { $text: { $search: input } } },
 			{
 				$match: {
 					"metaData.positions": { $in: [pos] },

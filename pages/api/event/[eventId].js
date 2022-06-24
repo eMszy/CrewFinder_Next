@@ -5,6 +5,7 @@ import User from "../../../models/user";
 import Position from "../../../models/position";
 
 import dbConnect from "../../../shared/dbConnect";
+import mongoose from "mongoose";
 
 const EventInfoTreeHandler = (data, pos, label, evtId) => {
 	return {
@@ -134,19 +135,82 @@ const handler = async (req, res) => {
 
 		switch (req.method) {
 			case "GET": {
-				let theEvent;
+				const agg = [
+					{
+						$match: {
+							eventId: mongoose.Types.ObjectId(eventId),
+						},
+					},
+					{
+						$lookup: {
+							from: "users",
+							localField: "users",
+							foreignField: "_id",
+							as: "user",
+						},
+					},
+					{
+						$unwind: {
+							path: "$user",
+						},
+					},
+					{
+						$unwind: {
+							path: "$user.events",
+						},
+					},
+					{
+						$match: {
+							"user.events.event": mongoose.Types.ObjectId(eventId),
+						},
+					},
+					{
+						$unwind: {
+							path: "$user.events.positions",
+						},
+					},
+					{
+						$group: {
+							_id: "$_id",
+							posName: {
+								$first: "$posName",
+							},
+							// weight: {
+							// 	$first: "$weight",
+							// },
+							invition: {
+								$first: "$invition",
+							},
+							dates: {
+								$first: "$dates",
+							},
+							users: {
+								$push: {
+									name: "$user.name",
+									image: "$user.image",
+									_id: "$user._id",
+									label: "$user.events.positions.label",
+									status: "$user.events.positions.status",
+									messages: "$user.events.positions.messages",
+								},
+							},
+						},
+					},
+				];
+
+				let positions;
 				if (eventId.length === 24 && !isNaN(Number("0x" + eventId))) {
-					theEvent = await Event.findById(eventId);
+					positions = await Position.aggregate(agg);
 				}
 
-				if (!theEvent) {
+				if (!positions) {
 					res.statusCode = 404;
 					res.json({ message: `Nincs ilyen esemény.`, error: true });
 					return;
 				}
 
 				res.statusCode = 200;
-				res.json(theEvent);
+				res.json(positions);
 				return;
 			}
 

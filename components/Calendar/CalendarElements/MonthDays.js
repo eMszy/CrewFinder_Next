@@ -1,16 +1,15 @@
 import React, { useContext, useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import dayjs from "dayjs";
 
 import { StateContext } from "../../../context/state-context";
 
 import classes from "./MonthDays.module.scss";
-import {
-	eventLoaderHandler,
-	getStyle,
-	posCounterPerDay,
-} from "../../../shared/utility";
+import { eventLoaderHandler, getStyle } from "../../../shared/utility";
 
 const MonthDays = ({ day, rowIdx }) => {
+	const { data: session, status } = useSession();
+
 	const [dayEvents, setDayEvents] = useState([]);
 
 	const {
@@ -18,13 +17,17 @@ const MonthDays = ({ day, rowIdx }) => {
 		setShowEventModal,
 		filteredEvents,
 		setSelectedEvent,
-		userId,
 	} = useContext(StateContext);
 
+	useSession;
+
 	useEffect(() => {
-		const events = eventLoaderHandler(filteredEvents, day, userId);
-		setDayEvents(events);
-	}, [filteredEvents, day, userId]);
+		if (status === "authenticated") {
+			const events = eventLoaderHandler(filteredEvents, day, session.id);
+			setDayEvents(events);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [filteredEvents, day, status]);
 
 	const getCurrentDayClass = () => {
 		return day.format("YY-MM-DD") === dayjs().format("YY-MM-DD")
@@ -60,7 +63,7 @@ const MonthDays = ({ day, rowIdx }) => {
 											onClick={() => {
 												setSelectedEvent(evt);
 											}}
-											style={getStyle(evt, day, userId)}
+											style={getStyle(evt, day, session.id)}
 											className={classes.Event}
 										>
 											{evt.positions && evt.positions.length > 0 && (

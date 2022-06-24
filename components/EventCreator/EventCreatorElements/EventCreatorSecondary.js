@@ -15,7 +15,7 @@ import EventICreatorTeamManager from "./EventICreatorTeamManager";
 
 const EventCreatorSecondary = ({
 	department,
-	setIsCreatroPage,
+	setEventCreatroPage,
 	isEventCreatorMain,
 }) => {
 	const { setShowEventModal, selectedEvent, dispatchCallEvent } =
@@ -31,7 +31,7 @@ const EventCreatorSecondary = ({
 		e.preventDefault();
 		saveHandle();
 		setShowEventModal(false);
-		setIsCreatroPage(true);
+		setEventCreatroPage(true);
 	};
 
 	const saveHandle = () => {

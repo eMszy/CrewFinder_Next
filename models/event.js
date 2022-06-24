@@ -28,10 +28,10 @@ const eventSchema = new Schema(
 			type: Number,
 			required: true,
 		},
-		weight: {
-			type: Number,
-			required: true,
-		},
+		// weight: {
+		// 	type: Number,
+		// 	required: true,
+		// },
 		department: {
 			type: String,
 			required: false,
