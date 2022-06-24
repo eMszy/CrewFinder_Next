@@ -217,48 +217,69 @@ const handler = async (req, res) => {
 			case "POST": {
 				const { event, positions } = req.body;
 
+				let userIds = [];
+				let usersDataArray = [];
+
 				const eventModel = await new Event(event);
-				const positionModel = await new Position(positions[0]);
-				const userModel = await User.findById(token.id);
 
-				if (!userModel) {
-					throw Error("A felhasználói adatok betöltése sikertelen.");
-				}
+				positions.forEach(async (pos) => {
+					delete pos._id;
+					delete pos.name;
+					pos.eventId = eventModel._id;
+					const positionModel = await new Position(pos);
+					eventModel.positions.push(positionModel._id);
 
-				eventModel.positions = positionModel._id;
-				positionModel.eventId = eventModel._id;
+					pos.users.forEach((user) => {
+						if (!userIds.includes(user)) {
+							userIds.push(user);
+							usersDataArray.push({
+								userId: user,
+								data: {
+									event: eventModel._id,
+									positions: [
+										{
+											position: positionModel._id,
+											label: pos.label,
+											status: "new",
+										},
+									],
+								},
+							});
+						} else {
+							usersDataArray.map((userData) =>
+								userData.userId === user
+									? userData.data.positions.push({
+											position: positionModel._id,
+											label: pos.label,
+											status: "new",
+									  })
+									: userData
+							);
+						}
+					});
+					await positionModel.save();
+				});
+				await eventModel.save();
 
-				positionModel.users.push(userModel._id);
-				userModel.events.push({
-					event: eventModel._id,
-					positions: [
-						{
-							position: positionModel._id,
-							label: positions[0].label,
-							status: "new",
-							// messages: [],
-						},
-					],
+				// data.userId === token.id az a kéne vissza adni és akkor nem kell plusz egy lekérdezés, de az async miatt nem ment.
+				usersDataArray.forEach(async (data) => {
+					await User.findByIdAndUpdate(data.userId, {
+						$push: { events: data.data },
+					});
 				});
 
-				await userModel.save();
-				await eventModel.save();
-				await positionModel.save();
+				const user = await User.findById(token.id)
+					.populate("events.event")
+					.populate("events.positions.position");
+
+				if (!user) {
+					throw Error("A felhasználói adatok betöltése sikertelen.");
+				}
 
 				res.statusCode = 201;
 				res.json({
 					message: "Sikeresen létrehoztál egy eseményt",
-					event: {
-						event: eventModel,
-						positions: [
-							{
-								position: positionModel,
-								label: positions[0].label,
-								status: "new",
-								// messages: [],
-							},
-						],
-					},
+					event: user.events,
 				});
 				return;
 			}

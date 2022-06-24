@@ -183,8 +183,6 @@ const EventCreatorMain = ({
 				dates: eventInputData.dates,
 			});
 			Object.assign(creatorPosition, {
-				startDate: +dayjs(eventInputData.startDate),
-				endDate: +dayjs(eventInputData.endDate),
 				dates: eventInputData.dates,
 			});
 		}
@@ -198,6 +196,14 @@ const EventCreatorMain = ({
 			});
 			Object.assign(creatorPosition, {
 				invition: { type: "creator" },
+				users: [
+					session.id,
+					// {
+					// 	_id: session.id,
+					// 	name: session.user.name,
+					// 	image: session.user.image,
+					// },
+				],
 				// weight:
 				// 	control.departments[eventInputData.department].positions[
 				// 		eventInputData.creatorPosition
@@ -216,7 +222,6 @@ const EventCreatorMain = ({
 			});
 		}
 
-		const baseTeamPositions = [];
 		const positions = [];
 		const label = department === "Privát" ? 0 : 1;
 
@@ -226,12 +231,22 @@ const EventCreatorMain = ({
 				_id: theCreatorPos?.position._id,
 				invition: { type: "creator" },
 				label,
+				users: [session.id],
 			});
 		}
 
-		if (baseTeamPositions.length) {
-			positions.push(baseTeamPositions);
+		let newBasePos = [...basePositions];
+		if (newBasePos.length) {
+			newBasePos.map((pos) => {
+				let usersIds = [];
+				pos.users.forEach((u) => usersIds.push(u._id));
+				pos.dates = eventInputData.dates;
+				pos.users = usersIds;
+			});
+
+			positions.push(...newBasePos);
 		}
+		console.log("positions", positions);
 
 		let updateData = {};
 
@@ -257,7 +272,7 @@ const EventCreatorMain = ({
 				updateEvent({ ...updateData, creatorId: session.id });
 			}
 		}
-		setEventCreatroPage(false);
+		// setEventCreatroPage(false);
 	};
 
 	const addPosHandel = (posName, id) => {
@@ -265,7 +280,6 @@ const EventCreatorMain = ({
 		const updatedPos = addPosHelper(posName, id, basePositions, {
 			type: "direct",
 		});
-		console.log("updatedPos", updatedPos);
 		if (updatedPos) {
 			setBasePositions(updatedPos);
 		}
@@ -285,7 +299,6 @@ const EventCreatorMain = ({
 			currentBaseCrew.filter((p) => p.id !== id)
 		);
 
-		// const updatedBasePos = eventInputData.baseCrew.filter((p) => p.id !== id);
 		const updatedPickedDays = [...eventInputData.dates];
 		updatedPickedDays.forEach((day) => {
 			const filteredCrew = day.crew?.filter((c) => c.id !== id);

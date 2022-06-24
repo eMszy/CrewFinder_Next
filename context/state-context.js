@@ -59,7 +59,7 @@ const StateContextProvider = (props) => {
 			if (!res.ok || res.error) {
 				throw Error(resJson.message);
 			}
-			setSelectedEvent(resJson.event);
+			// setSelectedEvent(resJson.event);
 			setStatus({ message: resJson.message });
 			dispatchCallEvent({
 				type: "createEvent",
@@ -149,13 +149,13 @@ const StateContextProvider = (props) => {
 				return payload;
 			}
 			case "createEvent": {
-				return [...state, payload];
+				console.log("payload", payload);
+				return payload;
 			}
 			case "updateEvent": {
 				return payload;
 			}
 			case "deleteEvent": {
-				// console.log("state", state, payload);
 				return state.filter((evt) => evt.event._id !== payload);
 			}
 			// case "application": {

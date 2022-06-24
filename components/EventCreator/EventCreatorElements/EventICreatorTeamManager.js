@@ -30,23 +30,24 @@ const EventICreatorTeamManager = ({
 	const [crewMemberTarget, setCrewMemberTarget] = useState([]);
 
 	const { selectedEvent, setStatus } = useContext(StateContext);
-	console.log("crewMembers", crewMembers);
 
 	// console.log("selectedEvent", selectedEvent);
 
 	useEffect(() => {
 		let isAllDirectInputValid = true;
 		crewMembers.forEach((crewMember) => {
-			if (crewMember.invition.type === "direct" && !crewMember._id) {
+			if (
+				crewMember.invition.type === "direct" &&
+				(!crewMember.users || !crewMember.users[0]._id)
+			) {
 				isAllDirectInputValid = false;
 			}
-			setValid(isAllDirectInputValid);
 		});
+		setValid(isAllDirectInputValid);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [crewMembers]);
 
 	const fetchUser = async (e, posName) => {
-		console.log("e, posName: ", e.target.value, posName);
 		try {
 			const res = await fetch(
 				`/api/user/search?input=${e.target.value}&pos=${posName}`
@@ -96,11 +97,14 @@ const EventICreatorTeamManager = ({
 				setFetchedUsers([]);
 			}
 		} else {
+			console.log("f", f, crewMember);
+
 			changeHandle({
 				...crewMember,
-				...f,
+				name: "",
 				invition: { type: "direct" },
 				label: 4,
+				users: [f],
 			});
 			setCrewMemberTarget([]);
 			setFetchedUsers([]);
@@ -132,19 +136,21 @@ const EventICreatorTeamManager = ({
 											{crewMember.posName}
 										</div>
 										{crewMember.invition.type === "direct" &&
-											(crewMember._id ? (
+											(crewMember.users &&
+											crewMember.users.length &&
+											crewMember.users[0]._id ? (
 												<div className={classes.BaseTeam_Pos__Direct}>
-													{crewMember.image ? (
+													{crewMember.users[0].image ? (
 														<Image
-															src={crewMember.image}
+															src={crewMember.users[0].image}
 															width={35}
 															height={35}
-															alt={crewMember.name}
+															alt={crewMember.users[0].name}
 														/>
 													) : (
 														<div></div>
 													)}
-													{crewMember.name}
+													{crewMember.users[0].name}
 												</div>
 											) : (
 												<input

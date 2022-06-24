@@ -84,7 +84,7 @@ const EventHandle = () => {
 				{!selectedEvent || selectedEvent.event.creator === session?.id ? (
 					isEventCreatorMain ? (
 						<EventCreatorMain
-							setIsCreatroPage={setEventCreatorMain}
+							setEventCreatroPage={setEventCreatorMain}
 							department={department}
 							setDepartment={setDepartment}
 							isEventCreatorMain={isEventCreatorMain}
