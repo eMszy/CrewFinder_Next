@@ -13,6 +13,7 @@ import control from "../../../control.json";
 
 import classes from "./../EventHandle.module.scss";
 import EventICreatorTeamManager from "./EventICreatorTeamManager";
+import { findColor } from "../../../shared/utility";
 
 const EventCreatorSecondary = ({
 	department,
@@ -132,10 +133,121 @@ const EventCreatorSecondary = ({
 		<div>
 			<form>
 				<div className={classes.EventModal_MainBody}>
-					<div className={classes.EventModal_Input}>
-						{eventPositions.map((pos) => (
-							<div key={pos._id}>{pos.posName}</div>
-						))}
+					<div className={classes.acceptorDates_MainLayout}>
+						<div className={classes.acceptorDates_MainDiv}>
+							<p>
+								{selectedEvent.event.title} {" - "}{" "}
+								{selectedEvent.event.shortTitle}
+							</p>
+							<div className={classes.acceptorDates_SubDiv}>
+								<div className={classes.acceptorDates}>
+									{eventPositions.map((pos) => {
+										// console.log("selectedEvent", selectedEvent);
+										console.log("pos", pos);
+
+										let label = 6;
+										let invited = [];
+										const directInvited = [];
+										const applied = [];
+										const confirmed = [];
+										const creator = [];
+										pos.users.forEach((user) => {
+											switch (user.label) {
+												case 5:
+													invited.push(user);
+													if (!label || label > 5) label = 5;
+													break;
+												case 4:
+													directInvited.push(user);
+													if (!label || label > 4) label = 4;
+													break;
+												case 3:
+													applied.push(user);
+													if (!label || label > 3) label = 3;
+													break;
+												case 2:
+													confirmed.push(user);
+													if (!label || label > 2) label = 2;
+													break;
+												case 1:
+													creator.push(user);
+													if (!label || label > 1) label = 1;
+													break;
+												default:
+													label = 6;
+											}
+										});
+
+										// console.log("label", label);
+
+										const style = {
+											background: `linear-gradient(135deg, ${findColor(1)
+												.slice(0, -4)
+												.concat("90%)")} 45%, ${findColor(label)
+												.slice(0, -4)
+												.concat("90%)")} 65%`,
+										};
+										const val = control.invitionType.find(
+											(v) => v.type === pos.invition.type
+										);
+										return (
+											<div
+												key={pos._id}
+												id={pos._id}
+												className={[
+													classes.acceptorDates_div,
+													// pickedPosId &&
+													// 	pos.position._id.toString() ===
+													// 		pickedPosId.toString() &&
+													// 	classes.activePos,
+												].join(" ")}
+												onClick={(e) => {
+													setPickedPosId(e.currentTarget.id);
+													setTheEvent(pos);
+												}}
+											>
+												<div
+													style={style}
+													className={classes.acceptorDates_Pos}
+												>
+													<p>{pos.posName}</p>
+
+													<p className={classes.Text400}>{val.name}</p>
+													{console.log("val.name", val.name)}
+													{(val.type === "open" ||
+														val.type === "attribute") && (
+														<>
+															<p className={classes.Text400}>
+																Visszaigazolt: {confirmed.length}
+															</p>
+															<p className={classes.Text400}>
+																Jelentkeztek: {applied.length}
+															</p>
+															<p className={classes.Text400}>
+																Nem jelzett: {invited.length}
+															</p>
+														</>
+													)}
+													{val.type === "direct" && (
+														<>
+															<p className={classes.Text400}>
+																Visszaigazolt: {confirmed.length}
+															</p>
+															<p className={classes.Text400}>
+																Nem jelzett: {directInvited.length}
+															</p>
+														</>
+													)}
+													<p className={classes.Text400}>
+														Napok: {pos.dates.length}
+													</p>
+												</div>
+											</div>
+										);
+									})}
+								</div>
+							</div>
+						</div>
 					</div>
 					<div className={classes.EventModal_Calendar}>
 						<SmallCalendar

@@ -170,6 +170,13 @@ const handler = async (req, res) => {
 						},
 					},
 					{
+						$match: {
+							$expr: {
+								$eq: ["$_id", "$user.events.positions.position"],
+							},
+						},
+					},
+					{
 						$group: {
 							_id: "$_id",
 							posName: {

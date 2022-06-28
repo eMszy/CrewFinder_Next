@@ -344,6 +344,10 @@
     {
       "type": "attribute",
       "name": "Paraméteres"
+    },
+    {
+      "type": "creator",
+      "name": "Létrehozó"
     }
   ]
 }

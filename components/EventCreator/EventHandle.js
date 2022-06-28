@@ -33,6 +33,7 @@ const EventHandle = () => {
 	);
 
 	console.log("eventPositions", eventPositions);
+	console.log("selectedEvent", selectedEvent);
 
 	const deletHandel = (e) => {
 		e.preventDefault();
@@ -70,7 +71,7 @@ const EventHandle = () => {
 			setLoading(false);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [status, isEventCreatorMain]);
+	}, [status, isEventCreatorMain, selectedEvent]);
 
 	return (
 		<div className={classes.EventModal_Main}>
@@ -80,28 +81,31 @@ const EventHandle = () => {
 						<div className={classes.Icon}>
 							<GiHamburgerMenu />
 						</div>
-
-						<div
-							className={[
-								classes.Icon2,
-								classes.Buttom1,
-								isEventCreatorMain && classes.Active,
-							].join(" ")}
-							onClick={() => setEventCreatorMain(true)}
-						>
-							Esemény
-						</div>
-						{selectedEvent && (
-							<div
-								className={[
-									classes.Icon2,
-									classes.Buttom1,
-									!isEventCreatorMain && classes.Active,
-								].join(" ")}
-								onClick={() => setEventCreatorMain(false)}
-							>
-								Poziciók
-							</div>
+						{selectedEvent?.event.creator === session.id && (
+							<>
+								<div
+									className={[
+										classes.Icon2,
+										classes.Buttom1,
+										isEventCreatorMain && classes.Active,
+									].join(" ")}
+									onClick={() => setEventCreatorMain(true)}
+								>
+									Esemény
+								</div>
+								{selectedEvent && (
+									<div
+										className={[
+											classes.Icon2,
+											classes.Buttom1,
+											!isEventCreatorMain && classes.Active,
+										].join(" ")}
+										onClick={() => setEventCreatorMain(false)}
+									>
+										Poziciók
+									</div>
+								)}
+							</>
 						)}
 					</div>
 					<div className={classes.IconDiv}>

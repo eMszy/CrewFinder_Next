@@ -170,7 +170,6 @@ const EventAccepter = () => {
 								className={classes.acceptorDates_MainDiv}
 							>
 								<div>
-									{" "}
 									<p>
 										{event.event.title} {" - "} {event.event.shortTitle}
 									</p>
