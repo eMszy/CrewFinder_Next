@@ -23,6 +23,7 @@ export const StateContext = React.createContext({
 	createEvent: (payload) => {},
 	updateEvent: (payload) => {},
 	deleteEvent: (payload) => {},
+	applicationEvent: (payload) => {},
 });
 
 const StateContextProvider = (props) => {
@@ -59,10 +60,13 @@ const StateContextProvider = (props) => {
 			if (!res.ok || res.error) {
 				throw Error(resJson.message);
 			}
-			// setSelectedEvent(resJson.event);
+			const theEvent = resJson.event.filter(
+				(eve) => eve.event._id === resJson.eventId
+			);
+			setSelectedEvent(...theEvent);
 			setStatus({ message: resJson.message });
 			dispatchCallEvent({
-				type: "createEvent",
+				type: "updateEvent",
 				payload: resJson.event,
 			});
 			return resJson;
@@ -134,56 +138,29 @@ const StateContextProvider = (props) => {
 			if (!res.ok || res.error) {
 				throw Error(resJson.message);
 			}
-			setStatus(resJson);
+			dispatchCallEvent({
+				type: "updateEvent",
+				payload: resJson.events,
+			});
+			setStatus(resJson.message);
 			return resJson;
 		} catch (err) {
 			setStatus({ message: err.message, error: true });
 		}
 	};
 
-	console.log("process.env.NODE_ENV", process.env.NODE_ENV);
-
 	const savedEventsReducer = (state, { type, payload }) => {
 		switch (type) {
-			case "init": {
-				return payload;
-			}
-			case "createEvent": {
-				console.log("payload", payload);
-				return payload;
-			}
 			case "updateEvent": {
 				return payload;
 			}
 			case "deleteEvent": {
 				return state.filter((evt) => evt.event._id !== payload);
 			}
-			// case "application": {
-			// 	applicationEvent(payload);
-			// 	return state.map((evt) =>
-			// 		evt._id === payload.theEvent._id ? payload.theEvent : evt
-			// 	);
-			// }
-			// case "incoming": {
-			// 	const ids = [];
-			// 	const events = [];
-
-			// 	payload.forEach((p) => {
-			// 		if (!ids.includes(p._id)) {
-			// 			ids.push(p._id);
-			// 			events.push(p);
-			// 		}
-			// 	});
-
-			// 	state.forEach((s) => {
-			// 		if (!ids.includes(s._id)) {
-			// 			ids.push(s._id);
-			// 			events.push(s);
-			// 		}
-			// 	});
-
-			// 	return events;
-			// }
+			case "incoming": {
+				console.log("incoming: ", payload, state);
+				return state;
+			}
 			default:
 				throw new Error();
 		}
@@ -191,7 +168,7 @@ const StateContextProvider = (props) => {
 
 	const [savedEvents, dispatchCallEvent] = useReducer(savedEventsReducer, []);
 
-	console.log("savedEvents", savedEvents);
+	// console.log("savedEvents", savedEvents);
 
 	let socket;
 
@@ -222,7 +199,7 @@ const StateContextProvider = (props) => {
 						throw Error(eventsJson.message);
 					}
 					dispatchCallEvent({
-						type: "init",
+						type: "updateEvent",
 						payload: eventsJson,
 					});
 				} catch (err) {
@@ -290,6 +267,7 @@ const StateContextProvider = (props) => {
 				createEvent,
 				updateEvent,
 				deleteEvent,
+				applicationEvent,
 			}}
 		>
 			{props.children}

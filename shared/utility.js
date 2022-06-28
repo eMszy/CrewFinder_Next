@@ -147,34 +147,36 @@ export const formingData = (resivedUserData, formTemplate) => {
 
 export const eventLoaderHandler = (filteredEvents, day, userId) => {
 	let events = [];
-	if (filteredEvents[0]?.event.creator === userId) {
-		filteredEvents.forEach((event) => {
+	filteredEvents.forEach((event) => {
+		let isExist = false;
+		let label;
+		if (event.event.creator === userId) {
 			event.event.dates.forEach((d) => {
-				if (d.id.toString() === dayjs(day).format("YYYYMMDD")) {
+				if (d.id === +day.format("YYYYMMDD")) {
 					const label = event.event.department === "Privát" ? 0 : 1;
 					events.push({ ...event, label, posCounter: event.positions.length });
 				}
 			});
-		});
-	} else {
-		filteredEvents.forEach((event) => {
+		} else {
 			event.positions.forEach((pos) => {
-				let label;
 				pos.position.dates.forEach((d) => {
 					if (d.id === +day.format("YYYYMMDD")) {
 						if (!label || label > pos.label) {
 							label = pos.label;
+							isExist = true;
 						}
-						events.push({
-							...event,
-							label,
-							posCounter: event.positions.length,
-						});
 					}
 				});
 			});
-		});
-	}
+		}
+		if (isExist) {
+			events.push({
+				...event,
+				label,
+				posCounter: event.positions.length,
+			});
+		}
+	});
 	return events;
 };
 

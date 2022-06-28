@@ -280,6 +280,7 @@ const handler = async (req, res) => {
 				res.json({
 					message: "Sikeresen létrehoztál egy eseményt",
 					event: user.events,
+					eventId: eventModel._id,
 				});
 				return;
 			}
@@ -384,12 +385,12 @@ const handler = async (req, res) => {
 				}
 
 				await Position.deleteMany({
-					_id: { $in: [event.positions] },
+					_id: { $in: event.positions },
 				});
 
 				await User.updateMany(
 					{
-						"events.event": { $in: [event._id] },
+						"events.event": { $in: event._id },
 					},
 					{ $pull: { events: { event: event._id } } }
 				);

@@ -17,7 +17,9 @@ const handler = async (req, res) => {
 
 		const userId = req.query.userId;
 
-		const user = await User.findById(userId);
+		const user = await User.findById(userId)
+			.populate("events.event")
+			.populate("events.positions.position");
 
 		if (!user) {
 			res.statusCode = 404;

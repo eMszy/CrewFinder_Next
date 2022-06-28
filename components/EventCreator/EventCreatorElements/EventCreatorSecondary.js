@@ -6,6 +6,7 @@ import { IoCalendarOutline, IoCloseCircleOutline } from "react-icons/io5";
 import { StateContext } from "../../../context/state-context";
 import SmallCalendar from "../../Calendar/CalendarElements/SmallCalendar";
 import Button from "../../UI/Button/Button";
+import Spinner from "../../UI/Spinner/Spinner";
 import { addPosHelper, uniqueArray } from "./utility";
 
 import control from "../../../control.json";
@@ -17,6 +18,7 @@ const EventCreatorSecondary = ({
 	department,
 	setEventCreatroPage,
 	isEventCreatorMain,
+	eventPositions,
 }) => {
 	const { setShowEventModal, selectedEvent, dispatchCallEvent } =
 		useContext(StateContext);
@@ -119,22 +121,29 @@ const EventCreatorSecondary = ({
 	// console.log("pickedDays", pickedDays);
 	console.log("selectedEvent", selectedEvent);
 
+	if (!eventPositions || eventPositions.length < 1)
+		return (
+			<div className={classes.Loding_Spinner}>
+				<Spinner />;
+			</div>
+		);
+
 	return (
 		<div>
 			<form>
 				<div className={classes.EventModal_MainBody}>
 					<div className={classes.EventModal_Input}>
-						{/* ide jönnek a pozik */}
+						{eventPositions.map((pos) => (
+							<div key={pos._id}>{pos.posName}</div>
+						))}
 					</div>
 					<div className={classes.EventModal_Calendar}>
 						<SmallCalendar
 							filteredEvents={[
 								{
-									label: selectedEvent.label,
-									startDate: +dayjs(selectedEvent.startDate),
-									endDate: +dayjs(selectedEvent.endDate),
+									label: 1,
 									dates: pickedDays,
-									selectedEventDates: selectedEvent.dates,
+									selectedEventDates: eventPositions[0].dates,
 								},
 							]}
 							setClickedDate={setClickedDate}

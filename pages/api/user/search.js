@@ -7,15 +7,19 @@ const handler = async (req, res) => {
 		dbConnect();
 
 		const result = await User.aggregate([
-			{ $match: { name: { $regex: input, $options: "i" } } },
 			{
 				$match: {
-					"metaData.positions": { $in: [pos] },
+					$and: [
+						{ name: { $regex: input, $options: "i" } },
+						{
+							"metaData.positions": { $in: [pos] },
+						},
+					],
 				},
 			},
 			{ $project: { name: 1, image: 1 } },
 		]);
-		console.log("Direct result: ", result.length);
+		console.log("Direct result: ", result.length - 1);
 		res.statusCode = 200;
 		res.json(result);
 		return;

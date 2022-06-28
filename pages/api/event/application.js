@@ -1,61 +1,37 @@
-import Event from "../../../models/event";
+import { getToken } from "next-auth/jwt";
 import User from "../../../models/user";
 import dbConnect from "../../../shared/dbConnect";
 
 const handler = async (req, res) => {
 	dbConnect();
-	const {
-		theUserEvents,
-		theEvent,
-		positionId,
-		userSession,
-		answer,
-		getLabel: theLabel,
-	} = req.body;
+	const { eventId, positionId, answer, newLabel } = req.body;
 
 	try {
-		let event = await Event.findById(theEvent._id);
-		if (!event) {
-			throw Error("Felhasználó nem található");
-		}
-
-		let updatedEventDates = event.dates.toObject();
-
-		updatedEventDates.forEach((d) => {
-			d.crew.forEach((crew) => {
-				if (crew.id.toString() === positionId) {
-					crew.label = theLabel;
-					if (answer) {
-						if (!crew.candidates) {
-							crew.candidates = [];
-						}
-						crew.candidates.push({
-							_id: userSession.id,
-							name: userSession.user.name,
-							image: userSession.user.image,
-						});
-					} else if (crew.candidates) {
-						crew.candidates = crew.candidates.filter(
-							(c) => c._id.toString() !== userSession.id
-						);
-					}
-				}
-			});
-		});
-		console.log("theUserEvents", theUserEvents);
-
-		event.dates = updatedEventDates;
-		await User.findByIdAndUpdate(userSession.id, {
-			events: theUserEvents,
+		const token = await getToken({
+			req,
+			secret: process.env.NEXTAUTH_SECRET,
+			secureCookie: process.env.NODE_ENV === "production",
 		});
 
-		await event.save();
+		const user = await User.findById(token.id)
+			.populate("events.event")
+			.populate("events.positions.position");
+
+		const event = user.events.find(
+			(eve) => eve.event._id.toString() === eventId
+		);
+		const position = event.positions.find(
+			(pos) => pos.position._id.toString() === positionId
+		);
+		position.label = newLabel;
+
+		const updatedUser = await user.save();
 
 		const message = answer
 			? { message: "Sikeresen jelentkeztél" }
 			: { message: "Sikeresen lemondtad", info: !answer };
 		res.statusCode = 200;
-		res.json(message);
+		res.json({ message, events: updatedUser.events });
 		return;
 	} catch (err) {
 		res.statusCode = 404;

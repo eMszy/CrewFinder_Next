@@ -1,36 +1,76 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { IoClose } from "react-icons/io5";
+import { MdDelete } from "react-icons/md";
 
 import { StateContext } from "../../context/state-context";
 import EventCreatorMain from "./EventCreatorElements/EventCreatorMain";
 import EventCreatorSecondary from "./EventCreatorElements/EventCreatorSecondary";
 import EventAccepter from "./EventCreatorElements/EventDateAccepter";
+import Spinner from "../UI/Spinner/Spinner";
 
-import { GiHamburgerMenu } from "react-icons/gi";
-import { IoArrowBack, IoClose } from "react-icons/io5";
-import { MdDelete } from "react-icons/md";
-
-// import control from "../../control.json";
+import control from "../../control.json";
 
 import classes from "./EventHandle.module.scss";
 
 const EventHandle = () => {
-	const { setShowEventModal, selectedEvent, dispatchCallEvent, deleteEvent } =
+	const { setShowEventModal, selectedEvent, deleteEvent } =
 		useContext(StateContext);
 
 	const { data: session, status } = useSession();
 
-	const [isEventCreatorMain, setEventCreatorMain] = useState(true);
+	const [eventPositions, setEventPositions] = useState([]);
+	const [isLoading, setLoading] = useState(false);
 	const [department, setDepartment] = useState(
 		selectedEvent
 			? selectedEvent.event.department
 			: session?.metaData?.isHOD[0] || "Privát"
 	);
+	const [isEventCreatorMain, setEventCreatorMain] = useState(
+		// true
+		selectedEvent && department !== "Privát" ? false : true
+	);
+
+	console.log("eventPositions", eventPositions);
 
 	const deletHandel = (e) => {
 		e.preventDefault();
 		deleteEvent(selectedEvent.event._id);
 	};
+
+	const fetchEventPos = async () => {
+		const fetchedEventPos = [];
+
+		try {
+			const res = await fetch(`api/event/${selectedEvent.event._id}`);
+			fetchedEventPos = await res.json();
+			if (!res.ok || res.error) {
+				throw Error(fetchedEventPos.message);
+			}
+			setEventPositions(fetchedEventPos);
+		} catch (err) {
+			setStatus({ message: err.message, error: true });
+		}
+	};
+
+	useEffect(() => {
+		if (status === "authenticated" && selectedEvent) {
+			setLoading(true);
+			fetchEventPos();
+			setLoading(false);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	useEffect(() => {
+		if (status === "authenticated" && selectedEvent) {
+			setLoading(true);
+			fetchEventPos();
+			setLoading(false);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [status, isEventCreatorMain]);
 
 	return (
 		<div className={classes.EventModal_Main}>
@@ -43,24 +83,24 @@ const EventHandle = () => {
 
 						<div
 							className={[
-								classes.Icon,
+								classes.Icon2,
 								classes.Buttom1,
 								isEventCreatorMain && classes.Active,
 							].join(" ")}
 							onClick={() => setEventCreatorMain(true)}
 						>
-							1
+							Esemény
 						</div>
 						{selectedEvent && (
 							<div
 								className={[
-									classes.Icon,
+									classes.Icon2,
 									classes.Buttom1,
 									!isEventCreatorMain && classes.Active,
 								].join(" ")}
 								onClick={() => setEventCreatorMain(false)}
 							>
-								2
+								Poziciók
 							</div>
 						)}
 					</div>
@@ -81,19 +121,25 @@ const EventHandle = () => {
 						</div>
 					</div>
 				</header>
-				{!selectedEvent || selectedEvent.event.creator === session?.id ? (
+				{isLoading || status === "loading" ? (
+					<div className={classes.Loding_Spinner}>
+						<Spinner />
+					</div>
+				) : !selectedEvent || selectedEvent.event.creator === session.id ? (
 					isEventCreatorMain ? (
 						<EventCreatorMain
-							setEventCreatroPage={setEventCreatorMain}
-							department={department}
 							setDepartment={setDepartment}
+							department={department}
+							setEventCreatroPage={setEventCreatorMain}
 							isEventCreatorMain={isEventCreatorMain}
+							eventPositions={eventPositions}
 						/>
 					) : (
 						<EventCreatorSecondary
-							setEventCreatroPage={setEventCreatorMain}
 							department={department}
+							setEventCreatroPage={setEventCreatorMain}
 							isEventCreatorMain={isEventCreatorMain}
+							eventPositions={eventPositions}
 						/>
 					)
 				) : (

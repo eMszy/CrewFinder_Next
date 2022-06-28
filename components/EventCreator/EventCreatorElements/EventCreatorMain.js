@@ -28,13 +28,19 @@ import { inputChangedHandler, isAllInputVaild } from "../../../shared/utility";
 //Egyenlőre mindenki csak egy DEPT BaseCrew-t tud kezelni
 
 const EventCreatorMain = ({
-	setEventCreatroPage,
 	department,
 	setDepartment,
 	isEventCreatorMain,
+	eventPositions,
+	setEventCreatroPage,
 }) => {
-	const { daySelected, selectedEvent, createEvent, updateEvent } =
-		useContext(StateContext);
+	const {
+		daySelected,
+		selectedEvent,
+		createEvent,
+		updateEvent,
+		setShowEventModal,
+	} = useContext(StateContext);
 
 	const { data: session, status } = useSession();
 
@@ -42,9 +48,11 @@ const EventCreatorMain = ({
 	const [clickedDate, setClickedDate] = useState();
 	const [isClicked, setIsClicked] = useState();
 	const [isTeamManagerValid, setTeamManagerValid] = useState(true);
-	const [isLoading, setLoading] = useState(false);
-	const [eventPositions, setEventPositions] = useState([]);
-	const [basePositions, setBasePositions] = useState([]);
+	const [basePositions, setBasePositions] = useState(
+		selectedEvent
+			? eventPositions.filter((event) => event.invition.type !== "creator")
+			: []
+	);
 
 	const [isDateTuched, setDateTuched] = useState(false);
 
@@ -55,30 +63,6 @@ const EventCreatorMain = ({
 	const [eventInputData, setEventInputData] = useState(
 		eventOtherTemplate(selectedEvent, daySelected, department)
 	);
-
-	useEffect(() => {
-		if (status === "authenticated" && selectedEvent) {
-			setLoading(true);
-			const fetchEventPos = async () => {
-				const fetchedEventPos = [];
-
-				try {
-					const res = await fetch(`api/event/${selectedEvent.event._id}`);
-					fetchedEventPos = await res.json();
-					if (!res.ok || res.error) {
-						throw Error(fetchedEventPos.message);
-					}
-				} catch (err) {
-					setStatus({ message: err.message, error: true });
-				}
-				console.log("fetchedEvent", fetchedEventPos);
-				setEventPositions(fetchedEventPos);
-			};
-			fetchEventPos();
-			setLoading(false);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [status, selectedEvent]);
 
 	const inputChanged = (event) => {
 		setEventTypedData(inputChangedHandler(event, eventTypedData));
@@ -269,10 +253,15 @@ const EventCreatorMain = ({
 				Object.assign(updateData, { positions });
 			}
 			if (Object.keys(updateData).length !== 0) {
+				console.log("updateData", updateData);
 				updateEvent({ ...updateData, creatorId: session.id });
 			}
 		}
-		// setEventCreatroPage(false);
+		if (department !== "Privát") {
+			setEventCreatroPage(false);
+		} else {
+			setShowEventModal(false);
+		}
 	};
 
 	const addPosHandel = (posName, id) => {
@@ -542,10 +531,7 @@ const EventCreatorMain = ({
 				</div>
 				{department !== "Privát" && selectedEvent?.department !== "Privát" && (
 					<EventICreatorTeamManager
-						eventPositions={eventPositions}
-						setEventPositions={setEventPositions}
-						isLoading={isLoading}
-						crewMembers={basePositions}
+						basePositions={basePositions}
 						addPosHandel={addPosHandel}
 						department={department}
 						changeHandle={changeHandle}

@@ -13,7 +13,7 @@ import Button from "../../UI/Button/Button";
 import classes from "./../EventHandle.module.scss";
 
 const EventICreatorTeamManager = ({
-	crewMembers,
+	basePositions,
 	department,
 	addPosHandel,
 	changeHandle,
@@ -21,8 +21,6 @@ const EventICreatorTeamManager = ({
 	setValid,
 	isValid,
 	isEventCreatorMain,
-	eventPositions,
-	isLoading,
 }) => {
 	const { data: session } = useSession();
 
@@ -31,11 +29,12 @@ const EventICreatorTeamManager = ({
 
 	const { selectedEvent, setStatus } = useContext(StateContext);
 
-	// console.log("selectedEvent", selectedEvent);
+	console.log("selectedEvent", selectedEvent);
+	console.log("basePositions", basePositions);
 
 	useEffect(() => {
 		let isAllDirectInputValid = true;
-		crewMembers.forEach((crewMember) => {
+		basePositions.forEach((crewMember) => {
 			if (
 				crewMember.invition.type === "direct" &&
 				(!crewMember.users || !crewMember.users[0]._id)
@@ -45,7 +44,7 @@ const EventICreatorTeamManager = ({
 		});
 		setValid(isAllDirectInputValid);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [crewMembers]);
+	}, [basePositions]);
 
 	const fetchUser = async (e, posName) => {
 		try {
@@ -127,118 +126,119 @@ const EventICreatorTeamManager = ({
 						<div>
 							<p>Poziciók</p>
 						</div>
-						{crewMembers
-							.sort((a, b) => a.id - b.id)
-							.map((crewMember, idx) => {
-								return (
-									<div key={idx} className={classes.BaseTeam_Pos}>
-										<div className={classes.BaseTeam_PosTitle}>
-											{crewMember.posName}
-										</div>
-										{crewMember.invition.type === "direct" &&
-											(crewMember.users &&
-											crewMember.users.length &&
-											crewMember.users[0]._id ? (
-												<div className={classes.BaseTeam_Pos__Direct}>
-													{crewMember.users[0].image ? (
-														<Image
-															src={crewMember.users[0].image}
-															width={35}
-															height={35}
-															alt={crewMember.users[0].name}
-														/>
-													) : (
-														<div></div>
-													)}
-													{crewMember.users[0].name}
-												</div>
-											) : (
-												<input
-													type="text"
-													name="name"
-													placeholder="Név"
-													value={crewMember.name}
-													required
-													onChange={(e) => {
-														setCrewMemberTarget(crewMember);
-														directInputHandler(e, null, crewMember);
-													}}
-												/>
-											))}
-										{crewMember.invition.type === "attribute" && (
-											<div className={classes.BaseTeam_Pos_Attribute}>
-												<div>Találtok száma: {crewMember.users?.length}</div>
-												{control.departments[department].attribute.map(
-													(att, id) => (
-														<div key={id}>
-															<label htmlFor={att.type}>
-																{att.name} -{" "}
-																{att.range[crewMember.invition[att.type]]}
-															</label>
-															<input
-																type="range"
-																id={id}
-																name={att.type}
-																min="0"
-																max={att.range.length - 1}
-																onChange={async (e) => {
-																	const findUsers = await fetchNumberofUsers(
-																		crewMember.posName,
-																		"attribute"
-																	);
-																	changeHandle({
-																		...crewMember,
-																		label: 5,
-																		invition: {
-																			...crewMember.invition,
-																			[e.target.type]: e.target.value,
-																		},
-																		users: findUsers,
-																	});
-																}}
-															/>
-														</div>
-													)
-												)}
-											</div>
-										)}
-										{crewMember.invition?.type === "open" && (
-											<div className={classes.BaseTeam_Pos_Attribut}>
-												<div>Találtok száma: {crewMember.users?.length}</div>
-											</div>
-										)}
-										<select
-											name="invition"
-											value={crewMember.invition.type}
-											onChange={async (e) => {
-												changeHandle({
-													...crewMember,
-													name: "",
-													_id: null,
-													label: 5,
-													[e.target.name]: {
-														type: e.target.value,
-													},
-													users: await fetchNumberofUsers(crewMember.posName),
-												});
-											}}
-										>
-											{control.invitionType.map((t) => (
-												<option key={t.type} value={t.type}>
-													{t.name}
-												</option>
-											))}
-										</select>
-
-										<div
-											className={classes.Icon}
-											onClick={() => deletPosHandel(crewMember.id)}
-										>
-											<IoCloseCircleOutline />
-										</div>
+						{basePositions.map((position, idx) => {
+							{
+								console.log("position", position);
+							}
+							return (
+								<div key={idx} className={classes.BaseTeam_Pos}>
+									<div className={classes.BaseTeam_PosTitle}>
+										{position.posName}
 									</div>
-								);
-							})}
+									{position.invition.type === "direct" &&
+										(position.users &&
+										position.users.length &&
+										position.users[0]._id ? (
+											<div className={classes.BaseTeam_Pos__Direct}>
+												{position.users[0].image ? (
+													<Image
+														src={position.users[0].image}
+														width={35}
+														height={35}
+														alt={position.users[0].name}
+													/>
+												) : (
+													<div></div>
+												)}
+												{position.users[0].name}
+											</div>
+										) : (
+											<input
+												type="text"
+												name="name"
+												placeholder="Név"
+												value={position.name}
+												required
+												onChange={(e) => {
+													setCrewMemberTarget(position);
+													directInputHandler(e, null, position);
+												}}
+											/>
+										))}
+									{position.invition.type === "attribute" && (
+										<div className={classes.BaseTeam_Pos_Attribute}>
+											<div>Találtok száma: {position.users?.length}</div>
+											{control.departments[department].attribute.map(
+												(att, id) => (
+													<div key={id}>
+														<label htmlFor={att.type}>
+															{att.name} -{" "}
+															{att.range[position.invition[att.type]]}
+														</label>
+														<input
+															type="range"
+															id={id}
+															name={att.type}
+															min="0"
+															max={att.range.length - 1}
+															onChange={async (e) => {
+																const findUsers = await fetchNumberofUsers(
+																	position.posName,
+																	"attribute"
+																);
+																changeHandle({
+																	...position,
+																	label: 5,
+																	invition: {
+																		...position.invition,
+																		[e.target.type]: e.target.value,
+																	},
+																	users: findUsers,
+																});
+															}}
+														/>
+													</div>
+												)
+											)}
+										</div>
+									)}
+									{position.invition?.type === "open" && (
+										<div className={classes.BaseTeam_Pos_Attribut}>
+											<div>Találtok száma: {position.users?.length}</div>
+										</div>
+									)}
+									<select
+										name="invition"
+										value={position.invition.type}
+										onChange={async (e) => {
+											changeHandle({
+												...position,
+												name: "",
+												_id: null,
+												label: 5,
+												[e.target.name]: {
+													type: e.target.value,
+												},
+												users: await fetchNumberofUsers(position.posName),
+											});
+										}}
+									>
+										{control.invitionType.map((t) => (
+											<option key={t.type} value={t.type}>
+												{t.name}
+											</option>
+										))}
+									</select>
+
+									<div
+										className={classes.Icon}
+										onClick={() => deletPosHandel(position.id)}
+									>
+										<IoCloseCircleOutline />
+									</div>
+								</div>
+							);
+						})}
 					</div>
 
 					<div className={classes.BaseTeam_Choice}>

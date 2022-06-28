@@ -17,8 +17,8 @@ const EventAccepter = () => {
 		setStatus,
 		daySelected,
 		setDaySelected,
-		dispatchCallEvent,
 		setShowEventModal,
+		applicationEvent,
 	} = useContext(StateContext);
 
 	const { data: session, status } = useSession();
@@ -62,12 +62,13 @@ const EventAccepter = () => {
 			if (!isEvent) {
 				const filteredEvents = [];
 				theUserEvents.forEach((event) => {
-					const eventPos = event.positions.filter(
-						(pos) =>
-							pos.date.filter(
+					const eventPos = event.positions.filter((pos) => {
+						return (
+							pos.position.dates.filter(
 								(d) => d.id.toString() === dayjs(daySelected).format("YYYYMMDD")
 							).length !== 0
-					);
+						);
+					});
 					if (eventPos.length !== 0) {
 						filteredEvents.push({ ...event, positions: eventPos });
 					}
@@ -85,7 +86,7 @@ const EventAccepter = () => {
 	useEffect(() => {
 		if ((theEvent, pickedPosId)) {
 			const thePosition = theEvent.positions.find(
-				(p) => p.id.toString() === pickedPosId.toString()
+				(p) => p.position._id.toString() === pickedPosId.toString()
 			);
 			setPickedPos(thePosition);
 		}
@@ -103,73 +104,51 @@ const EventAccepter = () => {
 
 		const getLabel = () => {
 			if (answer) {
-				if (pickedPos.invitionType[0].name === "open") {
+				if (pickedPos.position.invition.type === "open") {
 					return 3;
 				}
-				if (pickedPos.invitionType[0].name === "direct") {
+				if (pickedPos.position.invition.type === "direct") {
 					return 2;
 				}
 			} else {
-				return 7;
+				return 6;
 			}
 		};
 
-		// let otherUsers = [];
-
 		let newEventLabel;
 		theEvent.positions.forEach((pos) => {
-			if (pos.id.toString() === pickedPosId) {
+			if (pos.position._id.toString() === pickedPosId) {
 				pos.label = getLabel();
 				pos.status = answer ? "applied" : "resigned";
 				if (!newEventLabel || pos.label < newEventLabel) {
 					newEventLabel = pos.label;
 				}
-				// if (pos.invitionType[0].result) {
-				// 	otherUsers = pos.invitionType[0].result.filter(
-				// 		(u) => u._id.toString() !== session.id
-				// 	);
-				// }
 			} else if (!newEventLabel || pos.label < newEventLabel) {
 				newEventLabel = pos.label;
 			}
 		});
 		theEvent.label = newEventLabel;
 
-		// console.log('otherUsers', otherUsers)
-
 		theUserEvents.map((evt) => (evt._id === theEvent._id ? theEvent : evt));
 
 		const payload = {
-			theUserEvents: theUserEvents,
-			theEvent: theEvent,
+			eventId: theEvent.event._id,
 			positionId: pickedPosId,
-			userSession: session,
 			answer,
-			getLabel: getLabel(),
+			newLabel: getLabel(),
 		};
-		dispatchCallEvent({ type: "application", payload });
+		applicationEvent(payload);
 	};
 
-	const isDisabled = (eventId, test) => {
+	const isDisabled = (eventId, answer) => {
 		let disable = true;
-		if (theEvent && theEvent._id == eventId) {
-			if (
-				test &&
-				pickedPos &&
-				(pickedPos.label === 4 ||
-					pickedPos.label === 5 ||
-					pickedPos.label === 7)
-			) {
+		if (theEvent && theEvent.event._id == eventId) {
+			if (answer && pickedPos && pickedPos.label > 3) {
 				disable = false;
-			} else if (
-				!test &&
-				pickedPos &&
-				(pickedPos.label === 2 || pickedPos.label === 3)
-			) {
+			} else if (!answer && pickedPos && pickedPos.label < 4) {
 				disable = false;
 			}
 		}
-
 		return disable;
 	};
 
@@ -186,15 +165,18 @@ const EventAccepter = () => {
 				<div className={classes.EventModal_MainBody}>
 					<div className={classes.acceptorDates_MainLayout}>
 						{filteredUserEvents.map((event) => (
-							<div key={event._id} className={classes.acceptorDates_MainDiv}>
+							<div
+								key={event.event._id}
+								className={classes.acceptorDates_MainDiv}
+							>
 								<div>
 									{" "}
 									<p>
-										{event.title} {" - "} {event.shortTitle}
+										{event.event.title} {" - "} {event.event.shortTitle}
 									</p>
 									<p className={classes.Text400}>
 										{"Létrehozta: "}
-										{event.creatorName}
+										{event.event.creator}
 									</p>
 								</div>
 								<div className={classes.acceptorDates_SubDiv}>
@@ -208,17 +190,17 @@ const EventAccepter = () => {
 														.concat("90%)"),
 												};
 												const val = control.invitionType.find(
-													(v) => v.type === pos.invitionType[0].name
+													(v) => v.type === pos.position.invition.type
 												);
-
 												return (
 													<div
-														key={pos.id}
-														id={pos.id}
+														key={pos.position._id}
+														id={pos.position._id}
 														className={[
 															classes.acceptorDates_div,
 															pickedPosId &&
-																pos.id.toString() === pickedPosId.toString() &&
+																pos.position._id.toString() ===
+																	pickedPosId.toString() &&
 																classes.activePos,
 														].join(" ")}
 														onClick={(e) => {
@@ -230,10 +212,10 @@ const EventAccepter = () => {
 															style={style}
 															className={classes.acceptorDates_Pos}
 														>
-															<p>{pos.yourPosition}</p>
+															<p>{pos.position.posName}</p>
 															<p className={classes.Text400}>{val.name}</p>
 															<p className={classes.Text400}>
-																Napok: {pos.date.length}
+																Napok: {pos.position.dates.length}
 															</p>
 														</div>
 													</div>
@@ -257,11 +239,10 @@ const EventAccepter = () => {
 												respondHandler(e, true);
 											}}
 											btnType="Success"
-											disabled={isDisabled(event._id, true)}
+											disabled={isDisabled(event.event._id, true)}
 										>
-											{event?._id === theEvent?._id &&
-											pickedPos?.label !== 5 &&
-											pickedPos?.label !== 7
+											{event?.event._id === theEvent?._id &&
+											pickedPos?.label < 5
 												? "Vállalom"
 												: "Jelentkezem"}
 										</Button>
@@ -271,7 +252,7 @@ const EventAccepter = () => {
 												respondHandler(e, false);
 											}}
 											btnType="Danger"
-											disabled={isDisabled(event._id, false)}
+											disabled={isDisabled(event.event._id, false)}
 										>
 											Lemondom
 										</Button>
@@ -286,9 +267,7 @@ const EventAccepter = () => {
 								filteredEvents={[
 									{
 										label: pickedPos?.label || 0,
-										startDate: +dayjs(theEvent?.startDate),
-										endDate: +dayjs(theEvent?.endDate),
-										dates: pickedPos?.date,
+										dates: pickedPos?.position.dates,
 										selectedEventDates: [{ startTime: +dayjs(daySelected) }],
 									},
 								]}
@@ -299,18 +278,19 @@ const EventAccepter = () => {
 						{pickedPos && (
 							<div className={classes.EventModal_Sidebar}>
 								<div>
-									{" "}
 									<p>
-										{theEvent.title} {" - "} {theEvent.shortTitle}
+										{theEvent.event.title} {" - "} {theEvent.event.shortTitle}
 									</p>
 								</div>
 								<div className={classes.EventModal_Sidebar_div}>
 									<p>Leírás</p>
-									<p className={classes.Text400}>{theEvent.description}</p>
+									<p className={classes.Text400}>
+										{theEvent.event.description}
+									</p>
 								</div>
 								<div className={classes.EventModal_Sidebar_div}>
 									<p>Dátumok:</p>
-									{pickedPos?.date?.map((d) => (
+									{pickedPos?.position.dates?.map((d) => (
 										<p key={d.startTime} className={classes.Text400}>
 											{dayjs(d.startTime).format("YY. MMMM DD.")}
 											{" - "}
@@ -330,7 +310,7 @@ const EventAccepter = () => {
 								</div>
 								<div className={classes.EventModal_Sidebar_div}>
 									<p>{"Létrehozta: "}</p>
-									<p className={classes.Text400}>{theEvent.creatorName}</p>
+									<p className={classes.Text400}>{theEvent.event.creator}</p>
 								</div>
 							</div>
 						)}
@@ -339,7 +319,7 @@ const EventAccepter = () => {
 				<footer className={classes.EventModal_Footer}>
 					<Button
 						type="submit"
-						clicked={(e) => {
+						clicked={() => {
 							setShowEventModal(false);
 						}}
 					>
