@@ -35,104 +35,6 @@ const handler = async (req, res) => {
 			secureCookie: process.env.NODE_ENV === "production",
 		});
 
-		const invitionHandler = async (data, evtId) => {
-			let positionsIds = [];
-			let positionsArray = [];
-
-			data.dates.forEach((date) => {
-				date.crew.forEach((c) => {
-					if (!positionsIds.includes(c.id) && c.id > 0) {
-						positionsIds.push(c.id);
-						positionsArray.push({
-							id: c.id,
-							yourPosition: c.pos,
-							invitionType: c.invitionType,
-							label: c.label,
-							userId: c._id,
-							date: [
-								{
-									id: date.id,
-									startTime: date.startTime,
-									endTime: date.endTime,
-								},
-							],
-							status: "new",
-						});
-					} else if (c.id > 0) {
-						positionsArray.forEach((pos) => {
-							if (pos.id === c.id) {
-								pos.date.push({
-									id: date.id,
-									startTime: date.startTime,
-									endTime: date.endTime,
-								});
-							}
-						});
-					}
-				});
-			});
-
-			let usersIdArray = [];
-			let usersPosArray = [];
-
-			positionsArray.forEach((pos) => {
-				if (pos.invitionType.name === "direct") {
-					if (!usersIdArray.includes(pos.userId)) {
-						usersIdArray.push(pos.userId);
-						usersPosArray.push({ userId: pos.userId, pos: [pos] });
-					} else {
-						usersPosArray.forEach((userPos) => {
-							if (userPos.userId === pos.userId) {
-								userPos.pos.push(pos);
-							}
-						});
-					}
-				} else {
-					pos.invitionType.result.forEach((user) => {
-						if (!usersIdArray.includes(user._id)) {
-							usersIdArray.push(user._id);
-							usersPosArray.push({ userId: user._id, pos: [pos] });
-						} else {
-							usersPosArray.forEach((userPos) => {
-								if (userPos.userId === user._id) {
-									userPos.pos.push(pos);
-								}
-							});
-						}
-					});
-				}
-			});
-
-			usersPosArray.forEach(async (userPosArray) => {
-				let label;
-				userPosArray.pos.forEach((p) => {
-					if (!label || p.label < label) {
-						label = p.label;
-					}
-				});
-
-				const newEvent = EventInfoTreeHandler(
-					data,
-					userPosArray.pos,
-					label,
-					evtId
-				);
-				const user = await User.findById(userPosArray.userId);
-				if (!user) {
-					throw Error("Nincs meg a felhasználó, [eventId]:107");
-				}
-				let updatedEvents = user.events.filter(
-					(event) => event._id.toString() !== evtId
-				);
-				if (!updatedEvents) {
-					updatedEvents = [];
-				}
-				updatedEvents.push(newEvent);
-				user.events = updatedEvents;
-				await user.save();
-			});
-		};
-
 		switch (req.method) {
 			case "GET": {
 				const agg = [
@@ -295,9 +197,6 @@ const handler = async (req, res) => {
 			case "PUT": {
 				const { event, positions, creatorId } = req.body;
 				let newPosIds = [];
-				let positionModel;
-
-				// console.log("event", event);
 
 				if (creatorId !== token.id) {
 					throw Error("Nem általad létrehozott esemény");
@@ -305,18 +204,26 @@ const handler = async (req, res) => {
 
 				if (positions && positions.length) {
 					positions.forEach(async (pos) => {
-						positionModel = await Position.findByIdAndUpdate(pos._id, pos, {
-							new: true,
-						});
+						let positionModel;
+
+						if (!pos._id) {
+							delete pos._id;
+							delete pos.name;
+						} else {
+							positionModel = await Position.findByIdAndUpdate(pos._id, pos, {
+								new: true,
+							});
+						}
+
 						if (pos.invition.type !== "creator") {
 							if (positionModel) {
 								//Ki kell e értesíteni a pozicióra jelentkezett user-eket?
 							} else {
 								positionModel = await new Position(pos);
-								newPosIds.push(positionModel._id); //!Miért nem megy be az Array-ba?
+								newPosIds.push(positionModel._id);
 
 								const userUpdateObjct = {
-									event: pos.eventId,
+									event: eventId,
 									positions: [
 										{
 											position: positionModel,
@@ -326,44 +233,39 @@ const handler = async (req, res) => {
 										},
 									],
 								};
-
-								const candidateUsers = await User.updateMany(
+								const test = await User.updateMany(
 									{
-										// const candidateUsers = await User.find({
 										$and: [
-											{ _id: { $nin: [creatorId] } },
+											{ _id: { $nin: [token.id] } },
 											{ "metaData.positions": { $in: [pos.posName] } },
 										],
 									},
-									{ userUpdateObjct }
+									{
+										$push: {
+											events: userUpdateObjct,
+										},
+									}
 								);
-								console.log("candidateUsers", candidateUsers);
 
-								//  candidateUsers._id to array & pos.users.push(newUsersArray)
+								const test2 = await positionModel.save();
+
+								console.log("test", test);
+								console.log("test2", test2);
 							}
-							// await positionModel.save();
 						}
-
-						await positionModel.save();
-						// console.log("positionModel", positionModel.toObject());
-						console.log("newPosIds", newPosIds);
 					});
 				}
 
-				if (event) {
-					const eventModel = await Event.findByIdAndUpdate(event._id, event, {
-						new: true,
-					});
-
-					if (!eventModel) {
-						throw Error("Nem található az esemény. [eventId]:266");
-					}
-
-					if (newPosIds.length) {
-						eventModel.positions.push(newPosIds);
-					}
-					await eventModel.save();
+				const eventModel = await Event.findByIdAndUpdate(eventId, event, {
+					new: true,
+				});
+				if (!eventModel) {
+					throw Error("Nem található az esemény. [eventId]:266");
 				}
+				if (newPosIds) {
+					eventModel.positions.push(newPosIds);
+				}
+				await eventModel.save();
 
 				const user = await User.findById(token.id)
 					.populate("events.event")
