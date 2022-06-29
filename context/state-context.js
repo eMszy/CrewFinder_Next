@@ -60,14 +60,17 @@ const StateContextProvider = (props) => {
 			if (!res.ok || res.error) {
 				throw Error(resJson.message);
 			}
-			const theEvent = resJson.event.filter(
+			const theEvent = resJson.events.filter(
 				(eve) => eve.event._id === resJson.eventId
 			);
-			setSelectedEvent(...theEvent);
+
+			if (theEvent[0].event.department !== "Privát") {
+				setSelectedEvent(...theEvent);
+			}
 			setStatus({ message: resJson.message });
 			dispatchCallEvent({
 				type: "updateEvent",
-				payload: resJson.event,
+				payload: resJson.events,
 			});
 			return resJson;
 		} catch (err) {
@@ -150,6 +153,8 @@ const StateContextProvider = (props) => {
 	};
 
 	const savedEventsReducer = (state, { type, payload }) => {
+		console.log("payload: ", payload);
+		console.log("state: ", state);
 		switch (type) {
 			case "updateEvent": {
 				return payload;
