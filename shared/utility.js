@@ -147,10 +147,11 @@ export const formingData = (resivedUserData, formTemplate) => {
 
 export const eventLoaderHandler = (filteredEvents, day, userId) => {
 	let events = [];
+	let eventIds = [];
+	let isExist = false;
 	filteredEvents.forEach((event) => {
-		let isExist = false;
-		let label;
-		if (event.event.creator === userId) {
+		let label = 5;
+		if (event.creator === userId) {
 			event.event.dates.forEach((d) => {
 				if (d.id === +day.format("YYYYMMDD")) {
 					const label = event.event.department === "Privát" ? 0 : 1;
@@ -159,7 +160,7 @@ export const eventLoaderHandler = (filteredEvents, day, userId) => {
 			});
 		} else {
 			event.positions.forEach((pos) => {
-				pos.position.dates.forEach((d) => {
+				pos.position?.dates.forEach((d) => {
 					if (d.id === +day.format("YYYYMMDD")) {
 						if (!label || label > pos.label) {
 							label = pos.label;
@@ -169,7 +170,9 @@ export const eventLoaderHandler = (filteredEvents, day, userId) => {
 				});
 			});
 		}
-		if (isExist) {
+
+		if (isExist && !eventIds.includes(event._id)) {
+			eventIds.push(event._id);
 			events.push({
 				...event,
 				label,
@@ -177,6 +180,7 @@ export const eventLoaderHandler = (filteredEvents, day, userId) => {
 			});
 		}
 	});
+	console.log("event", events);
 	return events;
 };
 

@@ -206,6 +206,8 @@ const EventCreatorMain = ({
 			});
 		}
 
+		console.log("selectedEvent", selectedEvent);
+
 		const positions = [];
 		const label = department === "Privát" ? 0 : 1;
 
@@ -230,7 +232,6 @@ const EventCreatorMain = ({
 
 			positions.push(...newBasePos);
 		}
-		console.log("positions", positions);
 
 		let updateData = {};
 
@@ -242,19 +243,23 @@ const EventCreatorMain = ({
 		} else {
 			if (Object.keys(event).length !== 0) {
 				Object.assign(updateData, {
-					event: {
-						...event,
-						// creatorId: session.id,
-						_id: selectedEvent.event._id,
-					},
+					event,
 				});
 			}
 			if (positions.length) {
 				Object.assign(updateData, { positions });
 			}
 			if (Object.keys(updateData).length !== 0) {
-				console.log("updateData", updateData);
-				updateEvent({ ...updateData, creatorId: session.id });
+				console.log("updateData", {
+					...updateData,
+					creatorId: session.id,
+					event: { ...event, _id: selectedEvent.event._id },
+				});
+				updateEvent({
+					...updateData,
+					creatorId: session.id,
+					event: { ...event, _id: selectedEvent.event._id },
+				});
 			}
 		}
 		if (department !== "Privát") {
@@ -265,7 +270,6 @@ const EventCreatorMain = ({
 	};
 
 	const addPosHandel = (posName, id) => {
-		console.log("pos, id", posName, id, basePositions);
 		const updatedPos = addPosHelper(posName, id, basePositions, {
 			type: "direct",
 		});
@@ -273,8 +277,6 @@ const EventCreatorMain = ({
 			setBasePositions(updatedPos);
 		}
 	};
-
-	// console.log("selectedEvent", selectedEvent._id);
 
 	const changeHandle = (updatedCrewMember) => {
 		const updatedBaseCrew = basePositions.filter(

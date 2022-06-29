@@ -78,7 +78,7 @@ const StateContextProvider = (props) => {
 
 	const updateEvent = async (payload) => {
 		try {
-			const res = await fetch("/api/event/" + payload._id, {
+			const res = await fetch("/api/event/" + payload.event._id, {
 				method: "PUT",
 				body: JSON.stringify(payload),
 				headers: {

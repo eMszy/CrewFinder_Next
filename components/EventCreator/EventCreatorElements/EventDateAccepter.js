@@ -64,7 +64,7 @@ const EventAccepter = () => {
 				theUserEvents.forEach((event) => {
 					const eventPos = event.positions.filter((pos) => {
 						return (
-							pos.position.dates.filter(
+							pos.position?.dates.filter(
 								(d) => d.id.toString() === dayjs(daySelected).format("YYYYMMDD")
 							).length !== 0
 						);
@@ -169,6 +169,7 @@ const EventAccepter = () => {
 								key={event.event._id}
 								className={classes.acceptorDates_MainDiv}
 							>
+								{console.log("event", event)}
 								<div>
 									<p>
 										{event.event.title} {" - "} {event.event.shortTitle}
@@ -189,16 +190,16 @@ const EventAccepter = () => {
 														.concat("90%)"),
 												};
 												const val = control.invitionType.find(
-													(v) => v.type === pos.position.invition.type
+													(v) => v.type === pos.position?.invition.type
 												);
 												return (
 													<div
-														key={pos.position._id}
-														id={pos.position._id}
+														key={pos.position?._id}
+														id={pos.position?._id}
 														className={[
 															classes.acceptorDates_div,
 															pickedPosId &&
-																pos.position._id.toString() ===
+																pos.position?._id.toString() ===
 																	pickedPosId.toString() &&
 																classes.activePos,
 														].join(" ")}
@@ -211,10 +212,10 @@ const EventAccepter = () => {
 															style={style}
 															className={classes.acceptorDates_Pos}
 														>
-															<p>{pos.position.posName}</p>
-															<p className={classes.Text400}>{val.name}</p>
+															<p>{pos.position?.posName}</p>
+															<p className={classes.Text400}>{val?.name}</p>
 															<p className={classes.Text400}>
-																Napok: {pos.position.dates.length}
+																Napok: {pos.position?.dates.length}
 															</p>
 														</div>
 													</div>

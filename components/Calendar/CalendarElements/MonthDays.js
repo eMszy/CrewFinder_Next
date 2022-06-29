@@ -68,7 +68,7 @@ const MonthDays = ({ day, rowIdx }) => {
 										>
 											{evt.positions && evt.positions.length > 0 && (
 												<p>
-													{evt.event.shortTitle} - Poziciók: {evt.posCounter}
+													{evt.shortTitle} - Poziciók: {evt.posCounter}
 												</p>
 											)}
 										</div>

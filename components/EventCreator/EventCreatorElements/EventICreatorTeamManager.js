@@ -29,9 +29,6 @@ const EventICreatorTeamManager = ({
 
 	const { selectedEvent, setStatus } = useContext(StateContext);
 
-	console.log("selectedEvent", selectedEvent);
-	console.log("basePositions", basePositions);
-
 	useEffect(() => {
 		let isAllDirectInputValid = true;
 		basePositions.forEach((crewMember) => {
@@ -68,7 +65,6 @@ const EventICreatorTeamManager = ({
 	};
 
 	const fetchNumberofUsers = async (pos, attribute) => {
-		// console.log("attribute", attribute);
 		try {
 			const data = await fetch(
 				`/api/user/countMatches?pos=${pos}&attribute=${attribute}`
@@ -127,9 +123,6 @@ const EventICreatorTeamManager = ({
 							<p>Poziciók</p>
 						</div>
 						{basePositions.map((position, idx) => {
-							{
-								console.log("position", position);
-							}
 							return (
 								<div key={idx} className={classes.BaseTeam_Pos}>
 									<div className={classes.BaseTeam_PosTitle}>

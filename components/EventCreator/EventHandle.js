@@ -15,7 +15,7 @@ import control from "../../control.json";
 import classes from "./EventHandle.module.scss";
 
 const EventHandle = () => {
-	const { setShowEventModal, selectedEvent, deleteEvent } =
+	const { setShowEventModal, selectedEvent, deleteEvent, filteredEvents } =
 		useContext(StateContext);
 
 	const { data: session, status } = useSession();
@@ -28,12 +28,8 @@ const EventHandle = () => {
 			: session?.metaData?.isHOD[0] || "Privát"
 	);
 	const [isEventCreatorMain, setEventCreatorMain] = useState(
-		// true
 		selectedEvent && department !== "Privát" ? false : true
 	);
-
-	console.log("eventPositions", eventPositions);
-	console.log("selectedEvent", selectedEvent);
 
 	const deletHandel = (e) => {
 		e.preventDefault();
@@ -71,7 +67,7 @@ const EventHandle = () => {
 			setLoading(false);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [status, isEventCreatorMain, selectedEvent]);
+	}, [status, isEventCreatorMain, selectedEvent, filteredEvents]);
 
 	return (
 		<div className={classes.EventModal_Main}>
