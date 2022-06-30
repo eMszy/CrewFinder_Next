@@ -48,11 +48,22 @@ const EventCreatorMain = ({
 	const [clickedDate, setClickedDate] = useState();
 	const [isClicked, setIsClicked] = useState();
 	const [isTeamManagerValid, setTeamManagerValid] = useState(true);
+	const [newBasePositions, setnewBasePositions] = useState([]);
 	const [basePositions, setBasePositions] = useState(
 		selectedEvent
-			? eventPositions.filter((event) => event.invition.type !== "creator")
+			? eventPositions
+					.filter((event) => event.invition.type !== "creator")
+					.sort(
+						(a, b) =>
+							control.departments[department].positions[b.posName].weight -
+							control.departments[department].positions[a.posName].weight
+					)
+					.sort((a, b) => a.label - b.label)
 			: []
 	);
+
+	console.log("newBasePositions", newBasePositions);
+	console.log("basePositions", basePositions);
 
 	const [isDateTuched, setDateTuched] = useState(false);
 
@@ -206,12 +217,10 @@ const EventCreatorMain = ({
 			});
 		}
 
-		console.log("selectedEvent", selectedEvent);
-
 		const positions = [];
 		const label = department === "Privát" ? 0 : 1;
 
-		if (Object.keys(creatorPosition).length !== 0) {
+		if (!selectedEvent && Object.keys(creatorPosition).length !== 0) {
 			positions.push({
 				...creatorPosition,
 				_id: theCreatorPos?.position._id,
@@ -221,7 +230,7 @@ const EventCreatorMain = ({
 			});
 		}
 
-		let newBasePos = [...basePositions];
+		let newBasePos = [...newBasePositions];
 		if (newBasePos.length) {
 			newBasePos.map((pos) => {
 				let usersIds = [];
@@ -250,57 +259,53 @@ const EventCreatorMain = ({
 				Object.assign(updateData, { positions });
 			}
 			if (Object.keys(updateData).length !== 0) {
-				console.log("updateData", {
-					...updateData,
-					creatorId: session.id,
-					event: { ...event, _id: selectedEvent.event._id },
-				});
-				updateEvent({
-					...updateData,
-					creatorId: session.id,
-					event: { ...event, _id: selectedEvent.event._id },
-				});
+				// updateEvent({
+				// 	...updateData,
+				// 	creatorId: session.id,
+				// 	event: { ...event, _id: selectedEvent.event._id },
+				// });
 			}
+			console.log("updateData", {
+				...updateData,
+				creatorId: session.id,
+				event: { ...event, _id: selectedEvent.event._id },
+			});
 		}
 		if (department !== "Privát") {
-			setEventCreatroPage(false);
+			// setEventCreatroPage(false);
 		} else {
 			setShowEventModal(false);
 		}
 	};
 
 	const addPosHandel = (posName, id) => {
-		const updatedPos = addPosHelper(posName, id, basePositions, {
+		const updatedPos = addPosHelper(posName, id, newBasePositions, {
 			type: "direct",
 		});
 		if (updatedPos) {
-			setBasePositions(updatedPos);
+			setnewBasePositions(updatedPos);
 		}
 	};
 
 	const changeHandle = (updatedCrewMember) => {
-		const updatedBaseCrew = basePositions.filter(
+		console.log("first", updatedCrewMember);
+		const updatedBaseCrew = newBasePositions.filter(
 			(b) => b.id !== updatedCrewMember.id
 		);
-		setBasePositions([...updatedBaseCrew, updatedCrewMember]);
+		setnewBasePositions([...updatedBaseCrew, updatedCrewMember]);
 	};
 
-	const deletPosHandel = (id) => {
+	const deletPosHandel = (BasePosId, newBasePosId) => {
 		setBasePositions((currentBaseCrew) =>
-			currentBaseCrew.filter((p) => p.id !== id)
+			currentBaseCrew.filter((p) => p._id !== BasePosId)
 		);
 
-		const updatedPickedDays = [...eventInputData.dates];
-		updatedPickedDays.forEach((day) => {
-			const filteredCrew = day.crew?.filter((c) => c.id !== id);
-			day.crew = filteredCrew;
-		});
-
-		setEventInputData({
-			...eventInputData,
-			dates: updatedPickedDays,
-		});
+		setnewBasePositions((currentBaseCrew) =>
+			currentBaseCrew.filter((p) => p.id !== newBasePosId)
+		);
 	};
+
+	console.log("eventInputData", eventInputData);
 
 	useEffect(() => {
 		setEventInputData((currentData) => {
@@ -313,20 +318,6 @@ const EventCreatorMain = ({
 			};
 		});
 	}, [department]);
-
-	// useEffect(() => {
-	// 	let updateData = {
-	// 		...eventInputData,
-	// 		yourPosition: Object.keys(control.departments[department])[0],
-	// 	};
-
-	// 	department === "Privát"
-	// 		? (updateData = { ...updateData, label: 0 })
-	// 		: (updateData = { ...updateData, label: 1 });
-
-	// 	setEventInputData(updateData);
-	// 	// eslint-disable-next-line
-	// }, [department]);
 
 	useEffect(() => {
 		let pickedDate = eventInputData.dates.find(
@@ -377,6 +368,7 @@ const EventCreatorMain = ({
 		// eslint-disable-next-line
 	}, [eventInputData.dates]);
 
+	//! Itt a megoldás!
 	// useEffect(() => {
 	// 	let updatedCrew = uniqueArray(eventInputData.baseCrew, baseCrew);
 	// 	setEventInputData((currentEventInputData) => {
@@ -527,13 +519,13 @@ const EventCreatorMain = ({
 						) : (
 							<div>
 								<p className={classes.CreatorName}>Létrehozta:</p>
-								<p> IDE KELL A NÉV</p>
+								<p>IDE KELL A NÉV</p>
 							</div>
 						))}
 				</div>
 				{department !== "Privát" && selectedEvent?.department !== "Privát" && (
 					<EventICreatorTeamManager
-						basePositions={basePositions}
+						basePositions={[...basePositions, ...newBasePositions]}
 						addPosHandel={addPosHandel}
 						department={department}
 						changeHandle={changeHandle}

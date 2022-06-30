@@ -185,10 +185,12 @@ const handler = async (req, res) => {
 					throw Error("A felhasználói adatok betöltése sikertelen.");
 				}
 
+				console.log("user.events", user.events.toObject());
+
 				res.statusCode = 201;
 				res.json({
 					message: "Sikeresen létrehoztál egy eseményt",
-					event: user.events,
+					events: user.events,
 					eventId: eventModel._id,
 				});
 				return;

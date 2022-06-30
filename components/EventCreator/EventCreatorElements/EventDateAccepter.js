@@ -104,7 +104,10 @@ const EventAccepter = () => {
 
 		const getLabel = () => {
 			if (answer) {
-				if (pickedPos.position.invition.type === "open") {
+				if (
+					pickedPos.position.invition.type === "open" ||
+					pickedPos.position.invition.type === "attribute"
+				) {
 					return 3;
 				}
 				if (pickedPos.position.invition.type === "direct") {

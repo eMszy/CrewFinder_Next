@@ -141,9 +141,14 @@ const EventCreatorSecondary = ({
 			const applied = [];
 			const confirmed = [];
 			const creator = [];
+			const resigned = [];
 
 			pos.users.forEach((user) => {
 				switch (user.label) {
+					case 6:
+						resigned.push(user);
+						if (!label || label > 6) label = 6;
+						break;
 					case 5:
 						invited.push(user);
 						if (!label || label > 5) label = 5;
@@ -173,6 +178,7 @@ const EventCreatorSecondary = ({
 				dates: pos.dates,
 				invition: pos.invition,
 				posName: pos.posName,
+				resigned,
 				invited,
 				directInvited,
 				applied,
@@ -187,7 +193,7 @@ const EventCreatorSecondary = ({
 					control.departments[department].positions[b.posName].weight -
 					control.departments[department].positions[a.posName].weight
 			)
-			.sort((a, b) => b.label - a.label);
+			.sort((a, b) => a.label - b.label);
 		setSelectedEventPositions(selectedPositions);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [eventPositions]);
@@ -208,6 +214,47 @@ const EventCreatorSecondary = ({
 							{selectedEvent.event.title} {" - "}{" "}
 							{selectedEvent.event.shortTitle}
 						</p>
+						{pickedPos && (
+							<div
+								className={classes.acceptorDates_MainDiv}
+								style={{
+									background: `linear-gradient(135deg, ${findColor(1)
+										.slice(0, -4)
+										.concat("90%)")} 35%, ${findColor(pickedPos.label)
+										.slice(0, -4)
+										.concat("90%)")} 50%`,
+								}}
+							>
+								<p>Kiválasztott pozició</p>
+								<div className={classes.acceptorDates_SubDiv}>
+									<div className={classes.acceptorDates}>
+										<div className={classes.acceptorDates_addPos}>
+											<div className={classes.acceptorDates_Pos}>
+												<p>{pickedPos.posName}</p>
+												<p className={classes.Text400}>Visszaigazolt: Nem</p>
+												<p className={classes.Text400}>
+													Jelentkeztek: {pickedPos.applied.length}
+												</p>
+												<p className={classes.Text400}>
+													Nem jelzett: {pickedPos.invited.length}
+												</p>
+												<p className={classes.Text400}>
+													Napok: {pickedPos.dates.length}
+												</p>
+												{console.log("pickedPos", pickedPos)}
+											</div>
+										</div>
+										<div>
+											<p>Jelentkezettek:</p>
+											{pickedPos.applied.map((pos) => (
+												//!Itt tartok
+												<div key={pos._id}>{pos.name}</div>
+											))}
+										</div>
+									</div>
+								</div>
+							</div>
+						)}
 						<div className={classes.acceptorDates_MainDiv}>
 							<p>Még be nem telt poziciók</p>
 							<div className={classes.acceptorDates_SubDiv}>
@@ -223,11 +270,6 @@ const EventCreatorSecondary = ({
 											height={100}
 										/>
 									</div>
-									{console.log(
-										"selectedEventPositions",
-										selectedEventPositions
-									)}
-
 									{selectedEventPositions
 										.filter((pos) => pos.label > 2)
 										.map((pos) => {
@@ -277,14 +319,23 @@ const EventCreatorSecondary = ({
 																</p>
 															</>
 														)}
-														{val.type === "direct" && (
-															<>
-																<p>{pos.directInvited[0].name}</p>
-																<p className={classes.Text400}>
-																	Visszaigazolt: Nem
-																</p>
-															</>
-														)}
+														{val.type === "direct" &&
+															pos.directInvited.length !== 0 && (
+																<>
+																	<p>{pos.directInvited[0].name}</p>
+																	<p className={classes.Text400}>
+																		Visszaigazolt: Nem
+																	</p>
+																</>
+															)}
+														{val.type === "direct" &&
+															pos.resigned.length !== 0 && (
+																<>
+																	<p>{pos.resigned[0].name}</p>
+																	<p>Lemondta</p>
+																</>
+															)}
+
 														<p className={classes.Text400}>
 															Napok: {pos.dates.length}
 														</p>

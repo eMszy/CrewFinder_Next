@@ -24,13 +24,13 @@ export const uniqueArray = (array1 = [], array2 = []) => {
 export const addPosHelper = (
 	posName,
 	id,
-	basePositions,
+	newBasePositions,
 	invition = { type: "open" },
 	name = ""
 ) => {
 	if (posName && posName !== "") {
 		const updatedPos = [
-			...basePositions,
+			...newBasePositions,
 			{ id: id + Math.random(), posName, name, invition },
 		];
 		return updatedPos;

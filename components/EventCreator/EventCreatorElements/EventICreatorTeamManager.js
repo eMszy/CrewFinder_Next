@@ -225,7 +225,7 @@ const EventICreatorTeamManager = ({
 
 									<div
 										className={classes.Icon}
-										onClick={() => deletPosHandel(position.id)}
+										onClick={() => deletPosHandel(position._id, position.id)}
 									>
 										<IoCloseCircleOutline />
 									</div>
