@@ -16,18 +16,20 @@ const handler = async (req, res) => {
 		const result = await User.aggregate([
 			{
 				$match: {
-					_id: {
-						$not: {
-							$in: [mongoose.Types.ObjectId(token.id)],
+					$and: [
+						{
+							_id: {
+								$not: {
+									$in: [mongoose.Types.ObjectId(token.id)],
+								},
+							},
 						},
-					},
-				},
-			},
-			{
-				$match: {
-					"metaData.positions": {
-						$in: [pos],
-					},
+						{
+							"metaData.positions": {
+								$in: [pos],
+							},
+						},
+					],
 				},
 			},
 			{ $project: { name: 1, image: 1 } },

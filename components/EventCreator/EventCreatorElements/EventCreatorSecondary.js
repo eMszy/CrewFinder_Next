@@ -216,7 +216,10 @@ const EventCreatorSecondary = ({
 						</p>
 						{pickedPos && (
 							<div
-								className={classes.acceptorDates_MainDiv}
+								className={[
+									classes.acceptorDates_MainDiv,
+									!pickedPos && classes.Zero_Height,
+								].join(" ")}
 								style={{
 									background: `linear-gradient(135deg, ${findColor(1)
 										.slice(0, -4)
@@ -225,7 +228,7 @@ const EventCreatorSecondary = ({
 										.concat("90%)")} 50%`,
 								}}
 							>
-								<p>Kiválasztott pozició</p>
+								{!pickedPos && <p>Kiválasztott pozició</p>}
 								<div className={classes.acceptorDates_SubDiv}>
 									<div className={classes.acceptorDates}>
 										<div className={classes.acceptorDates_addPos}>
@@ -241,14 +244,33 @@ const EventCreatorSecondary = ({
 												<p className={classes.Text400}>
 													Napok: {pickedPos.dates.length}
 												</p>
-												{console.log("pickedPos", pickedPos)}
+												{/* {console.log("pickedPos", pickedPos)} */}
 											</div>
 										</div>
-										<div>
-											<p>Jelentkezettek:</p>
+										<div
+											className={[
+												classes.Span2,
+												classes.acceptorDates_Candidates,
+											].join(" ")}
+										>
 											{pickedPos.applied.map((pos) => (
-												//!Itt tartok
-												<div key={pos._id}>{pos.name}</div>
+												<div
+													className={classes.acceptorDates_Candidates_Grid}
+													key={pos._id}
+												>
+													<div className={classes.acceptorDates_Candidates_Img}>
+														<Image
+															src={pos.image}
+															width={35}
+															height={35}
+															alt={pos.name}
+														/>
+													</div>
+													<div>{pos.name}</div>
+													<div className={classes.Text400}>XP: X</div>
+													<div className={classes.Text400}>Értékelés: X</div>
+													{/* {console.log("pos", pos)} */}
+												</div>
 											))}
 										</div>
 									</div>

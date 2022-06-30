@@ -32,6 +32,7 @@ const Positions = ({ user }) => {
 
 	useEffect(() => {
 		isAnyPosCheck();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const openDepHandler = (dep) => {
@@ -61,7 +62,10 @@ const Positions = ({ user }) => {
 			try {
 				const res = await fetch("/api/user/" + user._id, {
 					method: "PUT",
-					body: JSON.stringify({ positions: yourPositions, type: "positions" }),
+					body: JSON.stringify({
+						positions: yourPositions,
+						type: "positions",
+					}),
 					headers: {
 						"Content-Type": "application/json",
 					},
