@@ -18,20 +18,19 @@ const handler = async (req, res) => {
 		});
 
 		const userId = req.query.userId;
-
-		console.log("userId", userId);
-
-		const user = await User.findById(userId)
-			.populate("events.event")
-			.populate("events.positions.position");
-
-		if (!user) {
-			res.statusCode = 404;
-			res.json({ message: `Nincs ilyen felhasználó.`, error: true });
-			return;
-		}
+		let user;
 
 		if (req.method === "GET") {
+			user = await User.findById(userId)
+				.populate("events.event")
+				.populate("events.positions.position");
+
+			if (!user) {
+				res.statusCode = 404;
+				res.json({ message: `Nincs ilyen felhasználó.`, error: true });
+				return;
+			}
+
 			const returnObj = returnObject(user);
 			res.statusCode = 200;
 			res.json(returnObj);
@@ -39,139 +38,158 @@ const handler = async (req, res) => {
 		}
 
 		if (req.method === "PUT") {
-			const { subPlusData, type, positions } = req.body;
+			const { subPlusData, positions } = req.body;
+			const posIds = [];
 
-			if (type === "userData") {
+			if (subPlusData) {
+				user = await User.findById(userId)
+					.populate("events.event")
+					.populate("events.positions.position");
+
+				if (!user) {
+					res.statusCode = 404;
+					res.json({ message: `Nincs ilyen felhasználó.`, error: true });
+					return;
+				}
+
 				const updateAnObjectHandler = (updateData) => {
 					for (const [key] of Object.entries(updateData)) {
 						user.userData[key] = { ...user.userData[key], ...subPlusData[key] };
 					}
 				};
-
 				updateAnObjectHandler(subPlusData);
-			} else {
+			}
+
+			if (positions) {
+				user = await User.findById(userId);
+
+				if (!user) {
+					res.statusCode = 404;
+					res.json({ message: `Nincs ilyen felhasználó.`, error: true });
+					return;
+				}
 				user.metaData.positions = positions;
-			}
+				const depts = [];
 
-			const depts = [];
-			for (const [key, value] of Object.entries(control.departments)) {
-				positions.forEach((pos) => {
-					if (Object.keys(value.positions).includes(pos)) {
-						if (!depts.includes(key)) {
-							depts.push(key);
+				for (const [key, value] of Object.entries(control.departments)) {
+					positions.forEach((pos) => {
+						if (Object.keys(value.positions).includes(pos)) {
+							if (!depts.includes(key)) {
+								depts.push(key);
+							}
 						}
-					}
-				});
-			}
+					});
+				}
 
-			const agg = [
-				{
-					$match: {
-						department: { $in: depts },
+				const agg = [
+					{
+						$match: {
+							department: { $in: depts },
+						},
 					},
-				},
-				{
-					$lookup: {
-						from: "positions",
-						localField: "Positions",
-						foreignField: "positions",
-						as: "pos",
+					{
+						$lookup: {
+							from: "positions",
+							localField: "Positions",
+							foreignField: "positions",
+							as: "pos",
+						},
 					},
-				},
-				{
-					$unwind: {
-						path: "$pos",
+					{
+						$unwind: {
+							path: "$pos",
+						},
 					},
-				},
-				{
-					$match: {
-						$and: [
-							{
-								$expr: {
-									$eq: ["$_id", "$pos.eventId"],
+					{
+						$match: {
+							$and: [
+								{
+									$expr: {
+										$eq: ["$_id", "$pos.eventId"],
+									},
 								},
-							},
-							{
-								$or: [
-									{
-										"pos.invition.type": "open",
-									},
-									{
-										"pos.invition.type": "attribute",
-									},
-								],
-							},
-							{
-								"pos.posName": "Cast PA",
-							},
-						],
+								{
+									$or: [
+										{
+											"pos.invition.type": "open",
+										},
+										{
+											"pos.invition.type": "attribute",
+										},
+									],
+								},
+								{
+									"pos.posName": { $in: positions },
+								},
+							],
+						},
 					},
-				},
-				{
-					$group: {
-						_id: "$_id",
-						event: { $first: "$_id" },
-						positions: {
-							$push: {
-								position: "$pos._id",
-								label: 5,
-								status: "new",
-								messages: [],
+					{
+						$group: {
+							_id: "$_id",
+							event: { $first: "$_id" },
+							positions: {
+								$push: {
+									position: "$pos._id",
+									label: 5,
+									status: "new",
+									messages: [],
+								},
 							},
 						},
 					},
-				},
-			];
+				];
 
-			//?User events-t most felül írja, pedig csak a nem létező pozik kellenek pluszba hozzá adni
-			const posIds = [];
-			const events = await Event.aggregate(agg);
-			// console.log("Before: user.events", user.events.toObject());
-			events.forEach((event) => {
-				const theEvent = user.events.find(
-					(ue) => ue.event._id.toString() === event.event.toString()
-				);
-				if (!theEvent) {
-					user.events.push(event);
-					console.log(
-						"event",
-						event.positions.forEach((pos) => posIds.push(pos.position))
+				//?User events-t most felül írja, pedig csak a nem létező pozik kellenek pluszba hozzá adni
+
+				const events = await Event.aggregate(agg);
+				events.forEach((event) => {
+					const theEvent = user.events.find(
+						(ue) => ue.event.toString() === event.event.toString()
 					);
-				} else {
-					theEvent.positions.forEach((pos) => {
-						user.events.forEach((userEve) => {
-							const thePos = userEve.positions.find(
-								(userPos) =>
-									userPos.position._id.toString() ===
-									pos.position._id.toString()
-							);
-							console.log("thePos.toObject()", thePos?.toObject());
-							if (!thePos) {
-								userEve.positions.push(thePos);
-								posIds.push(userPos.position._id);
-							}
+					if (!theEvent) {
+						user.events.push(event);
+						event.positions.forEach((pos) => posIds.push(pos.position));
+					} else {
+						theEvent.positions.forEach((pos) => {
+							user.events.forEach((userEve) => {
+								if (userEve.event.toString() === theEvent.event.toString()) {
+									let isExist = false;
+									userEve.positions.forEach((userPos) => {
+										if (
+											userPos.position.toString() === pos.position.toString()
+										) {
+											isExist = true;
+										}
+									});
+									if (!isExist) {
+										theEvent.positions.push(pos);
+										posIds.push(pos.position);
+									}
+								}
+							});
 						});
-					});
+					}
+				});
+
+				//?Positions-okba be kell tenni a usert, vagy kivenni
+
+				if (posIds.length) {
+					await Position.updateMany(
+						{ _id: { $in: posIds } },
+						{ $push: { users: userId } }
+					);
 				}
-			});
-			// console.log("After: user.events", user.events.toObject());
-
-			//!Positions-okba be kell tenni a usert, vagy kivenni
-
-			console.log("posIds", posIds);
-			if (posIds.length > 0) {
-				// const test = Position.find({ _id: { $in: [posIds] } });
-				// console.log("test", test);
 			}
-
-			// Position.updateMany({ _id: { $in: [posIds] } }, {});
-			// '_id': { $in: [
-
-			//!Kell egy dispact, hogy a változások megjelenjenek
-
 			await user.save();
+
+			//?Kell egy dispact, hogy a változások megjelenjenek
+			const updatedUser = await User.findById(userId)
+				.populate("events.event")
+				.populate("events.positions.position");
+
 			res.statusCode = 202;
-			res.json({ message: "Sikeresen frissítve" });
+			res.json({ message: "Sikeresen frissítve", events: updatedUser.events });
 			return;
 		}
 
@@ -193,7 +211,7 @@ const handler = async (req, res) => {
 	} catch (err) {
 		console.log("err", err);
 		res.statusCode = 400;
-		res.json({ mesage: err.message });
+		res.json({ message: err.message });
 		return;
 	}
 };

@@ -10,7 +10,7 @@ import Button from "../UI/Button/Button";
 import classes from "./Profil.module.scss";
 
 const Profil = ({ formedUser, user }) => {
-	const stateContext = useContext(StateContext);
+	const { setStatus } = useContext(StateContext);
 
 	const [DataForm, setDataForm] = useState(formedUser);
 	const [IsEdit, setIsEdit] = useState(false);
@@ -43,7 +43,7 @@ const Profil = ({ formedUser, user }) => {
 				if (Object.keys(subPlusData).length !== 0) {
 					const res = await fetch("/api/user/" + user._id, {
 						method: "PUT",
-						body: JSON.stringify({ subPlusData, type: "userData" }),
+						body: JSON.stringify({ subPlusData }),
 						headers: {
 							"Content-Type": "application/json",
 						},
@@ -54,7 +54,7 @@ const Profil = ({ formedUser, user }) => {
 					if (!res.ok || res.error) {
 						throw Error(resJson.message);
 					}
-					stateContext.setStatus(resJson);
+					setStatus(resJson);
 					return resJson;
 				}
 			} catch (err) {
@@ -78,18 +78,18 @@ const Profil = ({ formedUser, user }) => {
 					throw Error(res.error);
 				}
 
-				stateContext.setStatus({
+				setStatus({
 					message: "Sikeres törölted a regisztrációdat",
 					err: true,
 				});
 				signOut({ callbackUrl: `/` });
 				return res;
 			} catch (err) {
-				stateContext.setStatus({ message: err.message, error: true });
+				setStatus({ message: err.message, error: true });
 			}
 		} else {
 			setIsDelete(true);
-			stateContext.setStatus({
+			setStatus({
 				message:
 					"Biztos hogy törlöd a Profilodat? Így az általad létrehozott eseményeid is törlésre kerülnek!",
 				error: true,

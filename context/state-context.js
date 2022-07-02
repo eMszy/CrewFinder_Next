@@ -153,7 +153,7 @@ const StateContextProvider = (props) => {
 	};
 
 	const savedEventsReducer = (state, { type, payload }) => {
-		console.log("payload: ", payload);
+		console.log("payload: ", payload, type);
 		console.log("state: ", state);
 		switch (type) {
 			case "updateEvent": {

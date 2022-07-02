@@ -8,7 +8,7 @@ import control from "../../control.json";
 import classes from "./Positions.module.scss";
 
 const Positions = ({ user }) => {
-	const { setStatus } = useContext(StateContext);
+	const { setStatus, dispatchCallEvent } = useContext(StateContext);
 
 	const [department, setDepartment] = useState("");
 	const [positions, setPositions] = useState([]);
@@ -75,7 +75,16 @@ const Positions = ({ user }) => {
 				if (!res.ok || res.error) {
 					throw Error(resJson.message);
 				}
-				setStatus(resJson);
+
+				console.log("first", resJson.events);
+
+				if (resJson.events && resJson.events.length) {
+					dispatchCallEvent({
+						type: "updateEvent",
+						payload: resJson.events,
+					});
+				}
+				setStatus({ message: resJson.message });
 				return resJson;
 			} catch (err) {
 				setStatus({ message: err.message, error: true });
