@@ -24,6 +24,7 @@ const handler = async (req, res) => {
 			(pos) => pos.position._id.toString() === positionId
 		);
 		position.label = newLabel;
+		position.status = answer ? "applied" : "resigned";
 
 		const updatedUser = await user.save();
 

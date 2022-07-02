@@ -256,7 +256,9 @@ const EventCreatorSecondary = ({
 											{pickedPos.applied.map((pos) => (
 												<div
 													className={classes.acceptorDates_Candidates_Grid}
+													onClick={(e) => console.log("e", e.currentTarget.id)}
 													key={pos._id}
+													id={pos._id}
 												>
 													<div className={classes.acceptorDates_Candidates_Img}>
 														<Image

@@ -17,6 +17,7 @@ const handler = async (req, res) => {
 					],
 				},
 			},
+			{ $limit: 10 },
 			{ $project: { name: 1, image: 1 } },
 		]);
 		console.log("Direct result: ", result.length - 1);
