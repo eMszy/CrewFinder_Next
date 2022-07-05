@@ -51,6 +51,10 @@ const positionSchema = new Schema({
 		},
 	],
 	status: String,
+	chosenOne: {
+		type: Schema.Types.ObjectId,
+		ref: "User",
+	},
 });
 
 module.exports =

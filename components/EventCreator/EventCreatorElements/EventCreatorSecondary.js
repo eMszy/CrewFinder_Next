@@ -20,74 +20,91 @@ const EventCreatorSecondary = ({
 	isEventCreatorMain,
 	eventPositions,
 }) => {
-	const { setShowEventModal, selectedEvent, dispatchCallEvent } =
-		useContext(StateContext);
+	const {
+		setShowEventModal,
+		selectedEvent,
+		dispatchCallEvent,
+		acceptCandidate,
+	} = useContext(StateContext);
 
 	const [pickedDays, setPickedDays] = useState([]);
 	const [isClicked, setIsClicked] = useState(false);
 	const [clickedDate, setClickedDate] = useState(undefined);
 	const [crewMembers, setCrewMembers] = useState([]);
 	const [isTeamManagerValid, setTeamManagerValid] = useState(true);
+
 	const [pickedPos, setPickedPos] = useState();
 	const [pickedPosId, setPickedPosId] = useState();
 
+	const [theChosenOnes, setChosenOnes] = useState([
+		// {
+		// 	userId: undefined,
+		// 	posId: undefined,
+		// },
+	]);
+
+	// console.log("selectedEvent", selectedEvent.event._id);
+
 	const [selectedEventPositions, setSelectedEventPositions] = useState([]);
+
+	console.log("pickedPos", pickedPos);
+	// console.log("selectedEventPositions", selectedEventPositions);
 
 	const submitHandle = (e) => {
 		e.preventDefault();
-		saveHandle();
-		setShowEventModal(false);
-		setEventCreatroPage(true);
+		acceptCandidate(theChosenOnes);
+		// setShowEventModal(false);
+		// setEventCreatroPage(true);
 	};
-
-	const saveHandle = () => {
-		const datesArray = uniqueArray(selectedEvent.dates, pickedDays);
-		const calendarEvent = {
-			...selectedEvent,
-			dates: datesArray,
-		};
-
-		// dispatchCallEvent({ type: "update", payload: calendarEvent });
-	};
-
-	const resetHandle = () => {
-		setPickedDays([]);
-		setClickedDate(false);
-		setCrewMembers([]);
-	};
-
-	const addPosHandel = (pos, id) => {
-		const updatedPos = addPosHelper(pos, id, crewMembers);
-		if (updatedPos) {
-			setCrewMembers(updatedPos);
-		}
-	};
-
-	const changeHandle = (updatedCrewMember) => {
-		const updatedBaseCrew = crewMembers.filter(
-			(b) => b.id !== updatedCrewMember.id
+	const changeHandle = (userId) => {
+		const filteredOnes = theChosenOnes.filter(
+			(one) => one.posId !== pickedPos._id
 		);
-		setCrewMembers([...updatedBaseCrew, updatedCrewMember]);
-	};
+		setChosenOnes([...filteredOnes, { userId: userId, posId: pickedPos._id }]);
 
-	const deletPosHandel = (id, days = undefined) => {
-		const updatedPos = crewMembers.filter((p) => p.id !== id);
-		setCrewMembers(updatedPos);
-
-		const updatedPickedDays = [...pickedDays];
-		updatedPickedDays.forEach((day) => {
-			if ((days && day.id === days) || !days) {
-				const filteredCrew = day.crew.filter((crew) => crew.id !== id);
-				day.crew = filteredCrew;
-			}
+		setPickedPos((currentData) => {
+			return { ...currentData, label: 2 };
 		});
-		setPickedDays(updatedPickedDays);
 	};
 
-	const onChangeHandle = (value, id, name, day) => {
-		const filteredDay = day.filter((elem) => elem.id !== day[id].id);
-		return [...filteredDay, { ...day[id], [name]: value }];
-	};
+	// const resetHandle = () => {
+	// 	setPickedDays([]);
+	// 	setClickedDate(false);
+	// 	setCrewMembers([]);
+	// };
+
+	// const addPosHandel = (pos, id) => {
+	// 	const updatedPos = addPosHelper(pos, id, crewMembers);
+	// 	if (updatedPos) {
+	// 		setCrewMembers(updatedPos);
+	// 	}
+	// };
+
+	// const changeHandle = (updatedCrewMember) => {
+	// 	const updatedBaseCrew = crewMembers.filter(
+	// 		(b) => b.id !== updatedCrewMember.id
+	// 	);
+	// 	setCrewMembers([...updatedBaseCrew, updatedCrewMember]);
+	// };
+
+	// const deletPosHandel = (id, days = undefined) => {
+	// 	const updatedPos = crewMembers.filter((p) => p.id !== id);
+	// 	setCrewMembers(updatedPos);
+
+	// 	const updatedPickedDays = [...pickedDays];
+	// 	updatedPickedDays.forEach((day) => {
+	// 		if ((days && day.id === days) || !days) {
+	// 			const filteredCrew = day.crew.filter((crew) => crew.id !== id);
+	// 			day.crew = filteredCrew;
+	// 		}
+	// 	});
+	// 	setPickedDays(updatedPickedDays);
+	// };
+
+	// const onChangeHandle = (value, id, name, day) => {
+	// 	const filteredDay = day.filter((elem) => elem.id !== day[id].id);
+	// 	return [...filteredDay, { ...day[id], [name]: value }];
+	// };
 
 	useEffect(() => {
 		let updatedPickedDates = [...pickedDays];
@@ -244,7 +261,6 @@ const EventCreatorSecondary = ({
 												<p className={classes.Text400}>
 													Napok: {pickedPos.dates.length}
 												</p>
-												{/* {console.log("pickedPos", pickedPos)} */}
 											</div>
 										</div>
 										<div
@@ -255,10 +271,14 @@ const EventCreatorSecondary = ({
 										>
 											{pickedPos.applied.map((pos) => (
 												<div
-													className={classes.acceptorDates_Candidates_Grid}
-													onClick={(e) => console.log("e", e.currentTarget.id)}
 													key={pos._id}
-													id={pos._id}
+													className={[
+														classes.acceptorDates_Candidates_Grid,
+														// theChosenOnes.posId === pickedPos._id &&
+														// 	theChosenOnes.userId === pos._id &&
+														// 	classes.acceptorDates_Candidates_Chosen,
+													].join(" ")}
+													onClick={() => changeHandle(pos._id)}
 												>
 													<div className={classes.acceptorDates_Candidates_Img}>
 														<Image
@@ -271,7 +291,6 @@ const EventCreatorSecondary = ({
 													<div>{pos.name}</div>
 													<div className={classes.Text400}>XP: X</div>
 													<div className={classes.Text400}>Értékelés: X</div>
-													{/* {console.log("pos", pos)} */}
 												</div>
 											))}
 										</div>

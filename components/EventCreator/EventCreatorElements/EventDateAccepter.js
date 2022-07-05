@@ -172,7 +172,7 @@ const EventAccepter = () => {
 								key={event.event._id}
 								className={classes.acceptorDates_MainDiv}
 							>
-								{console.log("event", event)}
+								{/* {console.log("event", event)} */}
 								<div>
 									<p>
 										{event.event.title} {" - "} {event.event.shortTitle}

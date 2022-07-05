@@ -272,7 +272,7 @@ const EventCreatorMain = ({
 			});
 		}
 		if (department !== "Privát") {
-			// setEventCreatroPage(false);
+			setEventCreatroPage(false);
 		} else {
 			setShowEventModal(false);
 		}

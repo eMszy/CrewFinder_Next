@@ -24,6 +24,7 @@ export const StateContext = React.createContext({
 	updateEvent: (payload) => {},
 	deleteEvent: (payload) => {},
 	applicationEvent: (payload) => {},
+	acceptCandidate: (payload) => {},
 });
 
 const StateContextProvider = (props) => {
@@ -152,6 +153,30 @@ const StateContextProvider = (props) => {
 		}
 	};
 
+	const acceptCandidate = async (payload) => {
+		try {
+			const res = await fetch("/api/position/accepter", {
+				method: "PUT",
+				body: JSON.stringify(payload),
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+			const resJson = await res.json();
+			if (!res.ok || res.error) {
+				throw Error(resJson.message);
+			}
+			// dispatchCallEvent({
+			// 	type: "updateEvent",
+			// 	payload: resJson.events,
+			// });
+			setStatus(resJson);
+			return resJson;
+		} catch (err) {
+			setStatus({ message: err.message, error: true });
+		}
+	};
+
 	const savedEventsReducer = (state, { type, payload }) => {
 		console.log("payload: ", payload, type);
 		console.log("state: ", state);
@@ -273,6 +298,7 @@ const StateContextProvider = (props) => {
 				updateEvent,
 				deleteEvent,
 				applicationEvent,
+				acceptCandidate,
 			}}
 		>
 			{props.children}

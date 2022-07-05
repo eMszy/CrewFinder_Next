@@ -1,5 +1,6 @@
 import { getToken } from "next-auth/jwt";
 import User from "../../../models/user";
+import Position from "../../../models/position";
 import dbConnect from "../../../shared/dbConnect";
 
 const handler = async (req, res) => {
@@ -26,7 +27,14 @@ const handler = async (req, res) => {
 		position.label = newLabel;
 		position.status = answer ? "applied" : "resigned";
 
+		const pos = await Position.findById(positionId);
+		if (answer) {
+			pos.chosenOne = token.id;
+		} else {
+			pos.chosenOne = undefined;
+		}
 		const updatedUser = await user.save();
+		await pos.save();
 
 		const message = answer
 			? { message: "Sikeresen jelentkeztél" }
