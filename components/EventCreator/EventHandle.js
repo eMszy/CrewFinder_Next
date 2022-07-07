@@ -7,7 +7,7 @@ import { MdDelete } from "react-icons/md";
 import { StateContext } from "../../context/state-context";
 import EventCreatorMain from "./EventCreatorElements/EventCreatorMain";
 import EventCreatorSecondary from "./EventCreatorElements/EventCreatorSecondary";
-import EventAccepter from "./EventCreatorElements/EventDateAccepter";
+import EventAccepter from "./EventCreatorElements/EventAccepter";
 import Spinner from "../UI/Spinner/Spinner";
 
 import control from "../../control.json";

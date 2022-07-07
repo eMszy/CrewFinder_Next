@@ -11,6 +11,7 @@ import control from "../../../control.json";
 
 import Button from "../../UI/Button/Button";
 import classes from "./../EventHandle.module.scss";
+import { fetchNumberofUsers, fetchUserFormDirecInput } from "./utility";
 
 const EventICreatorTeamManager = ({
 	basePositions,
@@ -43,41 +44,7 @@ const EventICreatorTeamManager = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [basePositions]);
 
-	const fetchUser = async (e, posName) => {
-		try {
-			const res = await fetch(
-				`/api/user/search?input=${e.target.value}&pos=${posName}`
-			);
-			const dataJson = await res.json();
-
-			if (!res.ok || res.error) {
-				throw Error(resJson.message);
-			}
-
-			const filteredData = dataJson.filter(
-				(d) => d._id.toString() !== session.id
-			);
-			setFetchedUsers(filteredData);
-		} catch (err) {
-			console.error("Error", err);
-			throw new Error({ message: err.message });
-		}
-	};
-
-	const fetchNumberofUsers = async (pos, attribute) => {
-		try {
-			const data = await fetch(
-				`/api/user/countMatches?pos=${pos}&attribute=${attribute}`
-			);
-			const dataJson = await data.json();
-			return dataJson;
-		} catch (err) {
-			console.error("Error", err);
-			throw new Error({ message: err.message });
-		}
-	};
-
-	const directInputHandler = (e, f, crewMember = crewMemberTarget) => {
+	const directInputHandler = async (e, f, crewMember = crewMemberTarget) => {
 		const target = e.currentTarget;
 		if (target.type === "text") {
 			changeHandle({
@@ -87,7 +54,9 @@ const EventICreatorTeamManager = ({
 				_id: null,
 			});
 			if (target.value.length > 2) {
-				fetchUser(e, crewMember.posName);
+				setFetchedUsers(
+					await fetchUserFormDirecInput(e.target.value, crewMember.posName)
+				);
 			} else {
 				setFetchedUsers([]);
 			}

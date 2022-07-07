@@ -1,0 +1,2223 @@
+[{
+  "_id": {
+    "$oid": "62bc540e89f92b22d7bfd842"
+  },
+  "eventId": {
+    "$oid": "62bc540e89f92b22d7bfd840"
+  },
+  "posName": "Key Set PA",
+  "invition": {
+    "type": "direct",
+    "attribute": []
+  },
+  "dates": [
+    {
+      "id": 20220615,
+      "startTime": {
+        "$numberLong": "1655265600000"
+      },
+      "endTime": {
+        "$numberLong": "1655308800000"
+      }
+    },
+    {
+      "id": 20220619,
+      "startTime": {
+        "$numberLong": "1655611200000"
+      },
+      "endTime": {
+        "$numberLong": "1655654400000"
+      }
+    },
+    {
+      "id": 20220616,
+      "startTime": {
+        "$numberLong": "1655352000000"
+      },
+      "endTime": {
+        "$numberLong": "1655395200000"
+      }
+    },
+    {
+      "id": 20220617,
+      "startTime": {
+        "$numberLong": "1655438400000"
+      },
+      "endTime": {
+        "$numberLong": "1655481600000"
+      }
+    },
+    {
+      "id": 20220618,
+      "startTime": {
+        "$numberLong": "1655524800000"
+      },
+      "endTime": {
+        "$numberLong": "1655568000000"
+      }
+    }
+  ],
+  "users": [
+    {
+      "$oid": "62bc4a3f89f92b22d7bfd57f"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62bc540e89f92b22d7bfd843"
+  },
+  "eventId": {
+    "$oid": "62bc540e89f92b22d7bfd840"
+  },
+  "posName": "Cast PA",
+  "invition": {
+    "type": "open",
+    "attribute": []
+  },
+  "dates": [
+    {
+      "id": 20220615,
+      "startTime": {
+        "$numberLong": "1655265600000"
+      },
+      "endTime": {
+        "$numberLong": "1655308800000"
+      }
+    },
+    {
+      "id": 20220619,
+      "startTime": {
+        "$numberLong": "1655611200000"
+      },
+      "endTime": {
+        "$numberLong": "1655654400000"
+      }
+    },
+    {
+      "id": 20220616,
+      "startTime": {
+        "$numberLong": "1655352000000"
+      },
+      "endTime": {
+        "$numberLong": "1655395200000"
+      }
+    },
+    {
+      "id": 20220617,
+      "startTime": {
+        "$numberLong": "1655438400000"
+      },
+      "endTime": {
+        "$numberLong": "1655481600000"
+      }
+    },
+    {
+      "id": 20220618,
+      "startTime": {
+        "$numberLong": "1655524800000"
+      },
+      "endTime": {
+        "$numberLong": "1655568000000"
+      }
+    }
+  ],
+  "users": [
+    {
+      "$oid": "62bc4a3f89f92b22d7bfd57f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5450"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5451"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5452"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5453"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5454"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5455"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5456"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5457"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5458"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5459"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545a"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545b"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545c"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545d"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545e"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5460"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5461"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5462"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5463"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5464"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5465"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5466"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5467"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5468"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5469"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546a"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546b"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546c"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546d"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546e"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5470"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5471"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5472"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5473"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5474"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5475"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5476"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5477"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5478"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f549f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a0"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a1"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a2"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a3"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a4"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a5"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a6"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a7"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a8"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a9"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54aa"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54ab"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54ac"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54ad"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54ae"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54af"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54b0"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54b1"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54b2"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54b3"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62bc540e89f92b22d7bfd841"
+  },
+  "eventId": {
+    "$oid": "62bc540e89f92b22d7bfd840"
+  },
+  "posName": "1st AD",
+  "invition": {
+    "type": "creator",
+    "attribute": []
+  },
+  "dates": [
+    {
+      "id": 20220615,
+      "startTime": {
+        "$numberLong": "1655265600000"
+      },
+      "endTime": {
+        "$numberLong": "1655308800000"
+      }
+    },
+    {
+      "id": 20220619,
+      "startTime": {
+        "$numberLong": "1655611200000"
+      },
+      "endTime": {
+        "$numberLong": "1655654400000"
+      }
+    },
+    {
+      "id": 20220616,
+      "startTime": {
+        "$numberLong": "1655352000000"
+      },
+      "endTime": {
+        "$numberLong": "1655395200000"
+      }
+    },
+    {
+      "id": 20220617,
+      "startTime": {
+        "$numberLong": "1655438400000"
+      },
+      "endTime": {
+        "$numberLong": "1655481600000"
+      }
+    },
+    {
+      "id": 20220618,
+      "startTime": {
+        "$numberLong": "1655524800000"
+      },
+      "endTime": {
+        "$numberLong": "1655568000000"
+      }
+    }
+  ],
+  "users": [
+    {
+      "$oid": "62bc4a2e89f92b22d7bfd57a"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62bc579889f92b22d7bfd8ba"
+  },
+  "eventId": {
+    "$oid": "62bc579889f92b22d7bfd8b9"
+  },
+  "posName": "1st AD",
+  "invition": {
+    "type": "creator",
+    "attribute": []
+  },
+  "dates": [
+    {
+      "id": 20220622,
+      "startTime": {
+        "$numberLong": "1655870400000"
+      },
+      "endTime": {
+        "$numberLong": "1655913600000"
+      }
+    },
+    {
+      "id": 20220625,
+      "startTime": {
+        "$numberLong": "1656129600000"
+      },
+      "endTime": {
+        "$numberLong": "1656172800000"
+      }
+    },
+    {
+      "id": 20220624,
+      "startTime": {
+        "$numberLong": "1656043200000"
+      },
+      "endTime": {
+        "$numberLong": "1656086400000"
+      }
+    }
+  ],
+  "users": [
+    {
+      "$oid": "62bc4a3f89f92b22d7bfd57f"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62bc579889f92b22d7bfd8bb"
+  },
+  "eventId": {
+    "$oid": "62bc579889f92b22d7bfd8b9"
+  },
+  "posName": "Cast PA",
+  "invition": {
+    "type": "open",
+    "attribute": []
+  },
+  "dates": [
+    {
+      "id": 20220622,
+      "startTime": {
+        "$numberLong": "1655870400000"
+      },
+      "endTime": {
+        "$numberLong": "1655913600000"
+      }
+    },
+    {
+      "id": 20220625,
+      "startTime": {
+        "$numberLong": "1656129600000"
+      },
+      "endTime": {
+        "$numberLong": "1656172800000"
+      }
+    },
+    {
+      "id": 20220624,
+      "startTime": {
+        "$numberLong": "1656043200000"
+      },
+      "endTime": {
+        "$numberLong": "1656086400000"
+      }
+    }
+  ],
+  "users": [
+    {
+      "$oid": "62bc4a2e89f92b22d7bfd57a"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5450"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5451"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5452"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5453"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5454"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5455"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5456"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5457"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5458"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5459"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545a"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545b"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545c"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545d"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545e"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5460"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5461"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5462"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5463"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5464"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5465"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5466"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5467"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5468"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5469"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546a"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546b"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546c"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546d"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546e"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5470"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5471"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5472"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5473"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5474"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5475"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5476"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5477"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5478"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f549f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a0"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a1"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a2"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a3"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a4"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a5"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a6"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a7"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a8"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a9"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54aa"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54ab"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54ac"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54ad"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54ae"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54af"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54b0"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54b1"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54b2"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54b3"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62bc579889f92b22d7bfd8bd"
+  },
+  "eventId": {
+    "$oid": "62bc579889f92b22d7bfd8b9"
+  },
+  "posName": "Key 2nd AD",
+  "invition": {
+    "type": "direct",
+    "attribute": []
+  },
+  "dates": [
+    {
+      "id": 20220622,
+      "startTime": {
+        "$numberLong": "1655870400000"
+      },
+      "endTime": {
+        "$numberLong": "1655913600000"
+      }
+    },
+    {
+      "id": 20220625,
+      "startTime": {
+        "$numberLong": "1656129600000"
+      },
+      "endTime": {
+        "$numberLong": "1656172800000"
+      }
+    },
+    {
+      "id": 20220624,
+      "startTime": {
+        "$numberLong": "1656043200000"
+      },
+      "endTime": {
+        "$numberLong": "1656086400000"
+      }
+    }
+  ],
+  "users": [
+    {
+      "$oid": "62bc4a2e89f92b22d7bfd57a"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62bc579889f92b22d7bfd8bc"
+  },
+  "eventId": {
+    "$oid": "62bc579889f92b22d7bfd8b9"
+  },
+  "posName": "Floor 2nd AD",
+  "invition": {
+    "type": "attribute",
+    "attribute": []
+  },
+  "dates": [
+    {
+      "id": 20220622,
+      "startTime": {
+        "$numberLong": "1655870400000"
+      },
+      "endTime": {
+        "$numberLong": "1655913600000"
+      }
+    },
+    {
+      "id": 20220625,
+      "startTime": {
+        "$numberLong": "1656129600000"
+      },
+      "endTime": {
+        "$numberLong": "1656172800000"
+      }
+    },
+    {
+      "id": 20220624,
+      "startTime": {
+        "$numberLong": "1656043200000"
+      },
+      "endTime": {
+        "$numberLong": "1656086400000"
+      }
+    }
+  ],
+  "users": [
+    {
+      "$oid": "62bc4a2e89f92b22d7bfd57a"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545d"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545e"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5460"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5461"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5462"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5463"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5464"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5465"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5466"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5467"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5468"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5469"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546a"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546b"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546c"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546d"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546e"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5470"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5471"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5472"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5473"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5474"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5475"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5476"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5477"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5478"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5479"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62bc633a89f92b22d7bfda1a"
+  },
+  "eventId": {
+    "$oid": "62bc633a89f92b22d7bfda19"
+  },
+  "posName": "Privát",
+  "invition": {
+    "type": "creator",
+    "attribute": []
+  },
+  "dates": [
+    {
+      "id": 20220607,
+      "startTime": {
+        "$numberLong": "1654574400000"
+      },
+      "endTime": {
+        "$numberLong": "1654617600000"
+      }
+    }
+  ],
+  "users": [
+    {
+      "$oid": "62bc4a2e89f92b22d7bfd57a"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62c034edd2314499e51da4ac"
+  },
+  "eventId": {
+    "$oid": "62c034edd2314499e51da4a9"
+  },
+  "posName": "Floor 2nd AD",
+  "invition": {
+    "type": "open",
+    "attribute": []
+  },
+  "dates": [
+    {
+      "id": 20220713,
+      "startTime": {
+        "$numberLong": "1657684800000"
+      },
+      "endTime": {
+        "$numberLong": "1657728000000"
+      }
+    },
+    {
+      "id": 20220721,
+      "startTime": {
+        "$numberLong": "1658376000000"
+      },
+      "endTime": {
+        "$numberLong": "1658419200000"
+      }
+    },
+    {
+      "id": 20220724,
+      "startTime": {
+        "$numberLong": "1658635200000"
+      },
+      "endTime": {
+        "$numberLong": "1658678400000"
+      }
+    },
+    {
+      "id": 20220722,
+      "startTime": {
+        "$numberLong": "1658462400000"
+      },
+      "endTime": {
+        "$numberLong": "1658505600000"
+      }
+    },
+    {
+      "id": 20220719,
+      "startTime": {
+        "$numberLong": "1658203200000"
+      },
+      "endTime": {
+        "$numberLong": "1658246400000"
+      }
+    },
+    {
+      "id": 20220720,
+      "startTime": {
+        "$numberLong": "1658289600000"
+      },
+      "endTime": {
+        "$numberLong": "1658332800000"
+      }
+    }
+  ],
+  "users": [
+    {
+      "$oid": "62bc4a3f89f92b22d7bfd57f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545d"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545e"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5460"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5461"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5462"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5463"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5464"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5465"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5466"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5467"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5468"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5469"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546a"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546b"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546c"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546d"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546e"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5470"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5471"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5472"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5473"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5474"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5475"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5476"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5477"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5478"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5479"
+    },
+    {
+      "$oid": "62bc5eed89f92b22d7bfda10"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62c034edd2314499e51da4ab"
+  },
+  "eventId": {
+    "$oid": "62c034edd2314499e51da4a9"
+  },
+  "posName": "Base PA",
+  "invition": {
+    "type": "open",
+    "attribute": []
+  },
+  "dates": [
+    {
+      "id": 20220713,
+      "startTime": {
+        "$numberLong": "1657684800000"
+      },
+      "endTime": {
+        "$numberLong": "1657728000000"
+      }
+    },
+    {
+      "id": 20220721,
+      "startTime": {
+        "$numberLong": "1658376000000"
+      },
+      "endTime": {
+        "$numberLong": "1658419200000"
+      }
+    },
+    {
+      "id": 20220724,
+      "startTime": {
+        "$numberLong": "1658635200000"
+      },
+      "endTime": {
+        "$numberLong": "1658678400000"
+      }
+    },
+    {
+      "id": 20220722,
+      "startTime": {
+        "$numberLong": "1658462400000"
+      },
+      "endTime": {
+        "$numberLong": "1658505600000"
+      }
+    },
+    {
+      "id": 20220719,
+      "startTime": {
+        "$numberLong": "1658203200000"
+      },
+      "endTime": {
+        "$numberLong": "1658246400000"
+      }
+    },
+    {
+      "id": 20220720,
+      "startTime": {
+        "$numberLong": "1658289600000"
+      },
+      "endTime": {
+        "$numberLong": "1658332800000"
+      }
+    }
+  ],
+  "users": [
+    {
+      "$oid": "62bc4a3f89f92b22d7bfd57f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546e"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5470"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5471"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5472"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5473"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5474"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5475"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5476"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5477"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5478"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5479"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f547a"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f547b"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f547c"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f547d"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f547e"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f547f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5480"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5481"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5482"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5483"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5484"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5485"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5486"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5487"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5488"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5489"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f548a"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f548b"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f548c"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f548d"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f548e"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f548f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5490"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5491"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5492"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5493"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5494"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5495"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5496"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5497"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5498"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5499"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f549a"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f549b"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f549c"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f549d"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f549e"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f549f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a0"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a1"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a2"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a3"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a4"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a5"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a6"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a7"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a8"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a9"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54aa"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54ab"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54ac"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54ad"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54ae"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54af"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54b0"
+    },
+    {
+      "$oid": "62bc5eed89f92b22d7bfda10"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62c034edd2314499e51da4aa"
+  },
+  "eventId": {
+    "$oid": "62c034edd2314499e51da4a9"
+  },
+  "posName": "1st AD",
+  "invition": {
+    "type": "creator",
+    "attribute": []
+  },
+  "dates": [
+    {
+      "id": 20220713,
+      "startTime": {
+        "$numberLong": "1657684800000"
+      },
+      "endTime": {
+        "$numberLong": "1657728000000"
+      }
+    },
+    {
+      "id": 20220721,
+      "startTime": {
+        "$numberLong": "1658376000000"
+      },
+      "endTime": {
+        "$numberLong": "1658419200000"
+      }
+    },
+    {
+      "id": 20220724,
+      "startTime": {
+        "$numberLong": "1658635200000"
+      },
+      "endTime": {
+        "$numberLong": "1658678400000"
+      }
+    },
+    {
+      "id": 20220722,
+      "startTime": {
+        "$numberLong": "1658462400000"
+      },
+      "endTime": {
+        "$numberLong": "1658505600000"
+      }
+    },
+    {
+      "id": 20220719,
+      "startTime": {
+        "$numberLong": "1658203200000"
+      },
+      "endTime": {
+        "$numberLong": "1658246400000"
+      }
+    },
+    {
+      "id": 20220720,
+      "startTime": {
+        "$numberLong": "1658289600000"
+      },
+      "endTime": {
+        "$numberLong": "1658332800000"
+      }
+    }
+  ],
+  "users": [
+    {
+      "$oid": "62bc4a2e89f92b22d7bfd57a"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62c034edd2314499e51da4ad"
+  },
+  "eventId": {
+    "$oid": "62c034edd2314499e51da4a9"
+  },
+  "posName": "3rd AD Base",
+  "invition": {
+    "type": "open",
+    "attribute": []
+  },
+  "dates": [
+    {
+      "id": 20220713,
+      "startTime": {
+        "$numberLong": "1657684800000"
+      },
+      "endTime": {
+        "$numberLong": "1657728000000"
+      }
+    },
+    {
+      "id": 20220721,
+      "startTime": {
+        "$numberLong": "1658376000000"
+      },
+      "endTime": {
+        "$numberLong": "1658419200000"
+      }
+    },
+    {
+      "id": 20220724,
+      "startTime": {
+        "$numberLong": "1658635200000"
+      },
+      "endTime": {
+        "$numberLong": "1658678400000"
+      }
+    },
+    {
+      "id": 20220722,
+      "startTime": {
+        "$numberLong": "1658462400000"
+      },
+      "endTime": {
+        "$numberLong": "1658505600000"
+      }
+    },
+    {
+      "id": 20220719,
+      "startTime": {
+        "$numberLong": "1658203200000"
+      },
+      "endTime": {
+        "$numberLong": "1658246400000"
+      }
+    },
+    {
+      "id": 20220720,
+      "startTime": {
+        "$numberLong": "1658289600000"
+      },
+      "endTime": {
+        "$numberLong": "1658332800000"
+      }
+    }
+  ],
+  "users": [
+    {
+      "$oid": "62bc4a3f89f92b22d7bfd57f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5450"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5451"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5452"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5453"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5454"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5455"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5456"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5457"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5458"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5459"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545a"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545b"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545c"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545d"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545e"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5460"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5461"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5462"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5463"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5464"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5465"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5466"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5467"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5468"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5469"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546a"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5493"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5494"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5495"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5496"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5497"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5498"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5499"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f549a"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f549b"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f549c"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f549d"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f549e"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f549f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a0"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a1"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a2"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a3"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a4"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a5"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a6"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a7"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a8"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a9"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54aa"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54ab"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54ac"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54ad"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54ae"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54af"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54b0"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54b1"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54b2"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54b3"
+    },
+    {
+      "$oid": "62bc5eed89f92b22d7bfda10"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62c47c3362910db2ed5ac3a1"
+  },
+  "eventId": {
+    "$oid": "62c47c3362910db2ed5ac3a0"
+  },
+  "posName": "1st AD",
+  "invition": {
+    "type": "creator",
+    "attribute": []
+  },
+  "dates": [
+    {
+      "id": 20220730,
+      "startTime": {
+        "$numberLong": "1659153600000"
+      },
+      "endTime": {
+        "$numberLong": "1659196800000"
+      }
+    },
+    {
+      "id": 20220729,
+      "startTime": {
+        "$numberLong": "1659067200000"
+      },
+      "endTime": {
+        "$numberLong": "1659110400000"
+      }
+    }
+  ],
+  "users": [
+    {
+      "$oid": "62bc4a2e89f92b22d7bfd57a"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62c47c3362910db2ed5ac3a2"
+  },
+  "eventId": {
+    "$oid": "62c47c3362910db2ed5ac3a0"
+  },
+  "posName": "Crowd 2nd AD",
+  "invition": {
+    "type": "open",
+    "attribute": []
+  },
+  "dates": [
+    {
+      "id": 20220730,
+      "startTime": {
+        "$numberLong": "1659153600000"
+      },
+      "endTime": {
+        "$numberLong": "1659196800000"
+      }
+    },
+    {
+      "id": 20220729,
+      "startTime": {
+        "$numberLong": "1659067200000"
+      },
+      "endTime": {
+        "$numberLong": "1659110400000"
+      }
+    }
+  ],
+  "users": [
+    {
+      "$oid": "62bc4a3f89f92b22d7bfd57f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5450"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5451"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5452"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5453"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5454"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5455"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5456"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5457"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5458"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5459"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545a"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545b"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5492"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5493"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5494"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5495"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5496"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5497"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5498"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5499"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f549a"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f549b"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f549c"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f549d"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f549e"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f549f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a0"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a1"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a2"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a3"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a4"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a5"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a6"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a7"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a8"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a9"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54aa"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54ab"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54ac"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54ad"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54ae"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54af"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54b0"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54b1"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54b2"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54b3"
+    },
+    {
+      "$oid": "62bc5eed89f92b22d7bfda10"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    }
+  ],
+  "__v": 0,
+  "chosenOne": {
+    "$oid": "62bd8c0e815ac09b5693dc27"
+  }
+},{
+  "_id": {
+    "$oid": "62c47c8962910db2ed5ac3e5"
+  },
+  "eventId": {
+    "$oid": "62c47c8962910db2ed5ac3e4"
+  },
+  "posName": "1st AD",
+  "invition": {
+    "type": "creator",
+    "attribute": []
+  },
+  "dates": [
+    {
+      "id": 20220726,
+      "startTime": {
+        "$numberLong": "1658808000000"
+      },
+      "endTime": {
+        "$numberLong": "1658851200000"
+      }
+    }
+  ],
+  "users": [
+    {
+      "$oid": "62bc4a2e89f92b22d7bfd57a"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62c47c8962910db2ed5ac3e6"
+  },
+  "eventId": {
+    "$oid": "62c47c8962910db2ed5ac3e4"
+  },
+  "posName": "Cast PA",
+  "invition": {
+    "type": "open",
+    "attribute": []
+  },
+  "dates": [
+    {
+      "id": 20220726,
+      "startTime": {
+        "$numberLong": "1658808000000"
+      },
+      "endTime": {
+        "$numberLong": "1658851200000"
+      }
+    }
+  ],
+  "users": [
+    {
+      "$oid": "62bc4a3f89f92b22d7bfd57f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5450"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5451"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5452"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5453"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5454"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5455"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5456"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5457"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5458"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5459"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545a"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545b"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545c"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545d"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545e"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f545f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5460"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5461"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5462"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5463"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5464"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5465"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5466"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5467"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5468"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5469"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546a"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546b"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546c"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546d"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546e"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f546f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5470"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5471"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5472"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5473"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5474"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5475"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5476"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5477"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f5478"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f549f"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a0"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a1"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a2"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a3"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a4"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a5"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a6"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a7"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a8"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54a9"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54aa"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54ab"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54ac"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54ad"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54ae"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54af"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54b0"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54b1"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54b2"
+    },
+    {
+      "$oid": "62bc4ddf79a87b79c66f54b3"
+    },
+    {
+      "$oid": "62bc5eed89f92b22d7bfda10"
+    },
+    {
+      "$oid": "62bd8c0e815ac09b5693dc27"
+    }
+  ],
+  "__v": 0,
+  "chosenOne": {
+    "$oid": "62bc4a3f89f92b22d7bfd57f"
+  }
+}]

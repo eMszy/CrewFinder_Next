@@ -76,7 +76,7 @@ const EventAccepter = () => {
 				setFilteredUserEvents(filteredEvents.sort((a, b) => a.label - b.label));
 			} else {
 				const thefullEvent = theUserEvents.filter(
-					(ev) => ev._id === theEvent._id
+					(ev) => ev.event._id === theEvent.event._id
 				);
 				setFilteredUserEvents(thefullEvent);
 			}
@@ -148,7 +148,7 @@ const EventAccepter = () => {
 		if (theEvent && theEvent.event._id == eventId) {
 			if (answer && pickedPos && pickedPos.label > 3) {
 				disable = false;
-			} else if (!answer && pickedPos && pickedPos.label < 4) {
+			} else if (!answer && pickedPos && pickedPos.label !== 6) {
 				disable = false;
 			}
 		}

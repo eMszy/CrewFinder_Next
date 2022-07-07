@@ -154,8 +154,9 @@ const StateContextProvider = (props) => {
 	};
 
 	const acceptCandidate = async (payload) => {
+		console.log("payload", payload);
 		try {
-			const res = await fetch("/api/position/accepter", {
+			const res = await fetch("/api/position/changeHandler", {
 				method: "PUT",
 				body: JSON.stringify(payload),
 				headers: {
@@ -166,6 +167,8 @@ const StateContextProvider = (props) => {
 			if (!res.ok || res.error) {
 				throw Error(resJson.message);
 			}
+
+			console.log("resJson", resJson);
 			// dispatchCallEvent({
 			// 	type: "updateEvent",
 			// 	payload: resJson.events,

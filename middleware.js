@@ -1,12 +1,12 @@
 import { getToken } from "next-auth/jwt";
-// eslint-disable-next-line @next/next/no-server-import-in-page
 import { NextResponse } from "next/server";
 
 export const middleware = async (req) => {
 	if (
 		req.nextUrl.pathname.startsWith("/home") ||
 		req.nextUrl.pathname.startsWith("/api/event") ||
-		req.nextUrl.pathname.startsWith("/api/user")
+		req.nextUrl.pathname.startsWith("/api/user") ||
+		req.nextUrl.pathname.startsWith("/api/position")
 	) {
 		const token = await getToken({
 			req,

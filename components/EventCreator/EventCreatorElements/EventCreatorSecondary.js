@@ -3,16 +3,16 @@ import dayjs from "dayjs";
 import Image from "next/image";
 
 import { StateContext } from "../../../context/state-context";
+import NewPosPanel from "./EventCreatorComponents/NewPosPanel";
 import SmallCalendar from "../../Calendar/CalendarElements/SmallCalendar";
 import Button from "../../UI/Button/Button";
 import Spinner from "../../UI/Spinner/Spinner";
-import { addPosHelper, uniqueArray } from "./utility";
 
 import control from "../../../control.json";
 
 import classes from "./../EventHandle.module.scss";
 import EventICreatorTeamManager from "./EventICreatorTeamManager";
-import { findColor } from "../../../shared/utility";
+import { fetchNumberofUsers, getBackgorund } from "./utility";
 
 const EventCreatorSecondary = ({
 	department,
@@ -25,126 +25,98 @@ const EventCreatorSecondary = ({
 		selectedEvent,
 		dispatchCallEvent,
 		acceptCandidate,
+		setStatus,
 	} = useContext(StateContext);
 
-	const [pickedDays, setPickedDays] = useState([]);
-	const [isClicked, setIsClicked] = useState(false);
-	const [clickedDate, setClickedDate] = useState(undefined);
-	const [crewMembers, setCrewMembers] = useState([]);
 	const [isTeamManagerValid, setTeamManagerValid] = useState(true);
 
+	const [clickedDate, setClickedDate] = useState(undefined);
+	const [isClicked, setIsClicked] = useState(false);
 	const [pickedPos, setPickedPos] = useState();
 	const [pickedPosId, setPickedPosId] = useState();
-
-	const [theChosenOnes, setChosenOnes] = useState([
-		// {
-		// 	userId: undefined,
-		// 	posId: undefined,
-		// },
-	]);
-
-	// console.log("selectedEvent", selectedEvent.event._id);
-
 	const [selectedEventPositions, setSelectedEventPositions] = useState([]);
-
-	console.log("pickedPos", pickedPos);
-	// console.log("selectedEventPositions", selectedEventPositions);
+	const [theUpdatedPos, setUpdatedPos] = useState([]);
+	const [isNewPos, setIsNewPos] = useState(false);
+	const [datesHelper, setDatesHelper] = useState([]);
+	const [labelHandel, setLabelHandel] = useState(1);
 
 	const submitHandle = (e) => {
 		e.preventDefault();
-		acceptCandidate(theChosenOnes);
-		// setShowEventModal(false);
-		// setEventCreatroPage(true);
+		acceptCandidate(theUpdatedPos);
+		setShowEventModal(false);
 	};
-	const changeHandle = (userId) => {
-		const filteredOnes = theChosenOnes.filter(
+
+	const changeHandle = (userId = undefined, newDates) => {
+		if (pickedPos.label === 1) {
+			return;
+		}
+
+		const filteredOnes = theUpdatedPos.filter(
 			(one) => one.posId !== pickedPos._id
 		);
-		setChosenOnes([...filteredOnes, { userId: userId, posId: pickedPos._id }]);
 
+		if (userId) {
+			setUpdatedPos([
+				...filteredOnes,
+				{ userId: userId, posId: pickedPos._id },
+			]);
+		} else {
+			setUpdatedPos([
+				...filteredOnes,
+				{ posId: pickedPos._id, dates: newDates, userId: undefined },
+			]);
+		}
+
+		let newLabel = 5;
+		if (userId) {
+			newLabel = 2;
+		}
 		setPickedPos((currentData) => {
-			return { ...currentData, label: 2 };
+			return { ...currentData, label: newLabel, dates: newDates };
 		});
 	};
-
-	// const resetHandle = () => {
-	// 	setPickedDays([]);
-	// 	setClickedDate(false);
-	// 	setCrewMembers([]);
-	// };
-
-	// const addPosHandel = (pos, id) => {
-	// 	const updatedPos = addPosHelper(pos, id, crewMembers);
-	// 	if (updatedPos) {
-	// 		setCrewMembers(updatedPos);
-	// 	}
-	// };
-
-	// const changeHandle = (updatedCrewMember) => {
-	// 	const updatedBaseCrew = crewMembers.filter(
-	// 		(b) => b.id !== updatedCrewMember.id
-	// 	);
-	// 	setCrewMembers([...updatedBaseCrew, updatedCrewMember]);
-	// };
-
-	// const deletPosHandel = (id, days = undefined) => {
-	// 	const updatedPos = crewMembers.filter((p) => p.id !== id);
-	// 	setCrewMembers(updatedPos);
-
-	// 	const updatedPickedDays = [...pickedDays];
-	// 	updatedPickedDays.forEach((day) => {
-	// 		if ((days && day.id === days) || !days) {
-	// 			const filteredCrew = day.crew.filter((crew) => crew.id !== id);
-	// 			day.crew = filteredCrew;
-	// 		}
-	// 	});
-	// 	setPickedDays(updatedPickedDays);
-	// };
-
-	// const onChangeHandle = (value, id, name, day) => {
-	// 	const filteredDay = day.filter((elem) => elem.id !== day[id].id);
-	// 	return [...filteredDay, { ...day[id], [name]: value }];
-	// };
-
-	useEffect(() => {
-		let updatedPickedDates = [...pickedDays];
-		updatedPickedDates.forEach((pday) => {
-			pday.crew = uniqueArray(pday?.crew, crewMembers);
-		});
-		setPickedDays(updatedPickedDates);
-		// eslint-disable-next-line
-	}, [isClicked, crewMembers]);
 
 	useEffect(() => {
 		if (clickedDate) {
-			let updatedpickedDays = pickedDays;
+			let updatedPosDays = datesHelper;
 
-			const pickedDay = selectedEvent.dates.find(
+			const isEventIncludes = selectedEvent.event.dates.find(
 				(d) => d.id === +dayjs(clickedDate).format("YYYYMMDD")
 			);
 
-			if (pickedDay) {
-				let isExist = updatedpickedDays.find((d) => d.id === pickedDay.id);
+			if (isEventIncludes) {
+				const isPosIncludes = datesHelper.find(
+					(d) => d.id === isEventIncludes.id
+				);
 
-				if (!isExist) {
-					updatedpickedDays.push(pickedDay);
+				if (isPosIncludes) {
+					updatedPosDays = datesHelper.filter(
+						(d) => d.id !== isEventIncludes.id
+					);
 				} else {
-					updatedpickedDays = pickedDays.filter((d) => d.id !== pickedDay.id);
+					updatedPosDays.push(isEventIncludes);
 				}
 
-				setClickedDate();
-				setPickedDays(updatedpickedDays);
+				if (pickedPos) {
+					changeHandle(undefined, updatedPosDays);
+				}
+				setDatesHelper(updatedPosDays);
+			} else {
+				setStatus({ message: "Nem az esemény napja", info: true });
 			}
+			setClickedDate(undefined);
 		}
 		// eslint-disable-next-line
-	}, [isClicked]);
+	}, [isClicked, clickedDate]);
 
 	useEffect(() => {
 		if (pickedPosId) {
 			const thePosition = selectedEventPositions.find(
-				(p) => p._id.toString() === pickedPosId.toString()
+				(p) => p.id.toString() === pickedPosId.toString()
 			);
 			setPickedPos(thePosition);
+			setDatesHelper(thePosition.dates);
+			setIsNewPos(false);
 		}
 		// eslint-disable-next-line
 	}, [pickedPosId]);
@@ -191,6 +163,7 @@ const EventCreatorSecondary = ({
 			});
 
 			selectedPositions.push({
+				id: pos.posName + Math.floor(Math.random() * (9999 - 1000) + 1),
 				_id: pos._id,
 				dates: pos.dates,
 				invition: pos.invition,
@@ -235,32 +208,34 @@ const EventCreatorSecondary = ({
 							<div
 								className={[
 									classes.acceptorDates_MainDiv,
-									!pickedPos && classes.Zero_Height,
+									// pickedPos && classes.Zero_Height,
 								].join(" ")}
-								style={{
-									background: `linear-gradient(135deg, ${findColor(1)
-										.slice(0, -4)
-										.concat("90%)")} 35%, ${findColor(pickedPos.label)
-										.slice(0, -4)
-										.concat("90%)")} 50%`,
-								}}
+								style={getBackgorund(pickedPos.label)}
 							>
-								{!pickedPos && <p>Kiválasztott pozició</p>}
 								<div className={classes.acceptorDates_SubDiv}>
 									<div className={classes.acceptorDates}>
 										<div className={classes.acceptorDates_addPos}>
 											<div className={classes.acceptorDates_Pos}>
-												<p>{pickedPos.posName}</p>
-												<p className={classes.Text400}>Visszaigazolt: Nem</p>
-												<p className={classes.Text400}>
-													Jelentkeztek: {pickedPos.applied.length}
-												</p>
-												<p className={classes.Text400}>
-													Nem jelzett: {pickedPos.invited.length}
-												</p>
-												<p className={classes.Text400}>
-													Napok: {pickedPos.dates.length}
-												</p>
+												<>
+													<p>{pickedPos.posName}</p>
+
+													<p className={classes.Text400}>
+														Visszaigazolt: {labelHandel < 3 ? "Igen" : "Nem"}
+													</p>
+													{labelHandel > 2 && (
+														<>
+															<p className={classes.Text400}>
+																Jelentkeztek: {pickedPos.applied.length}
+															</p>
+															<p className={classes.Text400}>
+																Nem jelzett: {pickedPos.invited.length}
+															</p>
+														</>
+													)}
+													<p className={classes.Text400}>
+														Napok: {datesHelper.length}
+													</p>
+												</>
 											</div>
 										</div>
 										<div
@@ -269,34 +244,74 @@ const EventCreatorSecondary = ({
 												classes.acceptorDates_Candidates,
 											].join(" ")}
 										>
-											{pickedPos.applied.map((pos) => (
-												<div
-													key={pos._id}
-													className={[
-														classes.acceptorDates_Candidates_Grid,
-														// theChosenOnes.posId === pickedPos._id &&
-														// 	theChosenOnes.userId === pos._id &&
-														// 	classes.acceptorDates_Candidates_Chosen,
-													].join(" ")}
-													onClick={() => changeHandle(pos._id)}
-												>
-													<div className={classes.acceptorDates_Candidates_Img}>
-														<Image
-															src={pos.image}
-															width={35}
-															height={35}
-															alt={pos.name}
-														/>
-													</div>
-													<div>{pos.name}</div>
-													<div className={classes.Text400}>XP: X</div>
-													<div className={classes.Text400}>Értékelés: X</div>
-												</div>
-											))}
+											{labelHandel === 3
+												? pickedPos.applied.map((pos) => (
+														<div
+															key={pos._id}
+															className={[
+																classes.acceptorDates_Candidates_Grid,
+																// theChosenOnes.posId === pickedPos._id &&
+																// 	theChosenOnes.userId === pos._id &&
+																// 	classes.acceptorDates_Candidates_Chosen,
+															].join(" ")}
+															onClick={() => changeHandle(pos._id)}
+														>
+															<div
+																className={classes.acceptorDates_Candidates_Img}
+															>
+																<Image
+																	src={pos.image}
+																	width={35}
+																	height={35}
+																	alt={pos.name}
+																/>
+															</div>
+															<p>{pos.name}</p>
+															<p className={classes.Text400}>XP: X</p>
+															<p className={classes.Text400}>Értékelés: X</p>
+														</div>
+												  ))
+												: pickedPos.confirmed.map((pos) => (
+														<div
+															key={pos._id}
+															className={[
+																classes.acceptorDates_Candidates_Grid,
+																// theChosenOnes.posId === pickedPos._id &&
+																// 	theChosenOnes.userId === pos._id &&
+																// 	classes.acceptorDates_Candidates_Chosen,
+															].join(" ")}
+															// onClick={() => changeHandle(pos._id)}
+														>
+															<div
+																className={classes.acceptorDates_Candidates_Img}
+															>
+																<Image
+																	src={pos.image}
+																	width={35}
+																	height={35}
+																	alt={pos.name}
+																/>
+															</div>
+															<p>{pos.name}</p>
+															<p className={classes.Text400}>XP: X</p>
+															<p className={classes.Text400}>Értékelés: X</p>
+														</div>
+												  ))}
 										</div>
 									</div>
 								</div>
 							</div>
+						)}
+						{isNewPos && (
+							<NewPosPanel
+								setIsNewPos={setIsNewPos}
+								setSelectedEventPositions={setSelectedEventPositions}
+								datesHelper={datesHelper}
+								setLabelHandel={setLabelHandel}
+								labelHandel={labelHandel}
+								department={department}
+								setUpdatedPos={setUpdatedPos}
+							/>
 						)}
 						<div className={classes.acceptorDates_MainDiv}>
 							<p>Még be nem telt poziciók</p>
@@ -304,7 +319,12 @@ const EventCreatorSecondary = ({
 								<div className={classes.acceptorDates}>
 									<div
 										className={classes.acceptorDates_addPos}
-										onClick={(e) => console.log(e)}
+										onClick={() => {
+											setIsNewPos(true);
+											setPickedPos();
+											setPickedPosId();
+											setDatesHelper([]);
+										}}
 									>
 										<Image
 											src="/icons/plus.svg"
@@ -316,25 +336,19 @@ const EventCreatorSecondary = ({
 									{selectedEventPositions
 										.filter((pos) => pos.label > 2)
 										.map((pos) => {
-											const style = {
-												background: `linear-gradient(135deg, ${findColor(1)
-													.slice(0, -4)
-													.concat("90%)")} 35%, ${findColor(pos.label)
-													.slice(0, -4)
-													.concat("90%)")} 50%`,
-											};
+											const style = getBackgorund(pos.label);
 											const val = control.invitionType.find(
 												(v) => v.type === pos.invition.type
 											);
 
 											return (
 												<div
-													key={pos._id}
-													id={pos._id}
+													key={pos.id}
+													id={pos.id}
 													className={[
 														classes.acceptorDates_div,
 														pickedPosId &&
-															pos._id.toString() === pickedPosId.toString() &&
+															pos.id.toString() === pickedPosId.toString() &&
 															classes.activePos,
 													].join(" ")}
 													onClick={(e) => {
@@ -394,23 +408,17 @@ const EventCreatorSecondary = ({
 							<div className={classes.acceptorDates_SubDiv}>
 								<div className={classes.acceptorDates}>
 									{selectedEventPositions
-										.filter((pos) => pos.label < 3)
+										.filter((pos) => pos.label === 2)
 										.map((pos) => {
-											const style = {
-												background: `linear-gradient(135deg, ${findColor(1)
-													.slice(0, -4)
-													.concat("90%)")} 35%, ${findColor(pos.label)
-													.slice(0, -4)
-													.concat("90%)")} 50%`,
-											};
+											const style = getBackgorund(pos.label);
 											const val = control.invitionType.find(
 												(v) => v.type === pos.invition.type
 											);
 
 											return (
 												<div
-													key={pos._id}
-													id={pos._id}
+													key={pos.id}
+													id={pos.id}
 													className={[
 														classes.acceptorDates_div,
 														pickedPosId &&
@@ -435,9 +443,11 @@ const EventCreatorSecondary = ({
 														{val.type === "direct" && (
 															<p>{pos.confirmed[0].name}</p>
 														)}
-														<p className={classes.Text400}>
-															Visszaigazolt: Igen
-														</p>
+														{pos.label !== 1 && (
+															<p className={classes.Text400}>
+																Visszaigazolt: Igen
+															</p>
+														)}
 														<p className={classes.Text400}>
 															Napok: {pos.dates.length}
 														</p>
@@ -454,15 +464,15 @@ const EventCreatorSecondary = ({
 							<SmallCalendar
 								filteredEvents={[
 									{
-										label: pickedPos ? pickedPos.label : 1,
-										dates: pickedPos ? pickedPos.dates : null,
-										selectedEventDates: eventPositions[0].dates,
+										label: pickedPos ? pickedPos.label : labelHandel,
+										dates: datesHelper,
+										selectedEventDates: selectedEvent.event.dates,
 									},
 								]}
 								setClickedDate={setClickedDate}
 								setIsClicked={setIsClicked}
 							/>
-							<div className={classes.EventModal_Calendar__ControlBtns}>
+							{/* <div className={classes.EventModal_Calendar__ControlBtns}>
 								<Button
 									type="button"
 									clicked={() => setPickedDays(selectedEvent.dates)}
@@ -472,7 +482,7 @@ const EventCreatorSecondary = ({
 								<Button type="button" clicked={() => setPickedDays([])}>
 									Töröl
 								</Button>
-							</div>
+							</div> */}
 						</div>
 
 						{pickedPos && (

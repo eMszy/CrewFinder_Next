@@ -1,0 +1,409 @@
+[{
+  "_id": {
+    "$oid": "62bc540e89f92b22d7bfd840"
+  },
+  "title": "1111",
+  "shortTitle": "1111",
+  "description": "1111",
+  "location": "1111",
+  "startDate": {
+    "$numberLong": "1655265600000"
+  },
+  "endDate": {
+    "$numberLong": "1655654400000"
+  },
+  "department": "AD's",
+  "dates": [
+    {
+      "id": 20220615,
+      "startTime": {
+        "$numberLong": "1655265600000"
+      },
+      "endTime": {
+        "$numberLong": "1655308800000"
+      }
+    },
+    {
+      "id": 20220619,
+      "startTime": {
+        "$numberLong": "1655611200000"
+      },
+      "endTime": {
+        "$numberLong": "1655654400000"
+      }
+    },
+    {
+      "id": 20220616,
+      "startTime": {
+        "$numberLong": "1655352000000"
+      },
+      "endTime": {
+        "$numberLong": "1655395200000"
+      }
+    },
+    {
+      "id": 20220617,
+      "startTime": {
+        "$numberLong": "1655438400000"
+      },
+      "endTime": {
+        "$numberLong": "1655481600000"
+      }
+    },
+    {
+      "id": 20220618,
+      "startTime": {
+        "$numberLong": "1655524800000"
+      },
+      "endTime": {
+        "$numberLong": "1655568000000"
+      }
+    }
+  ],
+  "creator": {
+    "$oid": "62bc4a2e89f92b22d7bfd57a"
+  },
+  "positions": [
+    {
+      "$oid": "62bc540e89f92b22d7bfd841"
+    },
+    {
+      "$oid": "62bc540e89f92b22d7bfd842"
+    },
+    {
+      "$oid": "62bc540e89f92b22d7bfd843"
+    }
+  ],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1656509454506"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1656509454506"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62bc579889f92b22d7bfd8b9"
+  },
+  "title": "mmmm",
+  "shortTitle": "mmmm",
+  "description": "mmmm",
+  "location": "mmmm",
+  "startDate": {
+    "$numberLong": "1655870400000"
+  },
+  "endDate": {
+    "$numberLong": "1656172800000"
+  },
+  "department": "AD's",
+  "dates": [
+    {
+      "id": 20220622,
+      "startTime": {
+        "$numberLong": "1655870400000"
+      },
+      "endTime": {
+        "$numberLong": "1655913600000"
+      }
+    },
+    {
+      "id": 20220625,
+      "startTime": {
+        "$numberLong": "1656129600000"
+      },
+      "endTime": {
+        "$numberLong": "1656172800000"
+      }
+    },
+    {
+      "id": 20220624,
+      "startTime": {
+        "$numberLong": "1656043200000"
+      },
+      "endTime": {
+        "$numberLong": "1656086400000"
+      }
+    }
+  ],
+  "creator": {
+    "$oid": "62bc4a3f89f92b22d7bfd57f"
+  },
+  "positions": [
+    {
+      "$oid": "62bc579889f92b22d7bfd8ba"
+    },
+    {
+      "$oid": "62bc579889f92b22d7bfd8bb"
+    },
+    {
+      "$oid": "62bc579889f92b22d7bfd8bc"
+    },
+    {
+      "$oid": "62bc579889f92b22d7bfd8bd"
+    }
+  ],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1656510360890"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1656510360890"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62bc633a89f92b22d7bfda19"
+  },
+  "title": "vvvv",
+  "shortTitle": "vvv",
+  "description": "vvvv",
+  "location": "vvvv",
+  "startDate": {
+    "$numberLong": "1654574400000"
+  },
+  "endDate": {
+    "$numberLong": "1654617600000"
+  },
+  "department": "Privát",
+  "dates": [
+    {
+      "id": 20220607,
+      "startTime": {
+        "$numberLong": "1654574400000"
+      },
+      "endTime": {
+        "$numberLong": "1654617600000"
+      }
+    }
+  ],
+  "creator": {
+    "$oid": "62bc4a2e89f92b22d7bfd57a"
+  },
+  "positions": [
+    {
+      "$oid": "62bc633a89f92b22d7bfda1a"
+    }
+  ],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1656513338182"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1656513338182"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62c034edd2314499e51da4a9"
+  },
+  "title": "gggg",
+  "shortTitle": "ggg",
+  "description": "gggg",
+  "location": "ggggg",
+  "startDate": {
+    "$numberLong": "1657684800000"
+  },
+  "endDate": {
+    "$numberLong": "1658678400000"
+  },
+  "department": "AD's",
+  "dates": [
+    {
+      "id": 20220713,
+      "startTime": {
+        "$numberLong": "1657684800000"
+      },
+      "endTime": {
+        "$numberLong": "1657728000000"
+      }
+    },
+    {
+      "id": 20220721,
+      "startTime": {
+        "$numberLong": "1658376000000"
+      },
+      "endTime": {
+        "$numberLong": "1658419200000"
+      }
+    },
+    {
+      "id": 20220724,
+      "startTime": {
+        "$numberLong": "1658635200000"
+      },
+      "endTime": {
+        "$numberLong": "1658678400000"
+      }
+    },
+    {
+      "id": 20220722,
+      "startTime": {
+        "$numberLong": "1658462400000"
+      },
+      "endTime": {
+        "$numberLong": "1658505600000"
+      }
+    },
+    {
+      "id": 20220719,
+      "startTime": {
+        "$numberLong": "1658203200000"
+      },
+      "endTime": {
+        "$numberLong": "1658246400000"
+      }
+    },
+    {
+      "id": 20220720,
+      "startTime": {
+        "$numberLong": "1658289600000"
+      },
+      "endTime": {
+        "$numberLong": "1658332800000"
+      }
+    }
+  ],
+  "creator": {
+    "$oid": "62bc4a2e89f92b22d7bfd57a"
+  },
+  "positions": [
+    {
+      "$oid": "62c034edd2314499e51da4aa"
+    },
+    {
+      "$oid": "62c034edd2314499e51da4ab"
+    },
+    {
+      "$oid": "62c034edd2314499e51da4ac"
+    },
+    {
+      "$oid": "62c034edd2314499e51da4ad"
+    }
+  ],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1656763629884"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1656763629884"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62c47c3362910db2ed5ac3a0"
+  },
+  "title": "sdfs",
+  "shortTitle": "sdfs",
+  "description": "sdfsd",
+  "location": "fdfdf",
+  "startDate": {
+    "$numberLong": "1659067200000"
+  },
+  "endDate": {
+    "$numberLong": "1659196800000"
+  },
+  "department": "AD's",
+  "dates": [
+    {
+      "id": 20220730,
+      "startTime": {
+        "$numberLong": "1659153600000"
+      },
+      "endTime": {
+        "$numberLong": "1659196800000"
+      }
+    },
+    {
+      "id": 20220729,
+      "startTime": {
+        "$numberLong": "1659067200000"
+      },
+      "endTime": {
+        "$numberLong": "1659110400000"
+      }
+    }
+  ],
+  "creator": {
+    "$oid": "62bc4a2e89f92b22d7bfd57a"
+  },
+  "positions": [
+    {
+      "$oid": "62c47c3362910db2ed5ac3a1"
+    },
+    {
+      "$oid": "62c47c3362910db2ed5ac3a2"
+    }
+  ],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1657044019519"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1657044019519"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "62c47c8962910db2ed5ac3e4"
+  },
+  "title": "bbbb",
+  "shortTitle": "bbbb",
+  "description": "bbbb",
+  "location": "bbbbb",
+  "startDate": {
+    "$numberLong": "1658808000000"
+  },
+  "endDate": {
+    "$numberLong": "1658851200000"
+  },
+  "department": "AD's",
+  "dates": [
+    {
+      "id": 20220726,
+      "startTime": {
+        "$numberLong": "1658808000000"
+      },
+      "endTime": {
+        "$numberLong": "1658851200000"
+      }
+    }
+  ],
+  "creator": {
+    "$oid": "62bc4a2e89f92b22d7bfd57a"
+  },
+  "positions": [
+    {
+      "$oid": "62c47c8962910db2ed5ac3e5"
+    },
+    {
+      "$oid": "62c47c8962910db2ed5ac3e6"
+    }
+  ],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1657044105207"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1657044105207"
+    }
+  },
+  "__v": 0
+}]

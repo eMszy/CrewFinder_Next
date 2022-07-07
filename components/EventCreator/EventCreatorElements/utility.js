@@ -7,6 +7,7 @@ import control from "../../../control.json";
 import classes from "./../EventHandle.module.scss";
 
 import * as InputTemplates from "../../UI/Input/InputTemplates/InputTemplates.js";
+import { findColor } from "../../../shared/utility";
 
 export const dayFormating = (day) => dayjs(day).format("YYYY-MM-DDTHH:mm");
 
@@ -126,3 +127,42 @@ export const eventOtherTemplate = (selectedEvent, daySelected, department) => {
 };
 
 export const weekdaysSet = [1, 2, 3, 4, 5, 6, 0];
+
+export const fetchNumberofUsers = async (pos, attribute) => {
+	try {
+		const data = await fetch(
+			`/api/user/countMatches?pos=${pos}&attribute=${attribute}`
+		);
+		const dataJson = await data.json();
+		return dataJson;
+	} catch (err) {
+		console.error("Error", err);
+		throw new Error({ message: err.message });
+	}
+};
+
+export const getBackgorund = (label) => {
+	return {
+		background: `linear-gradient(135deg, ${findColor(1)
+			.slice(0, -4)
+			.concat("90%)")} 35%, ${findColor(label)
+			.slice(0, -4)
+			.concat("90%)")} 50%`,
+	};
+};
+
+export const fetchUserFormDirecInput = async (value, posName) => {
+	try {
+		const res = await fetch(`/api/user/search?input=${value}&pos=${posName}`);
+		const resJson = await res.json();
+
+		if (!res.ok || res.error) {
+			throw Error(resJson.message);
+		}
+
+		return resJson;
+	} catch (err) {
+		console.error("Error", err);
+		throw new Error(err);
+	}
+};

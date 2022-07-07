@@ -80,19 +80,19 @@
           "weight": 3
         },
         "Key Set PA": {
-          "name": "Key SetPa",
+          "name": "Key Set PA",
           "weight": 2
         },
         "Cast PA": {
-          "name": "CastPa",
+          "name": "Cast PA",
           "weight": 1
         },
         "Set PA": {
-          "name": "SetPa",
+          "name": "Set PA",
           "weight": 1
         },
         "Base PA": {
-          "name": "Base Pa",
+          "name": "Base PA",
           "weight": 1
         },
         "Trainee": {
