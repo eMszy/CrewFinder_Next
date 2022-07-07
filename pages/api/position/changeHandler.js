@@ -15,11 +15,23 @@ const handler = async (req, res) => {
 		});
 
 		theUpdatedPos.forEach(async (pos) => {
-			const position = await Position.findById(pos.posId).populate("eventId");
+			console.log("pos", pos);
+			let position;
+			//!új pozició léterhozása
+			// if (pos._id) {
+			position = await Position.findById(pos.posId).populate("eventId");
+
+			if (!position) {
+				throw Error("A pozició nem található");
+			}
 
 			if (position.eventId.creator.toString() !== token.id) {
-				throw Error("nem általad létrhozott esemény");
+				throw Error("Nem általad létrhozott esemény");
 			}
+			// } else {
+			// 	position = await new Position(pos);
+			// 	console.log("position", position);
+			// }
 
 			if (pos.userId) {
 				position.chosenOne = pos.userId;
@@ -58,9 +70,10 @@ const handler = async (req, res) => {
 						thePos.status = "resigned";
 					}
 				}
-				await user.save();
+				// await user.save();
 			});
-			await position.save();
+
+			// await position.save();
 		});
 		res.statusCode = 200;
 		res.json({ message: "A változások sikeresen mentve" });
