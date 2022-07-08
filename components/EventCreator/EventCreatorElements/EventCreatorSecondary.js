@@ -42,7 +42,7 @@ const EventCreatorSecondary = ({
 
 	const submitHandle = (e) => {
 		e.preventDefault();
-		acceptCandidate(theUpdatedPos);
+		acceptCandidate(theUpdatedPos, selectedEvent.event._id);
 		setShowEventModal(false);
 	};
 
@@ -247,7 +247,7 @@ const EventCreatorSecondary = ({
 											{labelHandel === 3
 												? pickedPos.applied.map((pos) => (
 														<div
-															key={pos._id}
+															key={pos.id}
 															className={[
 																classes.acceptorDates_Candidates_Grid,
 																// theChosenOnes.posId === pickedPos._id &&
@@ -273,7 +273,7 @@ const EventCreatorSecondary = ({
 												  ))
 												: pickedPos.confirmed.map((pos) => (
 														<div
-															key={pos._id}
+															key={pos.id}
 															className={[
 																classes.acceptorDates_Candidates_Grid,
 																// theChosenOnes.posId === pickedPos._id &&

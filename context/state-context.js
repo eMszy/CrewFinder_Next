@@ -153,10 +153,9 @@ const StateContextProvider = (props) => {
 		}
 	};
 
-	const acceptCandidate = async (payload) => {
-		console.log("payload", payload);
+	const acceptCandidate = async (payload, eventId) => {
 		try {
-			const res = await fetch("/api/position/changeHandler", {
+			const res = await fetch(`/api/position/${eventId}`, {
 				method: "PUT",
 				body: JSON.stringify(payload),
 				headers: {

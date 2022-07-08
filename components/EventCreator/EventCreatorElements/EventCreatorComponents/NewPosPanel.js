@@ -53,7 +53,6 @@ const NewPosPanel = ({
 		};
 		setUpdatedPos((currentData) => [...currentData, newPos]);
 		setSelectedEventPositions((currentData) => [...currentData, newPos]);
-		console.log("click", newPos);
 		setIsNewPos(false);
 	};
 
