@@ -207,18 +207,19 @@ const StateContextProvider = (props) => {
 	const socketInitializer = async () => {
 		await fetch("/api/socket");
 		socket = io();
+
+		console.log("socket", socket);
+
 		if (!socket.connected) {
-			socket.on("connect", () => {
-				console.log("Socket.IO connected on " + session.id + " broadcast.");
+			console.log("Socket.IO connected on " + session.id + " broadcast.");
+			socket.on(session.id, (updatedEvents) => {
+				console.log("Updates from Socket: ", updatedEvents);
+				dispatchCallEvent({
+					type: "incoming",
+					payload: updatedEvents,
+				});
 			});
 		}
-		socket.on(session.id, (updatedEvents) => {
-			console.log("Updates from Socket: ", updatedEvents);
-			dispatchCallEvent({
-				type: "incoming",
-				payload: updatedEvents,
-			});
-		});
 	};
 
 	useEffect(() => {
@@ -238,8 +239,8 @@ const StateContextProvider = (props) => {
 					setStatus({ message: err.message, error: true });
 				}
 			};
-			console.log("socket", socket);
-			// socketInitializer();
+			// console.log("socket", socket);
+			socketInitializer();
 			loadAllEvents();
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps

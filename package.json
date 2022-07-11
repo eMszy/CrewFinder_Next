@@ -17,8 +17,8 @@
     "dayjs": "^1.11.3",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.7.0",
-    "mongoose": "^6.4.1",
-    "next": "^12.2.0",
+    "mongoose": "^6.4.4",
+    "next": "^12.2.2",
     "next-auth": "4.7.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -30,6 +30,7 @@
     "validator": "^13.7.0"
   },
   "devDependencies": {
+    "@socket.io/admin-ui": "^0.4.0",
     "cross-env": "^7.0.3",
     "cypress": "^10.3.0",
     "eslint": "8.18.0",
