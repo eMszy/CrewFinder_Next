@@ -10,13 +10,19 @@ import EventCreatorSecondary from "./EventCreatorElements/EventCreatorSecondary"
 import EventAccepter from "./EventCreatorElements/EventAccepter";
 import Spinner from "../UI/Spinner/Spinner";
 
-import control from "../../control.json";
-
 import classes from "./EventHandle.module.scss";
 
 const EventHandle = () => {
-	const { setShowEventModal, selectedEvent, deleteEvent, filteredEvents } =
-		useContext(StateContext);
+	const {
+		setShowEventModal,
+		selectedEvent,
+		// deleteEvent,
+		filteredEvents,
+		isSocket,
+		setStatus,
+		dispatchCallEvent,
+		setSelectedEvent,
+	} = useContext(StateContext);
 
 	const { data: session, status } = useSession();
 
@@ -33,32 +39,44 @@ const EventHandle = () => {
 
 	const deletHandel = (e) => {
 		e.preventDefault();
-		deleteEvent(selectedEvent.event._id);
+		isSocket.emit(
+			"delete-event",
+			selectedEvent.event._id,
+			selectedEvent.event.positions,
+			session.id,
+			(res) => {
+				if (res.error) {
+					setStatus(res);
+					return;
+				}
+				console.log("res", res);
+				dispatchCallEvent({
+					type: "deleteEvent",
+					payload: res.eventId,
+				});
+				setStatus({ message: res.message });
+				setSelectedEvent(null);
+				setShowEventModal(false);
+				return;
+			}
+		);
 	};
 
 	const fetchEventPos = async () => {
 		const fetchedEventPos = [];
 
 		try {
-			const res = await fetch(`api/event/${selectedEvent.event._id}`);
-			fetchedEventPos = await res.json();
-			if (!res.ok || res.error) {
-				throw Error(fetchedEventPos.message);
-			}
-			setEventPositions(fetchedEventPos);
+			await isSocket.emit("get-event", selectedEvent.event._id, (res) => {
+				if (res.error) {
+					setStatus(res);
+					return;
+				}
+				setEventPositions(res);
+			});
 		} catch (err) {
-			setStatus({ message: err.message, error: true });
+			setStatus(err);
 		}
 	};
-
-	useEffect(() => {
-		if (status === "authenticated" && selectedEvent) {
-			setLoading(true);
-			fetchEventPos();
-			setLoading(false);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
 
 	useEffect(() => {
 		if (status === "authenticated" && selectedEvent) {

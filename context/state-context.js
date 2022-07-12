@@ -22,9 +22,9 @@ export const StateContext = React.createContext({
 	setStatus: () => {},
 	createEvent: (payload) => {},
 	updateEvent: (payload) => {},
-	deleteEvent: (payload) => {},
 	applicationEvent: (payload) => {},
 	acceptCandidate: (payload) => {},
+	isSocket: null,
 });
 
 const StateContextProvider = (props) => {
@@ -33,6 +33,7 @@ const StateContextProvider = (props) => {
 	const [selectedEvent, setSelectedEvent] = useState(null);
 	const [labels, setLabels] = useState(control.labels);
 	const [isStatusMsg, setIsStatusMsg] = useState(null);
+	const [isSocket, setSocket] = useState();
 
 	const { data: session, status } = useSession();
 
@@ -61,6 +62,7 @@ const StateContextProvider = (props) => {
 			if (!res.ok || res.error) {
 				throw Error(resJson.message);
 			}
+
 			const theEvent = resJson.events.filter(
 				(eve) => eve.event._id === resJson.eventId
 			);
@@ -68,6 +70,7 @@ const StateContextProvider = (props) => {
 			if (theEvent[0].event.department !== "Privát") {
 				setSelectedEvent(...theEvent);
 			}
+
 			setStatus({ message: resJson.message });
 			dispatchCallEvent({
 				type: "updateEvent",
@@ -99,29 +102,6 @@ const StateContextProvider = (props) => {
 				payload: resJson.events,
 			});
 			setStatus({ message: resJson.message });
-			return;
-		} catch (err) {
-			setShowEventModal(false);
-			setStatus({ message: err.message, error: true });
-		}
-	};
-
-	const deleteEvent = async (payload) => {
-		try {
-			const res = await fetch("/api/event/" + payload, {
-				method: "DELETE",
-			});
-			const resJson = await res.json();
-			if (!res.ok || res.error) {
-				throw Error(resJson.message);
-			}
-			dispatchCallEvent({
-				type: "deleteEvent",
-				payload: resJson.eventId,
-			});
-			setStatus({ message: resJson.message });
-			setSelectedEvent(null);
-			setShowEventModal(false);
 			return;
 		} catch (err) {
 			setShowEventModal(false);
@@ -180,8 +160,8 @@ const StateContextProvider = (props) => {
 	};
 
 	const savedEventsReducer = (state, { type, payload }) => {
-		console.log("payload: ", payload, type);
-		console.log("state: ", state);
+		// console.log("payload: ", payload, type);
+		// console.log("state: ", state);
 		switch (type) {
 			case "updateEvent": {
 				return payload;
@@ -200,23 +180,25 @@ const StateContextProvider = (props) => {
 
 	const [savedEvents, dispatchCallEvent] = useReducer(savedEventsReducer, []);
 
-	// console.log("savedEvents", savedEvents);
-
-	let socket;
-
 	const socketInitializer = async () => {
 		await fetch("/api/socket");
-		socket = io();
-
-		console.log("socket", socket);
+		const socket = io();
+		setSocket(socket);
 
 		if (!socket.connected) {
-			console.log("Socket.IO connected on " + session.id + " broadcast.");
-			socket.on(session.id, (updatedEvents) => {
+			console.log("Socket.IO connected...");
+			socket.on("to-client", (updatedEvents) => {
 				console.log("Updates from Socket: ", updatedEvents);
 				dispatchCallEvent({
 					type: "incoming",
 					payload: updatedEvents,
+				});
+			});
+			socket.on("to-client-delete-event", (eventId) => {
+				console.log("Updates from Socket: ", eventId);
+				dispatchCallEvent({
+					type: "deleteEvent",
+					payload: eventId,
 				});
 			});
 		}
@@ -224,27 +206,25 @@ const StateContextProvider = (props) => {
 
 	useEffect(() => {
 		if (status === "authenticated") {
-			const loadAllEvents = async () => {
-				try {
-					const res = await fetch("/api/event/all");
-					const eventsJson = await res.json();
-					if (!res.ok || res.error) {
-						throw Error(eventsJson.message);
-					}
-					dispatchCallEvent({
-						type: "updateEvent",
-						payload: eventsJson,
-					});
-				} catch (err) {
-					setStatus({ message: err.message, error: true });
-				}
-			};
-			// console.log("socket", socket);
 			socketInitializer();
-			loadAllEvents();
+		}
+	}, [status]);
+
+	useEffect(() => {
+		if (isSocket && !savedEvents.length) {
+			isSocket.emit("get-all-events", session.id, (res) => {
+				if (res.error) {
+					setStatus(res);
+					return;
+				}
+				dispatchCallEvent({
+					type: "updateEvent",
+					payload: res,
+				});
+			});
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [status]);
+	}, [isSocket, savedEvents]);
 
 	const filteredEvents = useMemo(() => {
 		let events = [];
@@ -299,9 +279,9 @@ const StateContextProvider = (props) => {
 				setStatus,
 				createEvent,
 				updateEvent,
-				deleteEvent,
 				applicationEvent,
 				acceptCandidate,
+				isSocket,
 			}}
 		>
 			{props.children}

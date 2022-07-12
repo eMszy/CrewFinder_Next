@@ -5,24 +5,7 @@ import User from "../../../models/user";
 import Position from "../../../models/position";
 
 import dbConnect from "../../../shared/dbConnect";
-import mongoose from "mongoose";
-
-const EventInfoTreeHandler = (data, pos, label, evtId) => {
-	return {
-		_id: evtId,
-		statDate: data.startDate,
-		endDate: data.endDate,
-		id: data.id,
-		department: data.department,
-		title: data.title,
-		shortTitle: data.shortTitle,
-		description: data.description,
-		creator: data.creator,
-		creatorName: data.creatorName,
-		positions: pos,
-		label: label,
-	};
-};
+// import mongoose from "mongoose";
 
 const handler = async (req, res) => {
 	const eventId = req.query.eventId;
@@ -36,92 +19,89 @@ const handler = async (req, res) => {
 		});
 
 		switch (req.method) {
-			case "GET": {
-				const agg = [
-					{
-						$match: {
-							eventId: mongoose.Types.ObjectId(eventId),
-						},
-					},
-					{
-						$lookup: {
-							from: "users",
-							localField: "users",
-							foreignField: "_id",
-							as: "user",
-						},
-					},
-					{
-						$unwind: {
-							path: "$user",
-						},
-					},
-					{
-						$unwind: {
-							path: "$user.events",
-						},
-					},
-					{
-						$match: {
-							"user.events.event": mongoose.Types.ObjectId(eventId),
-						},
-					},
-					{
-						$unwind: {
-							path: "$user.events.positions",
-						},
-					},
-					{
-						$match: {
-							$expr: {
-								$eq: ["$_id", "$user.events.positions.position"],
-							},
-						},
-					},
-					{
-						$group: {
-							_id: "$_id",
-							posName: {
-								$first: "$posName",
-							},
-							// weight: {
-							// 	$first: "$weight",
-							// },
-							invition: {
-								$first: "$invition",
-							},
-							dates: {
-								$first: "$dates",
-							},
-							users: {
-								$push: {
-									name: "$user.name",
-									image: "$user.image",
-									_id: "$user._id",
-									label: "$user.events.positions.label",
-									status: "$user.events.positions.status",
-									messages: "$user.events.positions.messages",
-								},
-							},
-						},
-					},
-				];
+			// case "GET": {
+			// 	const agg = [
+			// 		{
+			// 			$match: {
+			// 				eventId: mongoose.Types.ObjectId(eventId),
+			// 			},
+			// 		},
+			// 		{
+			// 			$lookup: {
+			// 				from: "users",
+			// 				localField: "users",
+			// 				foreignField: "_id",
+			// 				as: "user",
+			// 			},
+			// 		},
+			// 		{
+			// 			$unwind: {
+			// 				path: "$user",
+			// 			},
+			// 		},
+			// 		{
+			// 			$unwind: {
+			// 				path: "$user.events",
+			// 			},
+			// 		},
+			// 		{
+			// 			$match: {
+			// 				"user.events.event": mongoose.Types.ObjectId(eventId),
+			// 			},
+			// 		},
+			// 		{
+			// 			$unwind: {
+			// 				path: "$user.events.positions",
+			// 			},
+			// 		},
+			// 		{
+			// 			$match: {
+			// 				$expr: {
+			// 					$eq: ["$_id", "$user.events.positions.position"],
+			// 				},
+			// 			},
+			// 		},
+			// 		{
+			// 			$group: {
+			// 				_id: "$_id",
+			// 				posName: {
+			// 					$first: "$posName",
+			// 				},
+			// 				invition: {
+			// 					$first: "$invition",
+			// 				},
+			// 				dates: {
+			// 					$first: "$dates",
+			// 				},
+			// 				users: {
+			// 					$push: {
+			// 						name: "$user.name",
+			// 						image: "$user.image",
+			// 						_id: "$user._id",
+			// 						label: "$user.events.positions.label",
+			// 						status: "$user.events.positions.status",
+			// 						messages: "$user.events.positions.messages",
+			// 					},
+			// 				},
+			// 			},
+			// 		},
+			// 	];
 
-				let positions;
-				if (eventId.length === 24 && !isNaN(Number("0x" + eventId))) {
-					positions = await Position.aggregate(agg);
-				}
+			// 	let positions;
+			// 	if (eventId.length === 24 && !isNaN(Number("0x" + eventId))) {
+			// 		positions = await Position.aggregate(agg);
+			// 	}
 
-				if (!positions) {
-					res.statusCode = 404;
-					res.json({ message: `Nincs ilyen esemény.`, error: true });
-					return;
-				}
+			// 	if (!positions) {
+			// 		res.statusCode = 404;
+			// 		res.json({ message: `Nincs ilyen esemény.`, error: true });
+			// 		return;
+			// 	}
 
-				res.statusCode = 200;
-				res.json(positions);
-				return;
-			}
+			// 	res.statusCode = 200;
+			// 	res.json(positions);
+			// 	return;
+			// }
 
 			case "POST": {
 				const { event, positions } = req.body;

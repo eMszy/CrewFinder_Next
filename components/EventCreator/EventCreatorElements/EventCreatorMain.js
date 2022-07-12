@@ -183,7 +183,6 @@ const EventCreatorMain = ({
 		}
 		if (!selectedEvent) {
 			Object.assign(event, {
-				// weight: eventInputData.weight,
 				department: eventInputData.department,
 				positions: eventInputData.positions,
 				creator: session.id,
@@ -191,18 +190,7 @@ const EventCreatorMain = ({
 			});
 			Object.assign(creatorPosition, {
 				invition: { type: "creator" },
-				users: [
-					session.id,
-					// {
-					// 	_id: session.id,
-					// 	name: session.user.name,
-					// 	image: session.user.image,
-					// },
-				],
-				// weight:
-				// 	control.departments[eventInputData.department].positions[
-				// 		eventInputData.creatorPosition
-				// 	]?.weight || 0,
+				users: [session.id],
 			});
 		}
 		for (const [key, value] of Object.entries(eventTypedData)) {
