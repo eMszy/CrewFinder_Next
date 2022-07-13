@@ -51,7 +51,6 @@ export const createEvent = async (event, positions) => {
 		});
 		await eventModel.save();
 
-		//find kell a filter helyett
 		const creatorData = usersDataArray.find(
 			(data) => data.userId === event.creator
 		);

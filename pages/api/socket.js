@@ -14,9 +14,8 @@ const SocketHandler = async (req, res) => {
 			cors: {
 				origin: [
 					"https://admin.socket.io",
-					"https://crewfindernext.herokuapp.com/home",
+					"https://crewfindernext.herokuapp.com",
 				],
-				methods: ["GET", "POST"],
 				credentials: true,
 			},
 		});
