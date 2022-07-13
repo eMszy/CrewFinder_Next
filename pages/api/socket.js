@@ -16,6 +16,7 @@ const SocketHandler = async (req, res) => {
 					"https://admin.socket.io",
 					"https://crewfindernext.herokuapp.com/home",
 				],
+				methods: ["GET", "POST"],
 				credentials: true,
 			},
 		});
