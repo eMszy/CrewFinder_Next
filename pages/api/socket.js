@@ -3,6 +3,7 @@ import { instrument } from "@socket.io/admin-ui";
 import { getAllEvents } from "../../shared/SocketFunctions/getAllEvents";
 import { getEvent } from "../../shared/SocketFunctions/getEvent";
 import { deleteEvent } from "../../shared/SocketFunctions/deleteEvent";
+import { createEvent } from "../../shared/SocketFunctions/createEvent";
 
 const SocketHandler = async (req, res) => {
 	if (res.socket.server.io) {
@@ -33,9 +34,11 @@ const SocketHandler = async (req, res) => {
 					socket.to(room).emit("to-client", message);
 				}
 			});
+
 			socket.on("client-join-room", (room) => {
 				socket.join(room);
 			});
+
 			socket.on("get-all-events", async (userId, cb) => {
 				let SocketRooms = [];
 				const res = await getAllEvents(userId);
@@ -51,10 +54,28 @@ const SocketHandler = async (req, res) => {
 				}
 				cb(res);
 			});
+
+			socket.on("create-event", async (event, positions, cb) => {
+				const res = await createEvent(event, positions);
+				const allUserIds = [];
+				positions.forEach((pos) => {
+					pos.users.forEach((user) => {
+						if (!allUserIds.includes(user)) {
+							allUserIds.push(user);
+						}
+					});
+				});
+				allUserIds.forEach((user) => {
+					socket.to(`Client_${user}`).emit("to-client-reload");
+				});
+				cb(res);
+			});
+
 			socket.on("get-event", async (eventId, cb) => {
 				const res = await getEvent(eventId);
 				cb(res);
 			});
+
 			socket.on("delete-event", async (eventId, posIds, userId, cb) => {
 				const res = await deleteEvent(eventId, userId);
 				socket.to(`Event_${eventId}`).emit("to-client-delete-event", eventId);

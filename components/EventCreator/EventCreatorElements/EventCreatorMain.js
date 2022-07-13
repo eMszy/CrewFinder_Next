@@ -40,6 +40,10 @@ const EventCreatorMain = ({
 		createEvent,
 		updateEvent,
 		setShowEventModal,
+		isSocket,
+		dispatchCallEvent,
+		setStatus,
+		setSelectedEvent,
 	} = useContext(StateContext);
 
 	const { data: session, status } = useSession();
@@ -62,8 +66,8 @@ const EventCreatorMain = ({
 			: []
 	);
 
-	console.log("newBasePositions", newBasePositions);
-	console.log("basePositions", basePositions);
+	// console.log("newBasePositions", newBasePositions);
+	// console.log("basePositions", basePositions);
 
 	const [isDateTuched, setDateTuched] = useState(false);
 
@@ -233,9 +237,39 @@ const EventCreatorMain = ({
 		let updateData = {};
 
 		if (!selectedEvent) {
-			createEvent({
-				event,
-				positions,
+			// createEvent({
+			// 	event,
+			// 	positions,
+			// });
+			console.log("event", event);
+			console.log("positions", positions);
+
+			await isSocket.emit("create-event", event, positions, (res) => {
+				try {
+					if (res.error) {
+						setStatus(res);
+						return;
+					}
+
+					console.log("res", res);
+
+					const theEvent = res.events.filter(
+						(eve) => eve.event._id === res.eventId
+					);
+
+					console.log("theEvent", theEvent);
+
+					if (theEvent.department !== "Privát") {
+						setSelectedEvent(...theEvent);
+					}
+
+					dispatchCallEvent({
+						type: "createEvent",
+						payload: theEvent,
+					});
+				} catch (err) {
+					setStatus(err);
+				}
 			});
 		} else {
 			if (Object.keys(event).length !== 0) {
@@ -259,6 +293,7 @@ const EventCreatorMain = ({
 				event: { ...event, _id: selectedEvent.event._id },
 			});
 		}
+
 		if (department !== "Privát") {
 			setEventCreatroPage(false);
 		} else {
@@ -276,7 +311,7 @@ const EventCreatorMain = ({
 	};
 
 	const changeHandle = (updatedCrewMember) => {
-		console.log("first", updatedCrewMember);
+		// console.log("first", updatedCrewMember);
 		const updatedBaseCrew = newBasePositions.filter(
 			(b) => b.id !== updatedCrewMember.id
 		);
@@ -293,7 +328,7 @@ const EventCreatorMain = ({
 		);
 	};
 
-	console.log("eventInputData", eventInputData);
+	// console.log("eventInputData", eventInputData);
 
 	useEffect(() => {
 		setEventInputData((currentData) => {

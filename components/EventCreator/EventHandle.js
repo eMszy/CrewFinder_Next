@@ -49,7 +49,6 @@ const EventHandle = () => {
 					setStatus(res);
 					return;
 				}
-				console.log("res", res);
 				dispatchCallEvent({
 					type: "deleteEvent",
 					payload: res.eventId,
@@ -63,8 +62,6 @@ const EventHandle = () => {
 	};
 
 	const fetchEventPos = async () => {
-		const fetchedEventPos = [];
-
 		try {
 			await isSocket.emit("get-event", selectedEvent.event._id, (res) => {
 				if (res.error) {

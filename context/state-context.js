@@ -20,7 +20,6 @@ export const StateContext = React.createContext({
 	filteredEvents: [],
 	isStatusMsg: null,
 	setStatus: () => {},
-	createEvent: (payload) => {},
 	updateEvent: (payload) => {},
 	applicationEvent: (payload) => {},
 	acceptCandidate: (payload) => {},
@@ -34,6 +33,7 @@ const StateContextProvider = (props) => {
 	const [labels, setLabels] = useState(control.labels);
 	const [isStatusMsg, setIsStatusMsg] = useState(null);
 	const [isSocket, setSocket] = useState();
+	const [reload, setReload] = useState(true);
 
 	const { data: session, status } = useSession();
 
@@ -46,41 +46,6 @@ const StateContextProvider = (props) => {
 			}
 		}
 		setIsStatusMsg(message);
-	};
-
-	const createEvent = async (payload) => {
-		try {
-			const res = await fetch("/api/event/new", {
-				method: "POST",
-				body: JSON.stringify(payload),
-				headers: {
-					"Content-Type": "application/json",
-				},
-			});
-
-			const resJson = await res.json();
-			if (!res.ok || res.error) {
-				throw Error(resJson.message);
-			}
-
-			const theEvent = resJson.events.filter(
-				(eve) => eve.event._id === resJson.eventId
-			);
-
-			if (theEvent[0].event.department !== "Privát") {
-				setSelectedEvent(...theEvent);
-			}
-
-			setStatus({ message: resJson.message });
-			dispatchCallEvent({
-				type: "updateEvent",
-				payload: resJson.events,
-			});
-			return resJson;
-		} catch (err) {
-			setShowEventModal(false);
-			setStatus({ message: err.message, error: true });
-		}
 	};
 
 	const updateEvent = async (payload) => {
@@ -163,6 +128,9 @@ const StateContextProvider = (props) => {
 		// console.log("payload: ", payload, type);
 		// console.log("state: ", state);
 		switch (type) {
+			case "createEvent": {
+				return [...state, ...payload];
+			}
 			case "updateEvent": {
 				return payload;
 			}
@@ -194,8 +162,11 @@ const StateContextProvider = (props) => {
 					payload: updatedEvents,
 				});
 			});
+
+			socket.on("to-client-reload", () => {
+				setReload(true);
+			});
 			socket.on("to-client-delete-event", (eventId) => {
-				console.log("Updates from Socket: ", eventId);
 				dispatchCallEvent({
 					type: "deleteEvent",
 					payload: eventId,
@@ -211,20 +182,22 @@ const StateContextProvider = (props) => {
 	}, [status]);
 
 	useEffect(() => {
-		if (isSocket && !savedEvents.length) {
+		if (isSocket && reload) {
 			isSocket.emit("get-all-events", session.id, (res) => {
 				if (res.error) {
 					setStatus(res);
 					return;
 				}
+				// console.log("res", res);
 				dispatchCallEvent({
 					type: "updateEvent",
 					payload: res,
 				});
 			});
+			setReload(false);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isSocket, savedEvents]);
+	}, [isSocket, reload]);
 
 	const filteredEvents = useMemo(() => {
 		let events = [];
@@ -277,7 +250,6 @@ const StateContextProvider = (props) => {
 				filteredEvents,
 				isStatusMsg,
 				setStatus,
-				createEvent,
 				updateEvent,
 				applicationEvent,
 				acceptCandidate,
