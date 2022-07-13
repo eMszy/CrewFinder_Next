@@ -51,14 +51,15 @@ export const createEvent = async (event, positions) => {
 		});
 		await eventModel.save();
 
-		const creatorData = usersDataArray.filter(
+		//find kell a filter helyett
+		const creatorData = usersDataArray.find(
 			(data) => data.userId === event.creator
 		);
 
 		const theCreator = await User.findByIdAndUpdate(
-			creatorData[0].userId,
+			creatorData.userId,
 			{
-				$push: { events: creatorData[0].data },
+				$push: { events: creatorData.data },
 			},
 			{
 				new: true,
