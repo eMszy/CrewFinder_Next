@@ -11,21 +11,21 @@ const SocketHandler = async (req, res) => {
 	} else {
 		console.log("Socket is initializing...");
 		const io = new Server(res.socket.server, {
-			cors: {
-				origin: [
-					"https://admin.socket.io",
-					"https://crewfindernext.herokuapp.com",
-				],
-				credentials: true,
-			},
+			// cors: {
+			// 	origin: [
+			// 		"https://admin.socket.io",
+			// 		"https://crewfindernext.herokuapp.com",
+			// 	],
+			// 	credentials: true,
+			// },
 		});
 		// io.sockets.setMaxListeners(0);
 
 		res.socket.server.io = io;
 
-		instrument(io, {
-			auth: false,
-		});
+		// instrument(io, {
+		// 	auth: false,
+		// });
 
 		const socketIo = res.socket.server.io;
 
