@@ -116,6 +116,7 @@ const EventCreatorSecondary = ({
 			);
 			setPickedPos(thePosition);
 			setDatesHelper(thePosition.dates);
+			setLabelHandel(thePosition?.label);
 			setIsNewPos(false);
 		}
 		// eslint-disable-next-line
@@ -244,6 +245,7 @@ const EventCreatorSecondary = ({
 												classes.acceptorDates_Candidates,
 											].join(" ")}
 										>
+											{console.log("pickedPos", pickedPos.applied)}
 											{labelHandel === 3
 												? pickedPos.applied.map((pos) => (
 														<div

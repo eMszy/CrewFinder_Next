@@ -6,7 +6,6 @@ import { deleteEvent } from "../../shared/SocketFunctions/deleteEvent";
 import { createEvent } from "../../shared/SocketFunctions/createEvent";
 
 const SocketHandler = async (req, res) => {
-	console.log("res.socket.server", res.socket.server);
 	if (res.socket.server.io) {
 		console.log("Socket is already running.");
 	} else {
