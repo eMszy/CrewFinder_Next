@@ -6,6 +6,7 @@ import { deleteEvent } from "../../shared/SocketFunctions/deleteEvent";
 import { createEvent } from "../../shared/SocketFunctions/createEvent";
 
 const SocketHandler = async (req, res) => {
+	console.log("res.socket.server", res.socket.server);
 	if (res.socket.server.io) {
 		console.log("Socket is already running.");
 	} else {
@@ -13,13 +14,12 @@ const SocketHandler = async (req, res) => {
 		const io = new Server(res.socket.server, {
 			cors: {
 				origin: [
-					// "https://admin.socket.io",
+					"https://admin.socket.io",
 					"https://crewfindernext.herokuapp.com",
 				],
 				credentials: true,
 			},
 		});
-		// io.sockets.setMaxListeners(0);
 
 		res.socket.server.io = io;
 
