@@ -11,19 +11,14 @@ import Spinner from "../../UI/Spinner/Spinner";
 import control from "../../../control.json";
 
 import classes from "./../EventHandle.module.scss";
-import EventICreatorTeamManager from "./EventICreatorTeamManager";
-import { fetchNumberofUsers, getBackgorund } from "./utility";
+// import EventICreatorTeamManager from "./EventICreatorTeamManager";
+import { getBackgorund } from "./utility";
 
-const EventCreatorSecondary = ({
-	department,
-	setEventCreatroPage,
-	isEventCreatorMain,
-	eventPositions,
-}) => {
+const EventCreatorSecondary = ({ department, eventPositions }) => {
 	const {
 		setShowEventModal,
 		selectedEvent,
-		dispatchCallEvent,
+		// dispatchCallEvent,
 		acceptCandidate,
 		setStatus,
 	} = useContext(StateContext);
@@ -34,7 +29,8 @@ const EventCreatorSecondary = ({
 	const [isClicked, setIsClicked] = useState(false);
 	const [pickedPos, setPickedPos] = useState();
 	const [pickedPosId, setPickedPosId] = useState();
-	const [selectedEventPositions, setSelectedEventPositions] = useState([]);
+	const [selsctedEventDonePos, setSelsctedEventDonePos] = useState([]);
+	const [selsctedEventPendingPos, setSelsctedEventPendingPos] = useState([]);
 	const [theUpdatedPos, setUpdatedPos] = useState([]);
 	const [isNewPos, setIsNewPos] = useState(false);
 	const [datesHelper, setDatesHelper] = useState([]);
@@ -111,9 +107,10 @@ const EventCreatorSecondary = ({
 
 	useEffect(() => {
 		if (pickedPosId) {
-			const thePosition = selectedEventPositions.find(
-				(p) => p.id.toString() === pickedPosId.toString()
-			);
+			const thePosition = [
+				...selsctedEventPendingPos,
+				...selsctedEventDonePos,
+			].find((p) => p.id.toString() === pickedPosId.toString());
 			setPickedPos(thePosition);
 			setDatesHelper(thePosition.dates);
 			setIsNewPos(false);
@@ -184,9 +181,16 @@ const EventCreatorSecondary = ({
 					control.departments[department].positions[a.posName].weight
 			)
 			.sort((a, b) => a.label - b.label);
-		setSelectedEventPositions(selectedPositions);
+		setSelsctedEventDonePos(selectedPositions.filter((pos) => pos.label === 2));
+		setSelsctedEventPendingPos(
+			selectedPositions.filter((pos) => pos.label > 2)
+		);
+		console.log("selectedPositions", selectedPositions);
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [eventPositions]);
+
+	console.log("selsctedEventPendingPos", selsctedEventPendingPos);
 
 	if (!eventPositions || eventPositions.length < 1)
 		return (
@@ -200,10 +204,6 @@ const EventCreatorSecondary = ({
 			<form>
 				<div className={classes.EventModal_MainBody}>
 					<div className={classes.acceptorDates_MainLayout}>
-						<p>
-							{selectedEvent.event.title} {" - "}{" "}
-							{selectedEvent.event.shortTitle}
-						</p>
 						{pickedPos && (
 							<div
 								className={[
@@ -305,7 +305,7 @@ const EventCreatorSecondary = ({
 						{isNewPos && (
 							<NewPosPanel
 								setIsNewPos={setIsNewPos}
-								setSelectedEventPositions={setSelectedEventPositions}
+								setSelsctedEventPendingPos={setSelsctedEventPendingPos}
 								datesHelper={datesHelper}
 								setLabelHandel={setLabelHandel}
 								labelHandel={labelHandel}
@@ -313,29 +313,39 @@ const EventCreatorSecondary = ({
 								setUpdatedPos={setUpdatedPos}
 							/>
 						)}
-						<div className={classes.acceptorDates_MainDiv}>
-							<p>Még be nem telt poziciók</p>
-							<div className={classes.acceptorDates_SubDiv}>
-								<div className={classes.acceptorDates}>
-									<div
-										className={classes.acceptorDates_addPos}
-										onClick={() => {
-											setIsNewPos(true);
-											setPickedPos();
-											setPickedPosId();
-											setDatesHelper([]);
-										}}
-									>
-										<Image
-											src="/icons/plus.svg"
-											alt="calendar"
-											width={100}
-											height={100}
-										/>
+
+						{!isNewPos && (
+							<div className={classes.acceptorDates_MainDiv}>
+								<div className={classes.acceptorDates_SubDiv}>
+									<div className={classes.acceptorDates}>
+										<div
+											className={classes.acceptorDates_addPos}
+											onClick={() => {
+												setIsNewPos(true);
+												setPickedPos();
+												setPickedPosId();
+												setDatesHelper([]);
+											}}
+										>
+											<Image
+												src="/icons/plus.svg"
+												alt="calendar"
+												width={50}
+												height={50}
+											/>
+											<div>Új pozició hozzáadása</div>
+										</div>
 									</div>
-									{selectedEventPositions
-										.filter((pos) => pos.label > 2)
-										.map((pos) => {
+								</div>
+							</div>
+						)}
+
+						{selsctedEventPendingPos.length > 0 && (
+							<div className={classes.acceptorDates_MainDiv}>
+								<p>Még be nem telt poziciók</p>
+								<div className={classes.acceptorDates_SubDiv}>
+									<div className={classes.acceptorDates}>
+										{selsctedEventPendingPos.map((pos) => {
 											const style = getBackgorund(pos.label);
 											const val = control.invitionType.find(
 												(v) => v.type === pos.invition.type
@@ -400,16 +410,16 @@ const EventCreatorSecondary = ({
 												</div>
 											);
 										})}
+									</div>
 								</div>
 							</div>
-						</div>
-						<div className={classes.acceptorDates_MainDiv}>
-							<p>Betelt poziciók</p>
-							<div className={classes.acceptorDates_SubDiv}>
-								<div className={classes.acceptorDates}>
-									{selectedEventPositions
-										.filter((pos) => pos.label === 2)
-										.map((pos) => {
+						)}
+						{selsctedEventDonePos.length > 0 && (
+							<div className={classes.acceptorDates_MainDiv}>
+								<p>Betelt poziciók</p>
+								<div className={classes.acceptorDates_SubDiv}>
+									<div className={classes.acceptorDates}>
+										{selsctedEventDonePos.map((pos) => {
 											const style = getBackgorund(pos.label);
 											const val = control.invitionType.find(
 												(v) => v.type === pos.invition.type
@@ -455,9 +465,10 @@ const EventCreatorSecondary = ({
 												</div>
 											);
 										})}
+									</div>
 								</div>
 							</div>
-						</div>
+						)}
 					</div>
 					<div className={classes.Sidebar}>
 						<div className={classes.EventModal_Calendar}>

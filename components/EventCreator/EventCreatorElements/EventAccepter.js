@@ -48,7 +48,6 @@ const EventAccepter = () => {
 				} catch (err) {
 					setStatus({ message: err.message, error: true });
 				}
-
 				setUserEvents(fetchedUser.events);
 			};
 			fetchUser();
@@ -179,7 +178,7 @@ const EventAccepter = () => {
 									</p>
 									<p className={classes.Text400}>
 										{"Létrehozta: "}
-										{event.event.creator}
+										{event.event.creator.name}
 									</p>
 								</div>
 								<div className={classes.acceptorDates_SubDiv}>
@@ -226,16 +225,6 @@ const EventAccepter = () => {
 											})}
 									</div>
 									<div className={classes.acceptorDates_Buttons}>
-										<Button
-											clicked={(e) => {
-												e.preventDefault();
-												setTheEvent(event);
-												setIsEvent((currentValue) => !currentValue);
-											}}
-											btnType="Info"
-										>
-											{isEvent ? "A dátumhoz" : "Eseményhez"}
-										</Button>
 										<Button
 											type="submit"
 											clicked={(e) => {
@@ -313,7 +302,9 @@ const EventAccepter = () => {
 								</div>
 								<div className={classes.EventModal_Sidebar_div}>
 									<p>{"Létrehozta: "}</p>
-									<p className={classes.Text400}>{theEvent.event.creator}</p>
+									<p className={classes.Text400}>
+										{theEvent.event.creator.name}
+									</p>
 								</div>
 							</div>
 						)}

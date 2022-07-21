@@ -16,7 +16,6 @@ const EventHandle = () => {
 	const {
 		setShowEventModal,
 		selectedEvent,
-		// deleteEvent,
 		filteredEvents,
 		isSocket,
 		setStatus,
@@ -119,18 +118,29 @@ const EventHandle = () => {
 							</>
 						)}
 					</div>
+					{selectedEvent && (
+						<div>
+							{selectedEvent.event.title} - {selectedEvent.event.shortTitle}
+						</div>
+					)}
+
 					<div className={classes.IconDiv}>
-						{selectedEvent && session.id === selectedEvent.event.creator && (
-							<div
-								className={`${classes.Icon}  ${classes.Buttom2}`}
-								onClick={deletHandel}
-							>
-								<MdDelete />
-							</div>
-						)}
+						{selectedEvent &&
+							session.id === selectedEvent.event.creator &&
+							isEventCreatorMain && (
+								<div
+									className={`${classes.Icon}  ${classes.Buttom2}`}
+									onClick={deletHandel}
+								>
+									<MdDelete />
+								</div>
+							)}
 						<div
 							className={`${classes.Icon}  ${classes.Buttom2}`}
-							onClick={() => setShowEventModal(false)}
+							onClick={() => {
+								setShowEventModal(false);
+								setSelectedEvent(null);
+							}}
 						>
 							<IoClose />
 						</div>
@@ -145,15 +155,11 @@ const EventHandle = () => {
 						<EventCreatorMain
 							setDepartment={setDepartment}
 							department={department}
-							setEventCreatroPage={setEventCreatorMain}
-							isEventCreatorMain={isEventCreatorMain}
 							eventPositions={eventPositions}
 						/>
 					) : (
 						<EventCreatorSecondary
 							department={department}
-							setEventCreatroPage={setEventCreatorMain}
-							isEventCreatorMain={isEventCreatorMain}
 							eventPositions={eventPositions}
 						/>
 					)

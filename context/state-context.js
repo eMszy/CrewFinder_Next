@@ -48,6 +48,8 @@ const StateContextProvider = (props) => {
 		setIsStatusMsg(message);
 	};
 
+	// console.log("selectedEvent", selectedEvent);
+
 	const updateEvent = async (payload) => {
 		try {
 			const res = await fetch("/api/event/" + payload.event._id, {

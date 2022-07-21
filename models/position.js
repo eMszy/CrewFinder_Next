@@ -12,10 +12,6 @@ const positionSchema = new Schema({
 		type: String,
 		required: true,
 	},
-	// weight: {
-	// 	type: Number,
-	// 	required: true,
-	// },
 	invition: {
 		type: {
 			type: String,

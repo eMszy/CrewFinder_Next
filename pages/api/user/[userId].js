@@ -22,7 +22,10 @@ const handler = async (req, res) => {
 
 		if (req.method === "GET") {
 			user = await User.findById(userId)
-				.populate("events.event")
+				.populate({
+					path: "events.event",
+					populate: { path: "creator", select: "name" },
+				})
 				.populate("events.positions.position");
 
 			if (!user) {

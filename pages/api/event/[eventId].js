@@ -18,78 +18,78 @@ const handler = async (req, res) => {
 		});
 
 		switch (req.method) {
-			case "POST": {
-				const { event, positions } = req.body;
+			// case "POST": {
+			// 	const { event, positions } = req.body;
 
-				let userIds = [];
-				let usersDataArray = [];
+			// 	let userIds = [];
+			// 	let usersDataArray = [];
 
-				const eventModel = await new Event(event);
+			// 	const eventModel = await new Event(event);
 
-				positions.forEach(async (pos) => {
-					delete pos._id;
-					delete pos.name;
-					pos.eventId = eventModel._id;
-					const positionModel = await new Position(pos);
-					eventModel.positions.push(positionModel._id);
+			// 	positions.forEach(async (pos) => {
+			// 		delete pos._id;
+			// 		delete pos.name;
+			// 		pos.eventId = eventModel._id;
+			// 		const positionModel = await new Position(pos);
+			// 		eventModel.positions.push(positionModel._id);
 
-					pos.users.forEach((user) => {
-						if (!userIds.includes(user)) {
-							userIds.push(user);
-							usersDataArray.push({
-								userId: user,
-								data: {
-									event: eventModel._id,
-									positions: [
-										{
-											position: positionModel._id,
-											label: pos.label,
-											status: "new",
-										},
-									],
-								},
-							});
-						} else {
-							usersDataArray.map((userData) =>
-								userData.userId === user
-									? userData.data.positions.push({
-											position: positionModel._id,
-											label: pos.label,
-											status: "new",
-									  })
-									: userData
-							);
-						}
-					});
-					await positionModel.save();
-				});
-				await eventModel.save();
+			// 		pos.users.forEach((user) => {
+			// 			if (!userIds.includes(user)) {
+			// 				userIds.push(user);
+			// 				usersDataArray.push({
+			// 					userId: user,
+			// 					data: {
+			// 						event: eventModel._id,
+			// 						positions: [
+			// 							{
+			// 								position: positionModel._id,
+			// 								label: pos.label,
+			// 								status: "new",
+			// 							},
+			// 						],
+			// 					},
+			// 				});
+			// 			} else {
+			// 				usersDataArray.map((userData) =>
+			// 					userData.userId === user
+			// 						? userData.data.positions.push({
+			// 								position: positionModel._id,
+			// 								label: pos.label,
+			// 								status: "new",
+			// 						  })
+			// 						: userData
+			// 				);
+			// 			}
+			// 		});
+			// 		await positionModel.save();
+			// 	});
+			// 	await eventModel.save();
 
-				// data.userId === token.id az a kéne vissza adni és akkor nem kell plusz egy lekérdezés, de az async miatt nem ment.
-				usersDataArray.forEach(async (data) => {
-					await User.findByIdAndUpdate(data.userId, {
-						$push: { events: data.data },
-					});
-				});
+			// 	// data.userId === token.id az a kéne vissza adni és akkor nem kell plusz egy lekérdezés, de az async miatt nem ment.
+			// 	usersDataArray.forEach(async (data) => {
+			// 		await User.findByIdAndUpdate(data.userId, {
+			// 			$push: { events: data.data },
+			// 		});
+			// 	});
 
-				const user = await User.findById(token.id)
-					.populate("events.event")
-					.populate("events.positions.position");
+			// 	const user = await User.findById(token.id)
+			// 		.populate("events.event")
+			// 		.populate("events.positions.position");
 
-				if (!user) {
-					throw Error("A felhasználói adatok betöltése sikertelen.");
-				}
+			// 	if (!user) {
+			// 		throw Error("A felhasználói adatok betöltése sikertelen.");
+			// 	}
 
-				console.log("user.events", user.events.toObject());
+			// 	console.log("user.events", user.events.toObject());
 
-				res.statusCode = 201;
-				res.json({
-					message: "Sikeresen létrehoztál egy eseményt",
-					events: user.events,
-					eventId: eventModel._id,
-				});
-				return;
-			}
+			// 	res.statusCode = 201;
+			// 	res.json({
+			// 		message: "Sikeresen létrehoztál egy eseményt",
+			// 		events: user.events,
+			// 		eventId: eventModel._id,
+			// 	});
+			// 	return;
+			// }
 
 			case "PUT": {
 				const { event, positions, creatorId } = req.body;
@@ -180,35 +180,35 @@ const handler = async (req, res) => {
 				return;
 			}
 
-			case "DELETE": {
-				const event = await Event.findById(eventId);
-				if (!event) {
-					throw Error("Nincs ilyen esemény");
-				}
+			// case "DELETE": {
+			// 	const event = await Event.findById(eventId);
+			// 	if (!event) {
+			// 		throw Error("Nincs ilyen esemény");
+			// 	}
 
-				if (event.creator.toString() !== token.id) {
-					throw Error("Nem általad létrehozott esemény");
-				}
+			// 	if (event.creator.toString() !== token.id) {
+			// 		throw Error("Nem általad létrehozott esemény");
+			// 	}
 
-				await Position.deleteMany({
-					_id: { $in: event.positions },
-				});
+			// 	await Position.deleteMany({
+			// 		_id: { $in: event.positions },
+			// 	});
 
-				await User.updateMany(
-					{
-						"events.event": { $in: event._id },
-					},
-					{ $pull: { events: { event: event._id } } }
-				);
+			// 	await User.updateMany(
+			// 		{
+			// 			"events.event": { $in: event._id },
+			// 		},
+			// 		{ $pull: { events: { event: event._id } } }
+			// 	);
 
-				await event.deleteOne();
-				res.statusCode = 202;
-				res.json({
-					message: "Sikeresen törölted az eseményt",
-					eventId: eventId,
-				});
-				return;
-			}
+			// 	await event.deleteOne();
+			// 	res.statusCode = 202;
+			// 	res.json({
+			// 		message: "Sikeresen törölted az eseményt",
+			// 		eventId: eventId,
+			// 	});
+			// 	return;
+			// }
 		}
 	} catch (err) {
 		console.log("err", err);

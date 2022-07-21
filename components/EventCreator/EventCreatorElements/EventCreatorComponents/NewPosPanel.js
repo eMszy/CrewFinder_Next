@@ -16,7 +16,7 @@ const NewPosPanel = ({
 	datesHelper,
 	department,
 	setUpdatedPos,
-	setSelectedEventPositions,
+	setSelsctedEventPendingPos,
 	setIsNewPos,
 	setLabelHandel,
 	labelHandel,
@@ -52,7 +52,7 @@ const NewPosPanel = ({
 			creator: [],
 		};
 		setUpdatedPos((currentData) => [...currentData, newPos]);
-		setSelectedEventPositions((currentData) => [...currentData, newPos]);
+		setSelsctedEventPendingPos((currentData) => [...currentData, newPos]);
 		setIsNewPos(false);
 	};
 

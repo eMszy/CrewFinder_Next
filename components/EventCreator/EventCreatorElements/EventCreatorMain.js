@@ -12,14 +12,14 @@ import control from "../../../control.json";
 
 import classes from "./../EventHandle.module.scss";
 import {
-	addPosHelper,
+	// addPosHelper,
 	dayFormating,
 	eventOtherTemplate,
 	eventTypeTemplate,
-	uniqueArray,
+	// uniqueArray,
 	weekdaysSet,
 } from "./utility";
-import EventICreatorTeamManager from "./EventICreatorTeamManager";
+// import EventICreatorTeamManager from "./EventICreatorTeamManager";
 
 import { useSession } from "next-auth/react";
 import InputElement from "../../UI/Input/InputElement";
@@ -30,15 +30,15 @@ import { inputChangedHandler, isAllInputVaild } from "../../../shared/utility";
 const EventCreatorMain = ({
 	department,
 	setDepartment,
-	isEventCreatorMain,
-	eventPositions,
+	// isEventCreatorMain,
+	// eventPositions,
 	setEventCreatroPage,
 }) => {
 	const {
 		daySelected,
 		selectedEvent,
-		createEvent,
-		updateEvent,
+		// createEvent,
+		// updateEvent,
 		setShowEventModal,
 		isSocket,
 		dispatchCallEvent,
@@ -53,18 +53,18 @@ const EventCreatorMain = ({
 	const [isClicked, setIsClicked] = useState();
 	const [isTeamManagerValid, setTeamManagerValid] = useState(true);
 	const [newBasePositions, setnewBasePositions] = useState([]);
-	const [basePositions, setBasePositions] = useState(
-		selectedEvent
-			? eventPositions
-					.filter((event) => event.invition.type !== "creator")
-					.sort(
-						(a, b) =>
-							control.departments[department].positions[b.posName].weight -
-							control.departments[department].positions[a.posName].weight
-					)
-					.sort((a, b) => a.label - b.label)
-			: []
-	);
+	// const [basePositions, setBasePositions] = useState(
+	// 	selectedEvent
+	// 		? eventPositions
+	// 				.filter((event) => event.invition.type !== "creator")
+	// 				.sort(
+	// 					(a, b) =>
+	// 						control.departments[department].positions[b.posName].weight -
+	// 						control.departments[department].positions[a.posName].weight
+	// 				)
+	// 				.sort((a, b) => a.label - b.label)
+	// 		: []
+	// );
 
 	// console.log("newBasePositions", newBasePositions);
 	// console.log("basePositions", basePositions);
@@ -301,32 +301,32 @@ const EventCreatorMain = ({
 		}
 	};
 
-	const addPosHandel = (posName, id) => {
-		const updatedPos = addPosHelper(posName, id, newBasePositions, {
-			type: "direct",
-		});
-		if (updatedPos) {
-			setnewBasePositions(updatedPos);
-		}
-	};
+	// const addPosHandel = (posName, id) => {
+	// 	const updatedPos = addPosHelper(posName, id, newBasePositions, {
+	// 		type: "direct",
+	// 	});
+	// 	if (updatedPos) {
+	// 		setnewBasePositions(updatedPos);
+	// 	}
+	// };
 
-	const changeHandle = (updatedCrewMember) => {
-		// console.log("first", updatedCrewMember);
-		const updatedBaseCrew = newBasePositions.filter(
-			(b) => b.id !== updatedCrewMember.id
-		);
-		setnewBasePositions([...updatedBaseCrew, updatedCrewMember]);
-	};
+	// const changeHandle = (updatedCrewMember) => {
+	// 	// console.log("first", updatedCrewMember);
+	// 	const updatedBaseCrew = newBasePositions.filter(
+	// 		(b) => b.id !== updatedCrewMember.id
+	// 	);
+	// 	setnewBasePositions([...updatedBaseCrew, updatedCrewMember]);
+	// };
 
-	const deletPosHandel = (BasePosId, newBasePosId) => {
-		setBasePositions((currentBaseCrew) =>
-			currentBaseCrew.filter((p) => p._id !== BasePosId)
-		);
+	// const deletPosHandel = (BasePosId, newBasePosId) => {
+	// 	setBasePositions((currentBaseCrew) =>
+	// 		currentBaseCrew.filter((p) => p._id !== BasePosId)
+	// 	);
 
-		setnewBasePositions((currentBaseCrew) =>
-			currentBaseCrew.filter((p) => p.id !== newBasePosId)
-		);
-	};
+	// 	setnewBasePositions((currentBaseCrew) =>
+	// 		currentBaseCrew.filter((p) => p.id !== newBasePosId)
+	// 	);
+	// };
 
 	// console.log("eventInputData", eventInputData);
 
@@ -534,19 +534,8 @@ const EventCreatorMain = ({
 							setIsClicked={setIsClicked}
 						/>
 					</div>
-					{selectedEvent &&
-						(selectedEvent.event.creator === session.id ? (
-							<div>
-								<p> Saját esemény </p>
-							</div>
-						) : (
-							<div>
-								<p className={classes.CreatorName}>Létrehozta:</p>
-								<p>IDE KELL A NÉV</p>
-							</div>
-						))}
 				</div>
-				{department !== "Privát" && selectedEvent?.department !== "Privát" && (
+				{/* {department !== "Privát" && selectedEvent?.department !== "Privát" && (
 					<EventICreatorTeamManager
 						basePositions={[...basePositions, ...newBasePositions]}
 						addPosHandel={addPosHandel}
@@ -557,7 +546,7 @@ const EventCreatorMain = ({
 						isValid={isTeamManagerValid}
 						isEventCreatorMain={isEventCreatorMain}
 					/>
-				)}
+				)} */}
 			</div>
 			<footer className={classes.EventModal_Footer}>
 				<Button
