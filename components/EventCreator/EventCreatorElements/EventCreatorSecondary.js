@@ -113,6 +113,7 @@ const EventCreatorSecondary = ({ department, eventPositions }) => {
 			].find((p) => p.id.toString() === pickedPosId.toString());
 			setPickedPos(thePosition);
 			setDatesHelper(thePosition.dates);
+			setLabelHandel(thePosition?.label);
 			setIsNewPos(false);
 		}
 		// eslint-disable-next-line
@@ -244,6 +245,7 @@ const EventCreatorSecondary = ({ department, eventPositions }) => {
 												classes.acceptorDates_Candidates,
 											].join(" ")}
 										>
+											{console.log("pickedPos", pickedPos.applied)}
 											{labelHandel === 3
 												? pickedPos.applied.map((pos) => (
 														<div

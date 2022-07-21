@@ -12,11 +12,13 @@ const SocketHandler = async (req, res) => {
 		console.log("Socket is initializing...");
 		const io = new Server(res.socket.server, {
 			cors: {
-				origin: ["https://admin.socket.io"],
+				origin: [
+					"https://admin.socket.io",
+					"https://crewfindernext.herokuapp.com",
+				],
 				credentials: true,
 			},
 		});
-		// io.sockets.setMaxListeners(0);
 
 		res.socket.server.io = io;
 
